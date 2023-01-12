@@ -21,7 +21,7 @@ LIB			=	libft.a
 EXEC		=	minishell
 
 CC			=	gcc
-CFLAGS		=	-Wall -Werror -Wextra
+CFLAGS		=	-Wall -Werror -Wextra -lreadline
 
 all:		$(EXEC)
 

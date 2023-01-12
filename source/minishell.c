@@ -20,10 +20,20 @@ int	main()
             add_history(str);
         if (!ft_strncmp(str, "pwd", sizeof(str)))
         {
-            char    *pwd = malloc(sizeof(char) * 256);
-            pwd = getcwd(pwd, sizeof(pwd));
+            char    *pwd = malloc(sizeof(char) * 1000);
+            getcwd(pwd, 1000);
             printf("%s\n", pwd);
             rl_on_new_line();
+        }
+		if (!ft_strncmp(str, "echo -n", 7))
+        {
+            printf("%s", str + 8);
+			rl_on_new_line();
+        }
+		if (!ft_strncmp(str, "cd ", 3))
+        {
+            if (!ft_strncmp(str, "cd .", sizeof(str)))
+				rl_on_new_line();
         }
         free(str);
     }
