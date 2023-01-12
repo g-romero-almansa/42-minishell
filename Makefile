@@ -6,7 +6,7 @@
 #    By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/12 10:57:13 by gromero-          #+#    #+#              #
-#    Updated: 2023/01/12 11:04:56 by gromero-         ###   ########.fr        #
+#    Updated: 2023/01/12 11:32:32 by gromero-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIB			=	libft.a
 EXEC		=	minishell
 
 CC			=	gcc
-CFLAGS		=	-Wall -Werror -Wextra
+CFLAGS		=	-Wall -Werror -Wextra -lreadline
 
 all:		$(EXEC)
 
