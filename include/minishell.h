@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/16 13:44:33 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/16 13:57:56 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 #define BEGIN "\001\033[m\002"
 #define CLOSE "\001\033[0m\002"
 
-
+/*MINISHELL*/
+char    *get_user(char *pwd);
+void    do_cmd(char *str);
 
 #endif
+
