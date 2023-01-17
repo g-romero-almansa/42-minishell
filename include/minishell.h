@@ -25,8 +25,9 @@
 #define CLOSE "\001\033[0m\002"
 
 /*MINISHELL*/
-char    *get_user(char *pwd);
-void    do_cmd(char *str);
+void    do_pipes(char *str);
+void    check_pipe(char *str);
+void    do_cmd(char *str, char **envp);
 
 #endif
 

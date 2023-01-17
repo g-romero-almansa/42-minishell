@@ -24,36 +24,37 @@ void	sighandler(int num)
 	rl_on_new_line();
 }
 
-char    *get_user(char *pwd)
+//void    do_pipes(char *str)
+
+void    check_pipe(char *str)
 {
-    char    *s;
-    int     i;
-    int     n;
+    int i;
 
     i = 0;
-    n = 0;
-    while (n++ != 2)
+    while (str[i])
     {
+        if (str[i] == '|')
+            do_pipes(str);
         i++;
-        while (pwd[i] != '/')
-            i++;
     }
-    s = malloc(i * sizeof(char));
-    ft_strlcpy(s, pwd, i + 1);
-    return(s);
 }
 
-void    do_cmd(char *str)
+void    do_cmd(char *str, char **envp)
 {
+    int     len;
+    int     i;
+    int     j;
     char    *pwd;
     char    *s;
     char    *dir;
     char    *path_dir;
 
+    len = 0;
     if (!ft_strncmp(str, "pwd", sizeof(str)))
     {
-        pwd = malloc(sizeof(char) * 1000);
-        getcwd(pwd, 1000);
+        len = ft_strlen(getenv("PWD"));
+        pwd = malloc(sizeof(char) * (len + 1));
+        getcwd(pwd, len + 1);
         printf("%s\n", pwd);
         rl_on_new_line();
     }
@@ -73,10 +74,9 @@ void    do_cmd(char *str)
         }
         else if (!ft_strncmp(str, "cd ", sizeof(str)))
         {
-            pwd = malloc(sizeof(char) * 1000);
-            getcwd(pwd, 1000);
-            s = malloc(sizeof(char) * 1000);
-            s = get_user(pwd);
+            len = ft_strlen(getenv("HOME"));
+            s = malloc(sizeof(char) * len);
+            s = getenv("HOME");
             chdir(s);
         }
         else
@@ -86,8 +86,9 @@ void    do_cmd(char *str)
             if (dir[1] != '/')
             {
                 dir[0] = '/';
-                pwd = malloc(sizeof(char) * 1000);
-                path_dir = ft_strjoin(getcwd(pwd, 1000), dir);
+                len = ft_strlen(getenv("PWD"));
+                pwd = malloc(sizeof(char) * (len + ft_strlen(str) - 3));
+                path_dir = ft_strjoin(getcwd(pwd, len), dir);
                 chdir(path_dir);
             }
             else
@@ -101,26 +102,39 @@ void    do_cmd(char *str)
 			exit (0);
 	if (!ft_strncmp(str, "env", sizeof(str)))
 	{
-		printf ("TERM_SESSION_ID=%s\n", getenv("TERM_SESSION_ID"));
-		printf ("PWD=%s\n", getenv("PWD"));
-		printf ("HOME=%s\n", getenv("HOME"));
+        i = 0;
+        while (envp[i])
+        {
+            j = 0;
+            while (envp[i][j])
+            {
+                printf("%c", envp[i][j]);
+                j++;
+            }
+            printf("\n");
+            i++;
+        }
 	}
 	if (!ft_strncmp(str, "unset", sizeof(str)))
 		unlink ("PRUEBA");
 	//if (!ft_strncmp(str, "export", sizeof(str)))
 	//sigaction(SIGINT, &sig, (void *)str);
 }
-int	main(void)
-{
-	char    *str;
 
-	signal(SIGINT, sighandler);
+int	main(int argc, char **argv, char **envp)
+{	
+    char    *str;
+
+	(void)argc;
+    (void)argv;
+    signal(SIGINT, sighandler);
     while (1)
     {
         str = readline(BEGIN "My Shell $" CLOSE);
         if (str && *str)
             add_history(str);
-        do_cmd(str);
+        check_pipe(str);
+        do_cmd(str, envp);
         free(str);
     }
 }
