@@ -24,21 +24,6 @@ void	sighandler(int num)
 	rl_on_new_line();
 }
 
-//void    do_pipes(char *str)
-
-void    check_pipe(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '|')
-            do_pipes(str);
-        i++;
-    }
-}
-
 void    do_cmd(char *str, char **envp)
 {
     int     len;
@@ -61,6 +46,11 @@ void    do_cmd(char *str, char **envp)
     else if (!ft_strncmp(str, "echo -n", 7))
     {
         printf("%s", str + 8);
+        rl_on_new_line();
+    }
+    else if (!ft_strncmp(str, "echo", 4))
+    {
+        printf("%s\n", str + 5);
         rl_on_new_line();
     }
     else if (!ft_strncmp(str, "cd ", 3))
@@ -97,6 +87,13 @@ void    do_cmd(char *str, char **envp)
                 chdir(dir);
             }
         }
+    }
+    else if (!ft_strncmp(str, "cd", 2))
+    {
+        len = ft_strlen(getenv("HOME"));
+        s = malloc(sizeof(char) * len);
+        s = getenv("HOME");
+        chdir(s);
     }
 	if (!ft_strncmp(str, "exit", sizeof(str)))
 			exit (0);

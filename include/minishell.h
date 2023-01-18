@@ -25,9 +25,10 @@
 #define CLOSE "\001\033[0m\002"
 
 /*MINISHELL*/
-void    do_pipes(char *str);
-void    check_pipe(char *str);
 void    do_cmd(char *str, char **envp);
 
+/*PIPES*/
+void    do_pipes(char *str);
+void    check_pipe(char *str);
 #endif
 

@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC			=	source/minishell.c	
+SRC			=	source/minishell.c	source/pipes.c
 
 OBJ_SRC		=	 $(SRC:.c = .o)
 
