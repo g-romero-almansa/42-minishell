@@ -6,11 +6,11 @@
 #    By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/12 10:57:13 by gromero-          #+#    #+#              #
-#    Updated: 2023/01/12 13:06:42 by gromero-         ###   ########.fr        #
+#    Updated: 2023/01/18 11:22:33 by gromero-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC			=	source/minishell.c	
+SRC			=	source/minishell.c source/ft_env_pwd.c	
 
 OBJ_SRC		=	 $(SRC:.c = .o)
 

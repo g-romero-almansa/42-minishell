@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/16 13:57:56 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/18 12:04:36 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@
 
 /*MINISHELL*/
 char    *get_user(char *pwd);
-void    do_cmd(char *str);
+
+void    do_cmd(char *str, char **envp);
+
+void	ft_env_pwd(char *old, char *nev, char **env, int num);
+
+void	ft_update_env(char *var, char *pwd, char **env);
 
 #endif
 

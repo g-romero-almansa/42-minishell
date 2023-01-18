@@ -6,22 +6,20 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/16 13:59:08 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/18 12:20:20 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-/*void	sighandler(int signum, siginfo_t *inf, void *s)
-{
-	(void)inf;
-	(void)signum;
-	printf ("%s\n", (char *)s);
-}*/
 void	sighandler(int num)
 {
 	(void)num;
 	printf ("\n");
+	rl_redisplay();
 	rl_on_new_line();
+	rl_redisplay();
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 char    *get_user(char *pwd)
@@ -43,12 +41,14 @@ char    *get_user(char *pwd)
     return(s);
 }
 
-void    do_cmd(char *str)
+void    do_cmd(char *str, char **envp)
 {
     char    *pwd;
     char    *s;
     char    *dir;
     char    *path_dir;
+	int		i;
+	int		j;
 
     if (!ft_strncmp(str, "pwd", sizeof(str)))
     {
@@ -63,20 +63,24 @@ void    do_cmd(char *str)
         rl_on_new_line();
     }
     else if (!ft_strncmp(str, "cd ", 3))
-    {
-        if (!ft_strncmp(str, "cd .", sizeof(str)))
-            rl_on_new_line();
-        else if (!ft_strncmp(str, "cd ..", sizeof(str)))
+    { 
+        if (!ft_strncmp(str, "cd ..", sizeof(str)))
         {
+			pwd = malloc(sizeof(char) * 1000);
+			getcwd(pwd, 1000);
             chdir("..");
+			s = malloc (sizeof(char) * 1000);
+			getcwd(s, 1000);
+			ft_env_pwd(pwd, s, envp, 1);
             rl_on_new_line();
         }
         else if (!ft_strncmp(str, "cd ", sizeof(str)))
         {
             pwd = malloc(sizeof(char) * 1000);
-            getcwd(pwd, 1000);
+            getcwd(pwd, 1000);	
             s = malloc(sizeof(char) * 1000);
             s = get_user(pwd);
+			ft_env_pwd(pwd, s, envp, 1);
             chdir(s);
         }
         else
@@ -88,11 +92,15 @@ void    do_cmd(char *str)
                 dir[0] = '/';
                 pwd = malloc(sizeof(char) * 1000);
                 path_dir = ft_strjoin(getcwd(pwd, 1000), dir);
+				ft_env_pwd(pwd, path_dir, envp, 1);
                 chdir(path_dir);
             }
             else
             {
+				pwd = malloc(sizeof(char) * 1000);
+				getcwd(pwd, 1000);
                 dir = ft_strchr(str, '/');
+				ft_env_pwd(pwd, dir, envp, 1);
                 chdir(dir);
             }
         }
@@ -101,26 +109,31 @@ void    do_cmd(char *str)
 			exit (0);
 	if (!ft_strncmp(str, "env", sizeof(str)))
 	{
-		printf ("TERM_SESSION_ID=%s\n", getenv("TERM_SESSION_ID"));
-		printf ("PWD=%s\n", getenv("PWD"));
-		printf ("HOME=%s\n", getenv("HOME"));
+		i = -1;
+		while (envp[++i])
+		{
+			j = -1;
+			while (envp[i][++j])
+				printf ("%c", envp[i][j]);
+			printf ("\n");
+		}	
 	}
 	if (!ft_strncmp(str, "unset", sizeof(str)))
 		unlink ("PRUEBA");
-	//if (!ft_strncmp(str, "export", sizeof(str)))
-	//sigaction(SIGINT, &sig, (void *)str);
 }
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char    *str;
 
+	(void)argc;
+	(void)argv;
 	signal(SIGINT, sighandler);
     while (1)
     {
-        str = readline(BEGIN "My Shell $" CLOSE);
+        str = readline(BEGIN "My Term $ " CLOSE);
         if (str && *str)
             add_history(str);
-        do_cmd(str);
+        do_cmd(str, envp);
         free(str);
     }
 }
