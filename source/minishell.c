@@ -33,7 +33,7 @@ void    do_cmd(char *str, char **envp)
 	int		len;
 
     len = 0;
-    if (!ft_strncmp(str, "pwd", sizeof(str)))
+    if (!ft_strncmp(str, "pwd", 3))
     {
         len = ft_strlen(getenv("PWD"));
         pwd = malloc(sizeof(char) * (len + 1));
@@ -51,6 +51,8 @@ void    do_cmd(char *str, char **envp)
         printf("%s\n", str + 5);
         rl_on_new_line();
     }
+    else if (!ft_strncmp(str, "cd .", sizeof(str)))
+        rl_on_new_line();
     else if (!ft_strncmp(str, "cd ", 3))
     { 
         if (!ft_strncmp(str, "cd ..", sizeof(str)))
@@ -81,8 +83,9 @@ void    do_cmd(char *str, char **envp)
             {
                 dir[0] = '/';
                 len = ft_strlen(getenv("PWD"));
-                pwd = malloc(sizeof(char) * (len + ft_strlen(str) - 3));
-                path_dir = ft_strjoin(getcwd(pwd, len), dir);
+                pwd = malloc(sizeof(char) * (len + 1));
+                getcwd(pwd, len + 1);
+                path_dir = ft_strjoin(pwd, dir);
 				ft_env_pwd(pwd, path_dir, envp, 1);
 				chdir(path_dir);
             }
