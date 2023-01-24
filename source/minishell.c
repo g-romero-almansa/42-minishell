@@ -107,8 +107,11 @@ void    do_cmd(char *str, char **envp)
         chdir(s);
     }
 	if (!ft_strncmp(str, "exit", sizeof(str)))
-			exit (0);
-	if (!ft_strncmp(str, "env", sizeof(str)))
+    {
+			printf("exit\n");
+            exit (0);
+    }
+    if (!ft_strncmp(str, "env", sizeof(str)))
 	{
 		i = -1;
 		while (envp[++i])
@@ -119,24 +122,75 @@ void    do_cmd(char *str, char **envp)
 			printf ("\n");
 		}	
 	}
-	if (!ft_strncmp(str, "unset", sizeof(str)))
-		unlink ("PRUEBA");
+	if (!ft_strncmp(str, "unset", 5))
+	{
+        char    *sub = ft_substr(str, 6, sizeof(str) - 5);
+        printf("%s\n", sub);
+        i = 0;
+        while (envp[i])
+        {
+            if (!ft_strncmp(envp[i], sub, sizeof(sub)))
+                printf("%s\n", envp[i]);
+            i++;
+        }
+        printf("%s\n", envp[i - 2]);
+    }
+    if (!ft_strncmp(str, "export", 6))
+    {
+        if (ft_strchr(str, '='))
+        {
+            int lenght = 0;
+            while (envp[lenght])
+                lenght++;
+            char    **env_var = malloc(sizeof(char *) * (lenght + 1));
+            copy_env(env_var, envp);
+            free(envp);
+            i = 0;
+		    while (env_var[i])
+                i++;
+            env_var[i] = env_var[i - 1];
+            env_var[i - 1] = str + 7;
+            printf("%s\n", env_var[i - 1]);
+            env_var[i + 1] = 0;
+            //si hago env no funciona porque estoy guardando la info en otra variable
+        }
+        //else
+    }
+}
+
+void    copy_env(char **var_env, char **envp)
+{
+    int i;
+
+    i = 0;
+    while (envp[i])
+    {
+        var_env[i] = envp[i];
+        i++;
+    }
 }
 
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
+    char    **var_env;
+    int     lenght;
 
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
+    lenght = 0;
+    while (envp[lenght])
+        lenght++;
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
         if (str && *str)
             add_history(str);
+        var_env = malloc(sizeof(char *) * lenght);
+        copy_env(var_env, envp);
         check_pipe(str);
-        do_cmd(str, envp);
+        do_cmd(str, var_env);
         free(str);
     }
 }

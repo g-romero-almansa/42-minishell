@@ -33,6 +33,8 @@ void	ft_env_pwd(char *old, char *nev, char **env, int num);
 
 void	ft_update_env(char *var, char *pwd, char **env);
 
+void    copy_env(char **var_env, char **envp);
+
 /*PIPES*/
 void	do_pipes(char *str);
 
