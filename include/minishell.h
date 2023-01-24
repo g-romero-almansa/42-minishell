@@ -25,18 +25,18 @@
 # define CLOSE "\001\033[0m\002"
 
 /*MINISHELL*/
-char	*get_user(char *pwd);
-
 void	do_cmd(char *str, char **envp);
 
+void    copy_env(char **var_env, char **envp);
+
+/*FT_ENV*/
 void	ft_env_pwd(char *old, char *nev, char **env, int num);
 
 void	ft_update_env(char *var, char *pwd, char **env);
 
-void    copy_env(char **var_env, char **envp);
-
 void	ft_env_(char *nev, char **env);
 
+/*FT_UTILS*/
 char	*ft_last_word(char *s);
 
 /*PIPES*/

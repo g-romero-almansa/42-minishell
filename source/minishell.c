@@ -153,9 +153,7 @@ void	do_cmd(char *str, char **envp)
             env_var[i - 1] = str + 7;
             printf("%s\n", env_var[i - 1]);
             env_var[i + 1] = 0;
-            //si hago env no funciona porque estoy guardando la info en otra variable
         }
-        //else
     }
 }
 
