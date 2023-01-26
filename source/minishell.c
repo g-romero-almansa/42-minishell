@@ -6,20 +6,21 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/23 13:20:33 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/26 14:06:32 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
 void	sighandler(int num)
 {
-	(void)num;
-	printf ("\n");
-	rl_redisplay();
-	rl_on_new_line();
-	rl_redisplay();
-	rl_on_new_line();
-	rl_redisplay();
+	if (num == SIGINT)
+	{
+		printf ("\n");
+		rl_on_new_line();
+		rl_redisplay();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void	do_cmd(char *str, char **envp)
@@ -48,7 +49,13 @@ void	do_cmd(char *str, char **envp)
 	}
 	else if (!ft_strncmp(str, "echo", 4))
 	{
-		printf("%s\n", str + 5);
+		i = 4;
+		while (str[++i])
+			if (str[i] == '$')
+				i = ft_echo(str, envp, i) + i;
+			else
+				printf ("%c", str[i]);
+		printf("\n");
 		rl_on_new_line();
 	}
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
@@ -178,6 +185,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
     lenght = 0;
     while (envp[lenght])
         lenght++;
@@ -187,7 +195,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_env_(str, envp);
         if (str && *str)
             add_history(str);
-        var_env = malloc(sizeof(char *) * lenght);
+		var_env = malloc(sizeof(char *) * lenght);
         copy_env(var_env, envp);
         check_pipe(str);
         do_cmd(str, var_env);
