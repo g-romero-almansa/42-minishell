@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 10:31:50 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/30 12:27:58 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -14,9 +14,9 @@
 void	sighandler(int num)
 {
 	if (num == SIGINT)
-	{
-		printf ("\n");
+	{	
 		rl_on_new_line();
+		printf ("\n");
 		rl_redisplay();
 		rl_replace_line("", 0);
 		rl_redisplay();
