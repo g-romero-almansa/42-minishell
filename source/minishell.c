@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 10:24:54 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:31:50 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -34,8 +34,6 @@ void	do_cmd(char *str, char **envp)
 	int		len;
 
     len = 0;
-	if (!str)
-		exit(0);
     if (!ft_strncmp(str, "pwd", 3))
     {
 		len = ft_strlen(getenv("PWD"));
@@ -194,6 +192,11 @@ int	main(int argc, char **argv, char **envp)
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
+		if (!str)
+		{
+			printf ("exit\n");
+			exit(0);
+		}
 		ft_env_(str, envp);
         if (str && *str)
             add_history(str);
