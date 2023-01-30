@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/26 14:10:27 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:17:48 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -25,9 +25,9 @@ int	ft_echo(char *s, char **envp, int i)
 	p[j] = '\0';
 	j = -1;
 	while (envp[++j])
-	{
-		if (!ft_strncmp(p, envp[j], ft_strlen(p)))
-		{
+	{	
+		if (!ft_strncmp(p, envp[j], ft_strlen(p)) && ft_strlen(p) == ft_count(envp[j]))
+		{	
 			i = -1;	
 			while (envp[j][i] != '=')
 				i++;
@@ -36,4 +36,14 @@ int	ft_echo(char *s, char **envp, int i)
 		}
 	}
 	return (ft_strlen(p));
+}
+
+size_t	ft_count(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] != '=')
+		i++;
+	return (i);
 }

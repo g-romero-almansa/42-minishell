@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/26 13:58:50 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:07:28 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	ft_env_(char *nev, char **env);
 /*FT_ECHO*/
 
 int		ft_echo(char *s, char **envp, int i);
+
+size_t	ft_count(char *s);
 
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
