@@ -24,10 +24,12 @@
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
 
-/*MINISHELL*/
-void	do_cmd(char *str, char **envp);
+char    **var_env;
 
-void    copy_env(char **var_env, char **envp);
+/*MINISHELL*/
+void	do_cmd(char *str);
+
+void    copy_env(char **new, char **envp);
 
 /*FT_ENV*/
 void	ft_env_pwd(char *old, char *nev, char **env, int num);

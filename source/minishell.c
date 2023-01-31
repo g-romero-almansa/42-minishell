@@ -22,7 +22,7 @@ void	sighandler(int num)
 	rl_redisplay();
 }
 
-void	do_cmd(char *str, char **envp)
+void	do_cmd(char *str)
 {
     char	*pwd;
     char	*s;
@@ -62,7 +62,7 @@ void	do_cmd(char *str, char **envp)
             chdir("..");
 			s = malloc (sizeof(char) * ft_strlen(getenv("PWD")));
 			getcwd(s, ft_strlen(getenv("PWD")));
-			ft_env_pwd(pwd, s, envp, 1);
+			ft_env_pwd(pwd, s, var_env, 1);
             rl_on_new_line();
         }
         else if (!ft_strncmp(str, "cd ", sizeof(str)))
@@ -72,7 +72,7 @@ void	do_cmd(char *str, char **envp)
  			len = ft_strlen(getenv("HOME"));
             s = malloc(sizeof(char) * len);
             s = getenv("HOME");
-			ft_env_pwd(pwd, s, envp, 1);
+			ft_env_pwd(pwd, s, var_env, 1);
             chdir(s);
         }
         else
@@ -86,7 +86,7 @@ void	do_cmd(char *str, char **envp)
                 pwd = malloc(sizeof(char) * (len + 1));
                 getcwd(pwd, len + 1);
                 path_dir = ft_strjoin(pwd, dir);
-				ft_env_pwd(pwd, path_dir, envp, 1);
+				ft_env_pwd(pwd, path_dir, var_env, 1);
 				chdir(path_dir);
             }
             else
@@ -94,7 +94,7 @@ void	do_cmd(char *str, char **envp)
 				pwd = malloc(sizeof(char) * ft_strlen(getenv("PWD")));
 				getcwd(pwd, ft_strlen(getenv("PWD")));
                 dir = ft_strchr(str, '/');
-				ft_env_pwd(pwd, dir, envp, 1);
+				ft_env_pwd(pwd, dir, var_env, 1);
                 chdir(dir);
             }
         }
@@ -104,7 +104,7 @@ void	do_cmd(char *str, char **envp)
         len = ft_strlen(getenv("HOME"));
         s = malloc(sizeof(char) * len);
         s = getenv("HOME");
-		ft_env_pwd(getenv("PWD"), s, envp, 1);
+		ft_env_pwd(getenv("PWD"), s, var_env, 1);
         chdir(s);
     }
 	if (!ft_strncmp(str, "exit", sizeof(str)))
@@ -115,56 +115,71 @@ void	do_cmd(char *str, char **envp)
     if (!ft_strncmp(str, "env", sizeof(str)))
 	{
 		i = -1;
-		while (envp[++i])
+		while (var_env[++i])
 		{
 			j = -1;
-			while (envp[i][++j])
-				printf ("%c", envp[i][j]);
+			while (var_env[i][++j])
+				printf ("%c", var_env[i][j]);
 			printf ("\n");
 		}	
 	}
-	if (!ft_strncmp(str, "unset", 5))
+	if (!ft_strncmp(str, "unset", 5)) //elimina todo menos PATH que elimina todo env
 	{
-        char    *sub = ft_substr(str, 6, sizeof(str) - 5);
-        printf("%s\n", sub);
+        char    *sub;
+        char    **var;
+        int     del;
+        
+        sub = ft_substr(str, 6, sizeof(str) - 5);
         i = 0;
-        while (envp[i])
+        while (var_env[i])
         {
-            if (!ft_strncmp(envp[i], sub, sizeof(sub)))
-                printf("%s\n", envp[i]);
+            if (!ft_strncmp(var_env[i], sub, sizeof(sub)))
+                del = i;
             i++;
         }
-        printf("%s\n", envp[i - 2]);
+        var = malloc(sizeof(char *) * i);
+        i = 0;
+        while (var_env[i])
+        {
+            if (i == del)
+                i++;
+            else
+                var[i] = var_env[i];
+            i++;
+        }
+        free(var_env);
+        var_env = var;
     }
     if (!ft_strncmp(str, "export", 6))
     {
         if (ft_strchr(str, '='))
         {
-            int lenght = 0;
-            while (envp[lenght])
+            char    **temp;
+            int     lenght;
+
+            lenght = 0;
+            while (var_env[lenght])
                 lenght++;
-            char    **env_var = malloc(sizeof(char *) * (lenght + 1));
-            copy_env(env_var, envp);
-            free(envp);
-            i = 0;
-		    while (env_var[i])
-                i++;
-            env_var[i] = env_var[i - 1];
-            env_var[i - 1] = str + 7;
-            printf("%s\n", env_var[i - 1]);
-            env_var[i + 1] = 0;
+            temp = malloc(sizeof(char *) * (lenght + 1));
+            copy_env(temp, var_env);
+            temp[lenght] = temp[lenght - 1];
+            temp[lenght - 1] = str + 7;
+            temp[lenght + 1] = 0;
+            var_env = malloc(sizeof(char *) * (lenght + 1));
+            copy_env(var_env, temp);
+            free(temp);
         }
     }
 }
 
-void    copy_env(char **var_env, char **envp)
+void    copy_env(char **new, char **envp)
 {
     int i;
 
     i = 0;
     while (envp[i])
     {
-        var_env[i] = envp[i];
+        new[i] = envp[i];
         i++;
     }
 }
@@ -172,7 +187,6 @@ void    copy_env(char **var_env, char **envp)
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
-    char    **var_env;
     int     lenght;
 
 	(void)argc;
@@ -181,16 +195,16 @@ int	main(int argc, char **argv, char **envp)
     lenght = 0;
     while (envp[lenght])
         lenght++;
+    var_env = malloc(sizeof(char *) * lenght);
+    copy_env(var_env, envp);
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
-		ft_env_(str, envp);
+		ft_env_(str, var_env);
         if (str && *str)
             add_history(str);
-        var_env = malloc(sizeof(char *) * lenght);
-        copy_env(var_env, envp);
         check_pipe(str);
-        do_cmd(str, var_env);
+        do_cmd(str);
         free(str);
     }
 }
