@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 12:27:58 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/31 12:38:59 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -145,65 +145,50 @@ void	do_cmd(char *str, char **envp)
     }
     if (!ft_strncmp(str, "export", 6))
     {
-        if (ft_strchr(str, '='))
-        {
-            int lenght = 0;
-            while (envp[lenght])
-                lenght++;
-            char    **env_var = malloc(sizeof(char *) * (lenght + 1));
-            copy_env(env_var, envp);
-            free(envp);
-            i = 0;
-		    while (env_var[i])
-                i++;
-            env_var[i] = env_var[i - 1];
-            env_var[i - 1] = str + 7;
-            printf("%s\n", env_var[i - 1]);
-            env_var[i + 1] = 0;
-        }
-    }
-}
-
-void    copy_env(char **var_env, char **envp)
-{
-    int i;
-
-    i = 0;
-    while (envp[i])
-    {
-        var_env[i] = envp[i];
-        i++;
+		int		i;
+		char	**env;
+		
+		i = 0;
+		while (envp[i])
+			i++;
+		env = (char **)malloc((i + 1) * sizeof(char *));
+		if (!env)
+			exit(0);
+		env = ft_export(envp, str, i, env);
+		i = -1;
+		while (env[++i])
     }
 }
 
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
-    char    **var_env;
-    int     lenght;
+	char	**env;
+	int		i;
 
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
-	signal(SIGQUIT, sighandler);
-    lenght = 0;
-    while (envp[lenght])
-        lenght++;
+	i = 0;
+	while (envp[i])
+		i++;
+	env = (char **)malloc(i * sizeof(char *));
+	if (!env)
+		exit(0);
+	env = ft_cpy_env(envp, env);
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
 		if (!str)
 		{
-			printf ("exit\n");
+			ft_putendl_fd ("exit", 2);
 			exit(0);
 		}
 		ft_env_(str, envp);
         if (str && *str)
             add_history(str);
-		var_env = malloc(sizeof(char *) * lenght);
-        copy_env(var_env, envp);
         check_pipe(str);
-        do_cmd(str, var_env);
+        do_cmd(str, env);
         free(str);
     }
 }
