@@ -6,20 +6,21 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/23 13:20:33 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:59:36 by barbizu-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
 void	sighandler(int num)
 {
-	(void)num;
-	printf ("\n");
-	rl_redisplay();
-	rl_on_new_line();
-	rl_redisplay();
-	rl_on_new_line();
-	rl_redisplay();
+	if (num == SIGINT)
+	{	
+		rl_on_new_line();
+		printf ("\n");
+		rl_redisplay();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void	do_cmd(char *str)
@@ -48,7 +49,13 @@ void	do_cmd(char *str)
 	}
 	else if (!ft_strncmp(str, "echo", 4))
 	{
-		printf("%s\n", str + 5);
+		i = 4;
+		while (str[++i])
+			if (str[i] == '$')
+				i = ft_echo(str, envp, i) + i;
+			else
+				printf ("%c", str[i]);
+		printf("\n");
 		rl_on_new_line();
 	}
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
@@ -123,7 +130,7 @@ void	do_cmd(char *str)
 			printf ("\n");
 		}	
 	}
-	if (!ft_strncmp(str, "unset", 5)) //elimina todo menos PATH que elimina todo env
+	if (!ft_strncmp(str, "unset", 5))
 	{
         char    *sub;
         char    **var;
@@ -192,6 +199,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
     lenght = 0;
     while (envp[lenght])
         lenght++;
@@ -200,10 +208,15 @@ int	main(int argc, char **argv, char **envp)
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
-		ft_env_(str, var_env);
+		if (!str)
+		{
+			printf ("exit\n");
+			exit(0);
+		}
+		ft_env_(str, envp);
         if (str && *str)
             add_history(str);
-        check_pipe(str);
+		check_pipe(str);
         do_cmd(str);
         free(str);
     }
