@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/02 11:31:01 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/02 14:24:35 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -216,10 +216,10 @@ int	main(int argc, char **argv, char **envp)
 	i = 0;
 	while (envp[i])
 		i++;
-	var_env = (char **)malloc((i) * sizeof(char *));
+	var_env = (char **)malloc((i + 1) * sizeof(char *));
 	if (!var_env)
 		exit(0);
-    ft_cpy_env(envp);
+    var_env = ft_cpy_env2(envp, var_env);
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
