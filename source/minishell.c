@@ -18,7 +18,7 @@ void	sighandler(int num)
 		rl_on_new_line();
 		printf ("\n");
 		rl_redisplay();
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -183,12 +183,12 @@ void	do_cmd(char *str)
             while (var_env[lenght])
                 lenght++;
             temp = malloc(sizeof(char *) * (lenght + 1));
-            ft_cpy_env(temp, var_env);
+            ft_cpy_env(var_env, temp);
             temp[lenght] = temp[lenght - 1];
             temp[lenght - 1] = str + 7;
             temp[lenght + 1] = 0;
             var_env = malloc(sizeof(char *) * (lenght + 1));
-            ft_cpy_env(var_env, temp);
+            ft_cpy_env(temp, var_env);
             free(temp);
         }*/
     }
