@@ -14,18 +14,15 @@
 void	ft_cpy_env(char **envp)
 {
 	int		i;
-	int		j;
+	char	**cpy;
 
+	i = 0;
+	while (envp[i])
+		i++;
+	cpy = malloc(sizeof(char *) * i);
 	i = -1;
 	while (envp[++i])
-	{	
-		var_env[i] = (char *)malloc(ft_strlen(envp[i]) * sizeof(char));
-		j = -1;
-		while (envp[i][++j])
-			var_env[i][j] = envp[i][j];
-	}
-	var_env[i] = (char *)malloc(1 * sizeof(char));
-	var_env[i][0] = '\0';
+		cpy[i] = envp[i];
 }
 
 char	**ft_cpy_env2(char **envp, char **cpy)
