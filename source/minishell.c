@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/31 10:59:36 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:01:11 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -18,7 +18,7 @@ void	sighandler(int num)
 		rl_on_new_line();
 		printf ("\n");
 		rl_redisplay();
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -161,7 +161,20 @@ void	do_cmd(char *str)
     }
     if (!ft_strncmp(str, "export", 6))
     {
-        if (ft_strchr(str, '='))
+		int		i;
+		char	**env;
+		i = 0;
+		while (var_env[i])
+			i++;
+		env = (char **)malloc((i + 1) * sizeof(char *));
+		if (!env)
+			exit(0);
+		env = ft_export(var_env, str, i, env);	
+		var_env = (char **)malloc((i + 1) *sizeof(char *));
+		if (!var_env)
+			exit(0);
+		ft_cpy_env(env, var_env);
+        /*if (ft_strchr(str, '='))
         {
             char    **temp;
             int     lenght;
@@ -170,26 +183,14 @@ void	do_cmd(char *str)
             while (var_env[lenght])
                 lenght++;
             temp = malloc(sizeof(char *) * (lenght + 1));
-            copy_env(temp, var_env);
+            ft_cpy_env(temp, var_env);
             temp[lenght] = temp[lenght - 1];
             temp[lenght - 1] = str + 7;
             temp[lenght + 1] = 0;
             var_env = malloc(sizeof(char *) * (lenght + 1));
-            copy_env(var_env, temp);
+            ft_cpy_env(var_env, temp);
             free(temp);
-        }
-    }
-}
-
-void    copy_env(char **new, char **envp)
-{
-    int i;
-
-    i = 0;
-    while (envp[i])
-    {
-        new[i] = envp[i];
-        i++;
+        }*/
     }
 }
 
@@ -215,17 +216,18 @@ int check_builtin(char *str)
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
-    int     lenght;
+	int		i;
 
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
-	signal(SIGQUIT, sighandler);
-    lenght = 0;
-    while (envp[lenght])
-        lenght++;
-    var_env = malloc(sizeof(char *) * lenght);
-    copy_env(var_env, envp);
+	i = 0;
+	while (envp[i])
+		i++;
+	var_env = (char **)malloc(i * sizeof(char *));
+	if (!var_env)
+		exit(0);
+    ft_cpy_env(envp, var_env);
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);

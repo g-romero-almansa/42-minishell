@@ -6,10 +6,25 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:03:46 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/23 13:19:04 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/31 12:50:45 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
+
+void	ft_cpy_env(char **envp, char **cpy)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (envp[++i])
+	{	
+		cpy[i] = (char *)malloc(ft_strlen(envp[i]) * sizeof(char));
+		j = -1;
+		while (envp[i][++j])
+			cpy[i][j] = envp[i][j];
+	}
+}
 
 void	ft_env_(char *nev, char **env)
 {

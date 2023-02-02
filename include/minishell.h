@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 10:07:28 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/01/31 12:54:46 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char    **var_env;
 
 /*MINISHELL*/
 void	do_cmd(char *str);
-
 void    copy_env(char **new, char **envp);
 int     check_builtin(char *str);
 
@@ -40,6 +39,12 @@ void	ft_update_env(char *var, char *pwd, char **env);
 
 void	ft_env_(char *nev, char **env);
 
+void	ft_cpy_env(char **envp, char **cpy);
+
+/*FT_EXPORT*/
+
+char	**ft_export(char **envp, char *str, int i, char **env);
+
 /*FT_ECHO*/
 
 int		ft_echo(char *s, char **envp, int i);
@@ -48,6 +53,8 @@ size_t	ft_count(char *s);
 
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
+
+void	ft_free_env(char **var_env);
 
 /*PIPES*/
 void	do_pipes(char *str);
