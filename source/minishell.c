@@ -51,11 +51,13 @@ void	do_cmd(char *str)
 	{
 		i = 4;
 		while (str[++i])
-			if (str[i] == '$')
+        {
+            if (str[i] == '$')
 				i = ft_echo(str, var_env, i) + i;
-			else
+            else
 				printf ("%c", str[i]);
-		printf("\n");
+        }
+        printf("\n");
 		rl_on_new_line();
 	}
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
@@ -184,6 +186,25 @@ void	do_cmd(char *str)
     }
 }
 
+int check_builtin(char *str)
+{
+    if (!ft_strncmp(str, "pwd", 3))
+        return (1);
+    else if (!ft_strncmp(str, "cd", 2))
+        return (1);
+    else if (!ft_strncmp(str, "echo", 4))
+        return (1);
+    else if (!ft_strncmp(str, "exit", 4))
+        return (1);
+    else if (!ft_strncmp(str, "env", 3))
+        return (1);
+    else if (!ft_strncmp(str, "export", 6))
+        return (1);
+    else if (!ft_strncmp(str, "unset", 5))
+        return (1);
+    return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
@@ -204,14 +225,18 @@ int	main(int argc, char **argv, char **envp)
         str = readline(BEGIN "My Term $ " CLOSE);
 		if (!str)
 		{
-			ft_putendl_fd ("exit", 2);
+            printf ("exit\n");
 			exit(0);
 		}
 		ft_env_(str, var_env);
         if (str && *str)
             add_history(str);
-		check_pipe(str);
-        do_cmd(str);
+        if (check_pipe(str))
+            do_pipes(str);
+        else if (check_builtin(str))
+            do_cmd(str);
+        else
+            find_cmd(str, var_env, argv);
         free(str);
     }
 }
