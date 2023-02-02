@@ -39,7 +39,7 @@ void    do_pipes(char *str)
     waitpid(-1, &status, 0);
 }
 
-void    check_pipe(char *str)
+int check_pipe(char *str)
 {
     int i;
 
@@ -47,7 +47,8 @@ void    check_pipe(char *str)
     while (str[i])
     {
         if (str[i] == '|')
-            do_pipes(str);
+            return (1);
         i++;
     }
+    return (0);
 }

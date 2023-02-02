@@ -16,11 +16,11 @@ int	ft_echo(char *s, char **envp, int i)
 	char	*p;
 	int		j;
 
-	p = malloc (1000 * sizeof(char));
+	p = malloc((ft_strlen(s) - 6) * sizeof(char));
 	if (!p)
 		exit (0);
 	j = -1;
-	while ((s[i] != ' ' || s[i] != '\t') && s[i])
+	while (s[i] != ' ' && s[i])
 		p[++j] = s[++i];
 	p[j] = '\0';
 	j = -1;

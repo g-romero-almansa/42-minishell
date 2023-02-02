@@ -18,7 +18,7 @@ void	sighandler(int num)
 		rl_on_new_line();
 		printf ("\n");
 		rl_redisplay();
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -51,11 +51,13 @@ void	do_cmd(char *str)
 	{
 		i = 4;
 		while (str[++i])
-			if (str[i] == '$')
-				i = ft_echo(str, envp, i) + i;
-			else
+        {
+            if (str[i] == '$')
+				i = ft_echo(str, var_env, i) + i;
+            else
 				printf ("%c", str[i]);
-		printf("\n");
+        }
+        printf("\n");
 		rl_on_new_line();
 	}
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
@@ -191,6 +193,25 @@ void    copy_env(char **new, char **envp)
     }
 }
 
+int check_builtin(char *str)
+{
+    if (!ft_strncmp(str, "pwd", 3))
+        return (1);
+    else if (!ft_strncmp(str, "cd", 2))
+        return (1);
+    else if (!ft_strncmp(str, "echo", 4))
+        return (1);
+    else if (!ft_strncmp(str, "exit", 4))
+        return (1);
+    else if (!ft_strncmp(str, "env", 3))
+        return (1);
+    else if (!ft_strncmp(str, "export", 6))
+        return (1);
+    else if (!ft_strncmp(str, "unset", 5))
+        return (1);
+    return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
@@ -210,14 +231,18 @@ int	main(int argc, char **argv, char **envp)
         str = readline(BEGIN "My Term $ " CLOSE);
 		if (!str)
 		{
-			printf ("exit\n");
+            printf ("exit\n");
 			exit(0);
 		}
-		ft_env_(str, envp);
+		ft_env_(str, var_env);
         if (str && *str)
             add_history(str);
-		check_pipe(str);
-        do_cmd(str);
+        if (check_pipe(str))
+            do_pipes(str);
+        else if (check_builtin(str))
+            do_cmd(str);
+        else
+            find_cmd(str, var_env, argv);
         free(str);
     }
 }

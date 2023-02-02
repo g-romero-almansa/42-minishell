@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
-				source/ft_utils.c source/ft_echo.c
+				source/ft_utils.c source/ft_echo.c source/command.c
 
 OBJ_SRC		=	 $(SRC:.c = .o)
 
