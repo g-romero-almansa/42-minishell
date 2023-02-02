@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/31 13:01:11 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/02 11:31:01 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -121,14 +121,13 @@ void	do_cmd(char *str)
     }
     if (!ft_strncmp(str, "env", sizeof(str)))
 	{
-		i = -1;
-		while (var_env[++i])
-		{
-			j = -1;
-			while (var_env[i][++j])
-				printf ("%c", var_env[i][j]);
-			printf ("\n");
-		}	
+		i = 0;
+		while (var_env[i])
+			i++;
+		printf ("%d\n", i);
+		j = -1;
+		while (++j < i)
+			printf ("%s\n", var_env[j]);
 	}
 	if (!ft_strncmp(str, "unset", 5))
 	{
@@ -160,19 +159,12 @@ void	do_cmd(char *str)
     if (!ft_strncmp(str, "export", 6))
     {
 		int		i;
-		char	**env;
+
 		i = 0;
 		while (var_env[i])
 			i++;
-		env = (char **)malloc((i + 1) * sizeof(char *));
-		if (!env)
-			exit(0);
-		env = ft_export(var_env, str, i, env);	
-		var_env = (char **)malloc((i + 1) *sizeof(char *));
-		if (!var_env)
-			exit(0);
-		ft_cpy_env(env, var_env);
-        /*if (ft_strchr(str, '='))
+		ft_export(str, i);
+	 	/*if (ft_strchr(str, '='))
         {
             char    **temp;
             int     lenght;
@@ -203,10 +195,10 @@ int	main(int argc, char **argv, char **envp)
 	i = 0;
 	while (envp[i])
 		i++;
-	var_env = (char **)malloc(i * sizeof(char *));
+	var_env = (char **)malloc((i) * sizeof(char *));
 	if (!var_env)
 		exit(0);
-    ft_cpy_env(envp, var_env);
+    ft_cpy_env(envp);
     while (1)
     {
         str = readline(BEGIN "My Term $ " CLOSE);
@@ -215,7 +207,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_putendl_fd ("exit", 2);
 			exit(0);
 		}
-		ft_env_(str, envp);
+		ft_env_(str, var_env);
         if (str && *str)
             add_history(str);
 		check_pipe(str);

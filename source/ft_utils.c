@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 11:35:18 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/31 13:00:25 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:21:26 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -35,6 +35,5 @@ void	ft_free_env(char **var_env)
 	i = -1;
 	while (var_env[++i])
 		free(var_env[i]);
-	//free(var_env[i]);
 	free(var_env);
 }

@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/31 12:54:46 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/01 11:20:08 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ void	ft_update_env(char *var, char *pwd, char **env);
 
 void	ft_env_(char *nev, char **env);
 
-void	ft_cpy_env(char **envp, char **cpy);
+void	ft_cpy_env(char **envp);
+
+char	**ft_cpy_env2(char **envp, char **cpy);
 
 /*FT_EXPORT*/
 
-char	**ft_export(char **envp, char *str, int i, char **env);
+void	ft_export(char *str, int i);
 
 /*FT_ECHO*/
 
