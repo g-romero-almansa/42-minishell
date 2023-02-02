@@ -6,47 +6,40 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/31 12:00:41 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:22:10 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	**ft_export(char **envp, char *str, int i, char **cpy)
+void	ft_export(char *str, int i)
 {
-	char	*acum;
+	char	**cpy;
 	int		j;
 	int		k;
 
 	cpy = (char **)malloc((i + 1) * sizeof(char *));
-	acum = (char *)malloc(ft_strlen(envp[i - 1]) * sizeof(char));
-	if (!cpy || !acum)
+	if (!cpy)
 		exit(0);
-	acum = envp[i - 1];
+	cpy = ft_cpy_env2(var_env, cpy);
+	ft_free_env(var_env);
+	var_env = (char **)malloc((i + 100) * sizeof(char *));
 	j = -1;
 	while (++j < (i - 1))
 	{
-		cpy[j] = (char *)malloc(ft_strlen(envp[j]) * sizeof(char));
+		var_env[j] = (char *)malloc(ft_strlen(cpy[j]) * sizeof(char));
 		k = -1;
-		while (envp[j][++k])
-			cpy[j][k] = envp[j][k];
-		free(envp[j]);
+		while (cpy[j][++k])
+			var_env[j][k] = cpy[j][k];
 	}
-	cpy[j] = (char *)malloc(ft_strlen(str) * sizeof(char));
-	j = 0;
-	while (str[j] != ' ')
-		j++;
+	var_env[j] = (char *)malloc((ft_strlen(str) - 7) * sizeof(char));
 	k = -1;
-	while (str[++j])
-	{	
-		cpy[i - 1][++k] = str[j];
+	while (str[++k + 7])
+	{
+		var_env[j][k] = str[k + 7];
 	}
-	cpy[i] = (char *)malloc(ft_strlen(envp[i - 1]) * sizeof(char));
-	j = -1;
-	while (envp[i - 1][++j])
-		cpy[i][j] = envp[i - 1][j];
-	free(envp[i - 1]);
-	free(envp);
-	cpy[++i] = (char *)malloc(1 * sizeof(char));
-	cpy[i][0] = '\0';
-	return (cpy);
+	var_env[++j] = (char *)malloc(ft_strlen(cpy[i - 1] + 10) * sizeof(char));
+	k = -1;
+	while (cpy[i - 1][++k])
+		var_env[j][k] = cpy[i - 1][k];
+	ft_free_env(cpy);
 }
