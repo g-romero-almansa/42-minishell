@@ -52,7 +52,12 @@ void	do_cmd(char *str)
 		i = 4;
 		while (str[++i])
         {
-            if (str[i] == '$')
+            if (str[i] == '$' && str[i + 1] == '_')
+            {
+                echo_low_bar(str, var_env);
+                i++;
+            }
+            else if (str[i] == '$')
 				i = ft_echo(str, var_env, i) + i;
             else
 				printf ("%c", str[i]);
@@ -206,7 +211,7 @@ int check_builtin(char *str)
 }
 
 int	main(int argc, char **argv, char **envp)
-{	
+{
     char    *str;
 	int		i;
 

@@ -26,14 +26,26 @@ char	*find_path(char **var_env)
 char	*ft_paths_arg(char **paths_sep, char *str)
 {
 	char	*temp;
+	char	*s;
 	char	*cmd;
 	int		i;
+	int		lenght;
 
+	i = 0;
+	while (str[i] && str[i] != ' ')
+		i++;
+	s = malloc(sizeof(char) * (i + 1));
+	lenght = 0;
+	while (lenght < i)
+	{
+		s[lenght] = str[lenght];
+		lenght++;
+	}
 	i = 0;
 	while (paths_sep[i])
 	{
 		temp = ft_strjoin(paths_sep[i], "/");
-		cmd = ft_strjoin(temp, str);
+		cmd = ft_strjoin(temp, s);
 		free(temp);
 		if (!access(cmd, F_OK))
 			return (cmd);
