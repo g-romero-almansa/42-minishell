@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:03:46 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/02 14:25:19 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:06:26 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -17,7 +17,7 @@ char	**ft_cpy_env2(char **envp, char **cpy)
 
 	i = -1;
 	while (envp[++i])
-		cpy[i] = envp[i];
+		cpy[i] = ft_strdup(envp[i]);
 	return (cpy);
 }
 
@@ -32,7 +32,6 @@ void	ft_env_(char *nev, char **env)
 		i++;
 	nev = ft_last_word(nev);
 	k = -1;
-	ft_bzero(env[i], ft_strlen(env[i]));
 	env[i][0] = '_';
 	env[i][1] = '=';
 	j = 1;

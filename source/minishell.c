@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/02 14:24:35 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/08 10:49:47 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -23,7 +23,7 @@ void	sighandler(int num)
 	}
 }
 
-void	do_cmd(char *str)
+void	do_cmd(char *str, t_t *p)
 {
     char	*pwd;
     char	*s;
@@ -123,12 +123,8 @@ void	do_cmd(char *str)
     }
     if (!ft_strncmp(str, "env", sizeof(str)))
 	{
-		i = 0;
-		while (var_env[i])
-			i++;
-		printf ("%d\n", i);
 		j = -1;
-		while (++j < i)
+		while (++j <= (p->env_n))
 			printf ("%s\n", var_env[j]);
 	}
 	if (!ft_strncmp(str, "unset", 5))
@@ -160,29 +156,15 @@ void	do_cmd(char *str)
     }
     if (!ft_strncmp(str, "export", 6))
     {
-		int		i;
+		char	**cpy;
 
-		i = 0;
-		while (var_env[i])
-			i++;
-		ft_export(str, i);
-	 	/*if (ft_strchr(str, '='))
-        {
-            char    **temp;
-            int     lenght;
-
-            lenght = 0;
-            while (var_env[lenght])
-                lenght++;
-            temp = malloc(sizeof(char *) * (lenght + 1));
-            ft_cpy_env(var_env, temp);
-            temp[lenght] = temp[lenght - 1];
-            temp[lenght - 1] = str + 7;
-            temp[lenght + 1] = 0;
-            var_env = malloc(sizeof(char *) * (lenght + 1));
-            ft_cpy_env(temp, var_env);
-            free(temp);
-        }*/
+		cpy = (char **)malloc((p->env_n) * sizeof(char *));
+		cpy = ft_cpy_env2(var_env, cpy);
+		ft_free_env (var_env, p->env_n);
+		var_env = (char **)malloc((p->env_n + 1) * sizeof(char *));
+		var_env = ft_export(str + 7, cpy, p->env_n);
+		ft_free_env (cpy, p->env_n);
+		p->env_n++;
     }
 }
 
@@ -209,6 +191,7 @@ int	main(int argc, char **argv, char **envp)
 {	
     char    *str;
 	int		i;
+	t_t		*p;
 
 	(void)argc;
     (void)argv;
@@ -217,11 +200,13 @@ int	main(int argc, char **argv, char **envp)
 	while (envp[i])
 		i++;
 	var_env = (char **)malloc((i + 1) * sizeof(char *));
+	p = malloc(sizeof(t_t));
+	p->env_n = 28;
 	if (!var_env)
 		exit(0);
     var_env = ft_cpy_env2(envp, var_env);
     while (1)
-    {
+    {	
         str = readline(BEGIN "My Term $ " CLOSE);
 		if (!str)
 		{
@@ -234,7 +219,7 @@ int	main(int argc, char **argv, char **envp)
         if (check_pipe(str))
             do_pipes(str);
         else if (check_builtin(str))
-            do_cmd(str);
+            do_cmd(str, p);
         else
             find_cmd(str, var_env, argv);
         free(str);

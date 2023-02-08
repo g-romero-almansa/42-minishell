@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/01 11:20:08 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/08 10:45:40 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,13 @@
 
 char    **var_env;
 
+typedef struct s_t
+{
+	int		env_n;
+}	t_t;
+
 /*MINISHELL*/
-void	do_cmd(char *str);
+void	do_cmd(char *str, t_t *p);
 void    copy_env(char **new, char **envp);
 int     check_builtin(char *str);
 
@@ -45,7 +50,7 @@ char	**ft_cpy_env2(char **envp, char **cpy);
 
 /*FT_EXPORT*/
 
-void	ft_export(char *str, int i);
+char 	**ft_export(char *str, char **cpy, int i);
 
 /*FT_ECHO*/
 
@@ -56,7 +61,7 @@ size_t	ft_count(char *s);
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
 
-void	ft_free_env(char **var_env);
+void	ft_free_env(char **var_env, int j);
 
 /*PIPES*/
 void	do_pipes(char *str);
