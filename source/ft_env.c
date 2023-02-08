@@ -28,16 +28,19 @@ void	ft_env_(char *nev, char **env)
 	int		k;
 
 	i = 0;
-	while (env[i] && ft_strncmp(env[i], "_=", 2))
-		i++;
-	nev = ft_last_word(nev);
-	k = -1;
-	env[i][0] = '_';
-	env[i][1] = '=';
-	j = 1;
-	while (nev[++k])
-		env[i][++j] = nev[k];
-	env[i][j + 1] = '\0';
+	if (ft_strncmp(nev, "echo $_", ft_strlen(nev)))
+	{
+		while (env[i] && ft_strncmp(env[i], "_=", 2))
+			i++;
+		nev = ft_last_word(nev);
+		k = -1;
+		env[i][0] = '_';
+		env[i][1] = '=';
+		j = 1;
+		while (nev[++k])
+			env[i][++j] = nev[k];
+		env[i][j + 1] = '\0';
+	}
 }
 
 void	ft_update_env(char *var, char *pwd, char **env)

@@ -34,7 +34,6 @@ typedef struct s_t
 
 /*MINISHELL*/
 void	do_cmd(char *str, t_t *p);
-void    copy_env(char **new, char **envp);
 int     check_builtin(char *str);
 
 /*FT_ENV*/
@@ -57,6 +56,8 @@ char	**ft_unset(char *str, char **cpy, int i);
 int		ft_echo(char *s, char **envp, int i);
 
 size_t	ft_count(char *s);
+
+void	echo_low_bar(char *str, char **envp);
 
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
