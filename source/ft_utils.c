@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 11:35:18 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/01 12:21:26 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:06:55 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -28,12 +28,12 @@ char	*ft_last_word(char *s)
 	return (str);
 }
 
-void	ft_free_env(char **var_env)
+void	ft_free_env(char **var_env, int j)
 {
 	int		i;
 	
 	i = -1;
-	while (var_env[++i])
+	while (++i < j)
 		free(var_env[i]);
 	free(var_env);
 }

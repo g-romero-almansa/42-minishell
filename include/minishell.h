@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/01 11:20:08 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/08 10:53:57 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,13 @@
 
 char    **var_env;
 
+typedef struct s_t
+{
+	int		env_n;
+}	t_t;
+
 /*MINISHELL*/
-void	do_cmd(char *str);
-void    copy_env(char **new, char **envp);
+void	do_cmd(char *str, t_t *p);
 int     check_builtin(char *str);
 
 /*FT_ENV*/
@@ -39,13 +43,11 @@ void	ft_update_env(char *var, char *pwd, char **env);
 
 void	ft_env_(char *nev, char **env);
 
-void	ft_cpy_env(char **envp);
-
-char	**ft_cpy_env2(char **envp, char **cpy);
+char	**ft_cpy_env(char **envp, char **cpy, int max);
 
 /*FT_EXPORT*/
 
-void	ft_export(char *str, int i);
+char 	**ft_export(char *str, char **cpy, int i);
 
 /*FT_ECHO*/
 
@@ -58,7 +60,7 @@ void	echo_low_bar(char *str, char **envp);
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
 
-void	ft_free_env(char **var_env);
+void	ft_free_env(char **var_env, int j);
 
 /*PIPES*/
 void	do_pipes(char *str);
