@@ -6,17 +6,17 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:03:46 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/07 13:06:26 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/08 10:53:41 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	**ft_cpy_env2(char **envp, char **cpy)
+char	**ft_cpy_env(char **envp, char **cpy, int max)
 {
 	int		i;
 
 	i = -1;
-	while (envp[++i])
+	while (++i <= max)
 		cpy[i] = ft_strdup(envp[i]);
 	return (cpy);
 }
