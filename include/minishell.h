@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <termios.h>
+# include <fcntl.h>
 
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
@@ -41,7 +42,7 @@ void	ft_env_pwd(char *old, char *nev, char **env, int num);
 
 void	ft_update_env(char *var, char *pwd, char **env);
 
-void	ft_env_(char *nev, char **env);
+void	ft_env_(char *nev, char **env, int max);
 
 char	**ft_cpy_env(char **envp, char **cpy, int max);
 
@@ -55,7 +56,7 @@ int		ft_echo(char *s, char **envp, int i);
 
 size_t	ft_count(char *s);
 
-void	echo_low_bar(char *str, char **envp);
+void	echo_low_bar(char *str, char **envp, int max);
 
 /*FT_UTILS*/
 char	*ft_last_word(char *s);

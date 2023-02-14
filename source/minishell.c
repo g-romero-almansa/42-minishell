@@ -47,14 +47,14 @@ void	do_cmd(char *str, t_t *p)
 		printf("%s", str + 8);
 		rl_on_new_line();
 	}
-	else if (!ft_strncmp(str, "echo", 4))
+	else if (!ft_strncmp(str, "echo", 4)) //mirar echo$PATH
 	{
 		i = 4;
 		while (str[++i])
         {
             if (str[i] == '$' && str[i + 1] == '_')
             {
-                echo_low_bar(str, var_env);
+                echo_low_bar(str, var_env, p->env_n);
                 i++;
             }
             else if (str[i] == '$')
@@ -218,7 +218,7 @@ int	main(int argc, char **argv, char **envp)
             printf ("exit\n");
 			exit(0);
 		}
-		ft_env_(str, var_env);
+		ft_env_(str, var_env, p->env_n);
         if (str && *str)
             add_history(str);
         if (check_pipe(str))
