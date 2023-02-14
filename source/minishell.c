@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/08 10:54:38 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/13 12:10:06 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -18,7 +18,7 @@ void	sighandler(int num)
 		rl_on_new_line();
 		printf ("\n");
 		rl_redisplay();
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -134,30 +134,18 @@ void	do_cmd(char *str, t_t *p)
 	}
 	if (!ft_strncmp(str, "unset", 5))
 	{
-        char    *sub;
-        char    **var;
-        int     del;
-        
-        sub = ft_substr(str, 6, sizeof(str) - 5);
-        i = 0;
-        while (var_env[i])
-        {
-            if (!ft_strncmp(var_env[i], sub, sizeof(sub)))
-                del = i;
-            i++;
-        }
-        var = malloc(sizeof(char *) * i);
-        i = 0;
-        while (var_env[i])
-        {
-            if (i == del)
-                i++;
-            else
-                var[i] = var_env[i];
-            i++;
-        }
-        free(var_env);
-        var_env = var;
+		char	**cpy;
+
+		cpy = (char **)malloc((p->env_n) * sizeof(char *));
+		cpy = ft_cpy_env(var_env, cpy, p->env_n);
+		ft_free_env (var_env, p->env_n);
+		var_env = (char **)malloc((p->env_n - 1) * sizeof(char *));
+		var_env = ft_unset(str + 6, cpy, p->env_n);
+		ft_free_env(cpy, p->env_n);
+		i = -1;
+		while (++i < p->env_n)
+			printf ("%s\n", var_env[i]);
+		p->env_n--;
     }
     if (!ft_strncmp(str, "export", 6))
     {

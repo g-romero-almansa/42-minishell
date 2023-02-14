@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/08 10:53:57 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/08 12:29:28 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ char	**ft_cpy_env(char **envp, char **cpy, int max);
 /*FT_EXPORT*/
 
 char 	**ft_export(char *str, char **cpy, int i);
+
+char	**ft_unset(char *str, char **cpy, int i);
 
 /*FT_ECHO*/
 
