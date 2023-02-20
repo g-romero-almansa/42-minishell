@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/13 12:10:06 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/20 12:35:44 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -17,9 +17,12 @@ void	sighandler(int num)
 	{	
 		rl_on_new_line();
 		printf ("\n");
-		rl_redisplay();
+		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		rl_replace_line("", 1);
+		//rl_redisplay();
+		//rl_replace_line("", 1);
 	}
 }
 
@@ -52,16 +55,18 @@ void	do_cmd(char *str, t_t *p)
 		i = 4;
 		while (str[++i])
         {
-            if (str[i] == '$' && str[i + 1] == '_')
+            if (str[i] == 34 || str[i] == 39)
+				i = ft_quotes(str, i, str[i], p);
+			 else if (str[i] == '$' && str[i + 1] == '_')
             {
                 echo_low_bar(str, var_env);
                 i++;
             }
             else if (str[i] == '$')
 				i = ft_echo(str, var_env, i) + i;
-            else
+			else 
 				printf ("%c", str[i]);
-        }
+		}
         printf("\n");
 		rl_on_new_line();
 	}
@@ -142,9 +147,6 @@ void	do_cmd(char *str, t_t *p)
 		var_env = (char **)malloc((p->env_n - 1) * sizeof(char *));
 		var_env = ft_unset(str + 6, cpy, p->env_n);
 		ft_free_env(cpy, p->env_n);
-		i = -1;
-		while (++i < p->env_n)
-			printf ("%s\n", var_env[i]);
 		p->env_n--;
     }
     if (!ft_strncmp(str, "export", 6))
@@ -195,6 +197,9 @@ int	main(int argc, char **argv, char **envp)
 	var_env = (char **)malloc((i + 1) * sizeof(char *));
 	p = malloc(sizeof(t_t));
 	p->env_n = 28;
+	p->flag_s = 0;
+	p->flag_d = 0;
+	p->flag_qu = 0;
 	if (!var_env)
 		exit(0);
     var_env = ft_cpy_env(envp, var_env, p->env_n);

@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 10:52:54 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/20 12:37:07 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -69,4 +69,44 @@ void	echo_low_bar(char *str, char **envp)
 			s = ft_strchr(s, ' ');
 		printf("%s", s + 1);
 	}
+}
+
+int	ft_quotes(char *s, int i, char c, t_t *p)
+{
+	int		j;
+
+	p->flag_qu = 0;
+	j = i;
+	++i;
+	while (s[i] && s[i] != c)
+	{
+		i++;
+	}
+	if (i != (int)ft_strlen(s) && c == 34)
+		p->flag_qu = 1;
+	else if (c == 34)
+		write (1, &c, 1);
+	 if (i != (int)ft_strlen(s) && c == 39)
+		p->flag_qu = 2;
+	 else if (c == 39)
+		 write (1, &c, 1);
+	if (p->flag_qu == 2)
+		while (++j < i)
+			write (1, &s[j], 1);
+	if (p->flag_qu == 1)
+		while (++j < i)
+		{
+			if (s[j] == '$' && s[j + 1] == '_')
+            {
+                echo_low_bar(s, var_env);
+                j++;
+            }
+            else if (s[j] == '$')
+			{
+				j = ft_echo(s, var_env, j) + j;
+			}
+			else
+				printf ("%c", s[j]);
+		}
+	return (j);
 }
