@@ -75,13 +75,18 @@ void    find_cmd(char *str, char **var_env, char **argv)
     char    *cmd;
 	pid_t	pid;
 	int		status;
+	char	**str_sep;
+	int		file;
 
-    pid = fork();
+    str_sep = ft_split(str, ' ');
+	file = open(str_sep[1], O_RDONLY);
+	pid = fork();
 	status = 0;
 	if (pid == 0)
 	{
 		path_env = find_path(var_env);
 		paths_sep = ft_split(path_env, ':');
+		dup2(file, STDIN_FILENO);
 		cmd = ft_paths_arg(paths_sep, str);
 		if (!cmd)
 		{
@@ -93,6 +98,6 @@ void    find_cmd(char *str, char **var_env, char **argv)
 		}
 		execve(cmd, argv, var_env);
 	}
-	else
-		waitpid(pid, &status, 0);
+	close(file);
+	waitpid(pid, &status, 0);
 }

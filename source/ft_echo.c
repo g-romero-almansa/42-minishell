@@ -48,7 +48,7 @@ size_t	ft_count(char *s)
 	return (i);
 }
 
-void	echo_low_bar(char *str, char **envp)
+void	echo_low_bar(char *str, char **envp, int max)
 {
 	int		i;
 	char	*s;
@@ -56,18 +56,18 @@ void	echo_low_bar(char *str, char **envp)
 	i = 0;
 	if (!ft_strncmp(str, "echo $_", ft_strlen(str)))
 	{
-		while (envp[i] && ft_strncmp(envp[i], "_=", 2))
+		while (i < max && ft_strncmp(envp[i], "_=", 2))
 			i++;
 		s = malloc(sizeof(char) * (ft_strlen(envp[i]) + 1));
 		s = ft_strchr(envp[i], '=');
-		if (!ft_strncmp(envp[i], "echo $", 6))
+		if (!ft_strncmp(envp[i], "_=$", 3))
 		{
 			s = ft_strchr(envp[i], '$');
-			printf("%s\n", s);
+			s = ft_strjoin("echo ", s);
+			ft_echo(s, envp, 5);
 		}
-		if (ft_strchr(s, ' '))
-			s = ft_strchr(s, ' ');
-		printf("%s", s + 1);
+		else
+			printf("%s", s + 1);
 	}
 }
 

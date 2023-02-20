@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    child_process(void)
+void    child_process(int *fd, char **pipe_sep)
 {
     printf("h");
 }
@@ -24,16 +24,17 @@ void    do_pipes(char *str)
 {
     int fd[2];
     int status;
+    char    **pipe_sep;
     pid_t   child_pid;
 
-    (void)str;
+    pipe_sep = ft_split(str, '|');
     if (pipe(fd) < 0)
         perror("Error en pipe");
     child_pid = fork();
     if (child_pid == -1)
         perror("Error en fork");
     else if (child_pid == 0)
-        child_process();
+        child_process(fd, pipe_sep);
     else
         parent_process();
     waitpid(-1, &status, 0);

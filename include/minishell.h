@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <termios.h>
+# include <fcntl.h>
 
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
@@ -60,7 +61,7 @@ int		ft_echo(char *s, char **envp, int i);
 
 size_t	ft_count(char *s);
 
-void	echo_low_bar(char *str, char **envp);
+void	echo_low_bar(char *str, char **envp, int max);
 
 int		ft_quotes(char *s, int i, char c, t_t *p);
 
