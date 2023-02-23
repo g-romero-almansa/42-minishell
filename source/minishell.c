@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/20 12:35:44 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/23 12:08:34 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -47,7 +47,21 @@ void	do_cmd(char *str, t_t *p)
 	}
 	else if (!ft_strncmp(str, "echo -n", 7))
 	{
-		printf("%s", str + 8);
+		i = 7;
+		while (str[++i])
+        {
+            if (str[i] == 34 || str[i] == 39)
+				i = ft_quotes(str, i, str[i], p);
+			 else if (str[i] == '$' && str[i + 1] == '_')
+            {
+                echo_low_bar(str, var_env, p->env_n);
+                i++;
+            }
+            else if (str[i] == '$')
+				i = ft_echo(str, var_env, i) + i;
+			else
+				printf ("%c", str[i]);
+		}
 		rl_on_new_line();
 	}
 	else if (!ft_strncmp(str, "echo", 4)) //mirar echo$PATH

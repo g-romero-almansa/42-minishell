@@ -6,12 +6,12 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 12:45:49 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/01/18 12:45:53 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/02/23 10:46:18 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    child_process(int *fd, char **pipe_sep)
+void    child_process(void)
 {
     printf("h");
 }
@@ -34,7 +34,7 @@ void    do_pipes(char *str)
     if (child_pid == -1)
         perror("Error en fork");
     else if (child_pid == 0)
-        child_process(fd, pipe_sep);
+        child_process();
     else
         parent_process();
     waitpid(-1, &status, 0);
