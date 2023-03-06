@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/20 11:21:32 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/06 12:21:06 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,8 @@ char	*find_path(char **var_env);
 char	*ft_paths_arg(char **paths_sep, char *str);
 void	free_matrix(char **matrix);
 void    find_cmd(char *str, char **var_env, char **argv);
+
+
+void	ft_prueba(char *s);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/02 10:54:19 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/06 12:33:44 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -24,6 +24,11 @@ void	sighandler(int num)
 		//rl_redisplay();
 		//rl_replace_line("", 1);
 	}
+	else if (num == SIGQUIT)
+	{	
+		rl_on_new_line();
+		rl_replace_line("", 1);
+	}
 }
 
 void	do_cmd(char *str, t_t *p)
@@ -37,7 +42,7 @@ void	do_cmd(char *str, t_t *p)
 	int		len;
 
     len = 0;
-    if (!ft_strncmp(str, "pwd", 3))
+	if (!ft_strncmp(str, "pwd", 4))
     {
 		len = ft_strlen(getenv("PWD"));
 		pwd = malloc(sizeof(char) * (len + 1));
@@ -52,7 +57,7 @@ void	do_cmd(char *str, t_t *p)
         {
             if (str[i] == 34 || str[i] == 39)
 				i = ft_quotes(str, i, str[i], p);
-			 else if (str[i] == '$' && str[i + 1] == '_')
+			else if (str[i] == '$' && str[i + 1] == '_')
             {
                 echo_low_bar(str, var_env, p->env_n);
                 i++;
@@ -68,10 +73,20 @@ void	do_cmd(char *str, t_t *p)
 	{
 		i = 4;
 		while (str[++i])
+		{
+			if (str[i] == '>')
+			{
+				ft_prueba(str);
+				break;
+			}
+			else
+				i = 4;
+		}
+		while (str[++i])
         {
-            if (str[i] == 34 || str[i] == 39)
+			if (str[i] == 34 || str[i] == 39)
 				i = ft_quotes(str, i, str[i], p);
-			 else if (str[i] == '$' && str[i + 1] == '_')
+			else if (str[i] == '$' && str[i + 1] == '_')
             {
                 echo_low_bar(str, var_env, p->env_n);
                 i++;
@@ -167,7 +182,7 @@ void	do_cmd(char *str, t_t *p)
     {
 		char	**cpy;
 
-		cpy = (char **)malloc((p->env_n) * sizeof(char *));
+		cpy = (char **)malloc(((p->env_n) + 1) * sizeof(char *));
 		cpy = ft_cpy_env(var_env, cpy, p->env_n);
 		ft_free_env (var_env, p->env_n);
 		var_env = (char **)malloc((p->env_n + 1) * sizeof(char *));
@@ -205,6 +220,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
     (void)argv;
     signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
 	i = 0;
 	while (envp[i])
 		i++;
