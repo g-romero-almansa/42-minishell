@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/13 12:10:06 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/02 10:54:19 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -17,9 +17,12 @@ void	sighandler(int num)
 	{	
 		rl_on_new_line();
 		printf ("\n");
-		rl_redisplay();
+		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		rl_replace_line("", 1);
+		//rl_redisplay();
+		//rl_replace_line("", 1);
 	}
 }
 
@@ -80,6 +83,11 @@ int	main(int argc, char **argv, char **envp)
     while (envp[i])
         i++;
 	var_env = (char **)malloc((i + 1) * sizeof(char *));
+	p = malloc(sizeof(t_t));
+	p->env_n = 28;
+	p->flag_s = 0;
+	p->flag_d = 0;
+	p->flag_qu = 0;
 	if (!var_env)
 		exit(0);
 	p = malloc(sizeof(t_t));

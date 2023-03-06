@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/08 12:29:28 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/20 11:21:32 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ char    **var_env;
 typedef struct s_t
 {
 	int		env_n;
+	int		flag_s;
+	int		flag_d;
+	int		flag_qu;
 }	t_t;
 
 /*MINISHELL*/
@@ -59,6 +62,8 @@ int		ft_echo(char *s, char **envp, int i);
 size_t	ft_count(char *s);
 
 void	echo_low_bar(char *str, char **envp, int max);
+
+int		ft_quotes(char *s, int i, char c, t_t *p);
 
 /*FT_UTILS*/
 char	*ft_last_word(char *s);

@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/01/30 10:52:54 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/02/23 11:52:27 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -20,7 +20,7 @@ int	ft_echo(char *s, char **envp, int i)
 	if (!p)
 		exit (0);
 	j = -1;
-	while (s[i] != ' ' && s[i])
+	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
 		p[++j] = s[++i];
 	p[j] = '\0';
 	j = -1;
@@ -69,4 +69,44 @@ void	echo_low_bar(char *str, char **envp, int max)
 		else
 			printf("%s", s + 1);
 	}
+}
+
+int	ft_quotes(char *s, int i, char c, t_t *p)
+{
+	int		j;
+
+	p->flag_qu = 0;
+	j = i;
+	++i;
+	while (s[i])
+		i++;
+	while (s[i] != c)
+		i--;
+	if (i != (int)ft_strlen(s) && c == 34)
+		p->flag_qu = 1;
+	else if (c == 34)
+		write (1, &c, 1);
+	 if (i != (int)ft_strlen(s) && c == 39)
+		p->flag_qu = 2;
+	 else if (c == 39)
+		 write (1, &c, 1);
+	if (p->flag_qu == 2)
+		while (++j < i)
+			write (1, &s[j], 1);
+	if (p->flag_qu == 1)
+		while (++j < i)
+		{
+			if (s[j] == '$' && s[j + 1] == '_')
+            {
+                echo_low_bar(s, var_env, p->env_n);
+                j++;
+            }
+            else if (s[j] == '$')
+			{
+				j = ft_echo(s, var_env, j) + j;
+			}
+			else if (s[j] != 34)
+				printf ("%c", s[j]);
+		}
+	return (j);
 }
