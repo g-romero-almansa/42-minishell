@@ -34,7 +34,7 @@ typedef struct s_t
 }	t_t;
 
 /*MINISHELL*/
-void	do_cmd(char *str, t_t *p);
+void	do_builtin(char *str, t_t *p);
 int     check_builtin(char *str);
 
 /*FT_ENV*/
@@ -67,13 +67,27 @@ void	ft_free_env(char **var_env, int j);
 
 /*PIPES*/
 void	do_pipes(char *str);
-
 int     check_pipe(char *str);
+void    ft_last(char **pipe_sep, int *prevpipe, int i);
+void    ft_pipe(char **pipe_sep, int *prevpipe, int i);
+void    exec(char **pipe_sep, int i);
 
 /*COMMAND*/
 char	*find_path(char **var_env);
-char	*ft_paths_arg(char **paths_sep, char *str);
+char	*paths_arg(char **paths_sep, char **arg);
 void	free_matrix(char **matrix);
-void    find_cmd(char *str, char **var_env, char **argv);
+void	c_proccess(int status, char *str, char **str_sep);
+void    find_cmd(char *str);
+
+/*BUILTIN*/
+void    do_env(t_t *p);
+void    do_pwd(void);
+void    do_echo(char *str, t_t *p);
+void    do_unset(t_t *p, char *str);
+void    do_export(char *str, t_t *p);
+
+/*BUILTIN_CD*/
+void    cd_back_home(int flag);
+void    do_cd(char *str);
 
 #endif

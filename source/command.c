@@ -23,29 +23,17 @@ char	*find_path(char **var_env)
 	return (path_env + 5);
 }
 
-char	*ft_paths_arg(char **paths_sep, char *str)
+char	*paths_arg(char **paths_sep, char **arg)
 {
 	char	*temp;
-	char	*s;
 	char	*cmd;
 	int		i;
-	int		lenght;
 
-	i = 0;
-	while (str[i] && str[i] != ' ')
-		i++;
-	s = malloc(sizeof(char) * (i + 1));
-	lenght = 0;
-	while (lenght < i)
-	{
-		s[lenght] = str[lenght];
-		lenght++;
-	}
 	i = 0;
 	while (paths_sep[i])
 	{
 		temp = ft_strjoin(paths_sep[i], "/");
-		cmd = ft_strjoin(temp, s);
+		cmd = ft_strjoin(temp, arg[0]);
 		free(temp);
 		if (!access(cmd, F_OK))
 			return (cmd);
@@ -68,36 +56,39 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-void    find_cmd(char *str, char **var_env, char **argv)
+void	c_proccess(int status, char *str, char **str_sep)
 {
-    char    *path_env;
+	char    *path_env;
     char    **paths_sep;
     char    *cmd;
+	char	**arg;
+
+	path_env = find_path(var_env);
+	paths_sep = ft_split(path_env, ':');
+	arg = ft_split(str, ' ');
+	cmd = paths_arg(paths_sep, arg);
+	if (!cmd)
+	{
+		free_matrix(paths_sep);
+		free(cmd);
+		ft_putstr_fd(str, 2);
+		ft_putendl_fd(": command not found", 2);
+		exit(status);
+	}
+	execve(cmd, arg, var_env);
+	free(str_sep);
+}
+
+void    find_cmd(char *str)
+{
 	pid_t	pid;
 	int		status;
 	char	**str_sep;
-	int		file;
 
-    str_sep = ft_split(str, ' ');
-	file = open(str_sep[1], O_RDONLY);
+	str_sep = ft_split(str, ' ');
 	pid = fork();
 	status = 0;
 	if (pid == 0)
-	{
-		path_env = find_path(var_env);
-		paths_sep = ft_split(path_env, ':');
-		dup2(file, STDIN_FILENO);
-		cmd = ft_paths_arg(paths_sep, str);
-		if (!cmd)
-		{
-			free_matrix(paths_sep);
-			free(cmd);
-			ft_putstr_fd(str, 2);
-			ft_putendl_fd(": command not found", 2);
-			exit(status);
-		}
-		execve(cmd, argv, var_env);
-	}
-	close(file);
+		c_proccess(status, str, str_sep);
 	waitpid(pid, &status, 0);
 }
