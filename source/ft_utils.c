@@ -28,12 +28,12 @@ char	*ft_last_word(char *s)
 	return (str);
 }
 
-void	ft_free_env(char **var_env, int j)
+void	ft_free_env(char **env, int j)
 {
 	int		i;
 	
 	i = -1;
-	while (++i < j)
-		free(var_env[i]);
-	free(var_env);
+	while (++i <= j && env[i])
+		free(env[i]);
+	free(env);
 }

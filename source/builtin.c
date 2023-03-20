@@ -23,6 +23,15 @@ void    do_pwd(void)
     rl_on_new_line();
 }
 
+int echo_status(t_t *p, int i)
+{
+    (void)p;
+    printf("%d", p->e_status);
+    i++;
+    rl_on_new_line();
+    return (i);
+}
+
 void    do_echo(char *str, t_t *p)
 {
     int i;
@@ -42,6 +51,8 @@ void    do_echo(char *str, t_t *p)
                 echo_low_bar(str, var_env, p->env_n);
                 i++;
             }
+            else if (str[i] == '$' && str[i + 1] == '?')
+                i = echo_status(p, i);
             else if (str[i] == '$')
 				i = ft_echo(str, var_env, i) + i;
             else
@@ -52,33 +63,29 @@ void    do_echo(char *str, t_t *p)
     }
 }
 
-void    do_unset(t_t *p, char *str) //no funciona para las variables de env
-{
-    char	**cpy;
-    int     i;
-
-    cpy = (char **)malloc((p->env_n) * sizeof(char *));
-    cpy = ft_cpy_env(var_env, cpy, p->env_n);
-    ft_free_env (var_env, p->env_n);
-    var_env = (char **)malloc((p->env_n - 1) * sizeof(char *));
-    var_env = ft_unset(str + 6, cpy, p->env_n);
-    ft_free_env(cpy, p->env_n);
-    i = -1;
-    while (++i < p->env_n)
-        printf ("%s\n", var_env[i]);
-    p->env_n--;
-}
-
-void    do_export(char *str, t_t *p)
+void    do_unset(t_t *p, char *str)
 {
     char	**cpy;
 
     cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
     cpy = ft_cpy_env(var_env, cpy, p->env_n);
-    ft_free_env (var_env, p->env_n);
-    var_env = (char **)malloc((p->env_n + 1) * sizeof(char *));
+    ft_free_env(var_env, p->env_n);
+    var_env = (char **)malloc((p->env_n) * sizeof(char *));
+    var_env = ft_unset(str + 6, cpy, p->env_n);
+    ft_free_env(cpy, p->env_n);
+    p->env_n--;
+}
+
+void    do_export(char *str, t_t *p) //export sin variables
+{
+    char	**cpy;
+
+    cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
+    cpy = ft_cpy_env(var_env, cpy, p->env_n);
+    ft_free_env(var_env, p->env_n);
+    var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
     var_env = ft_export(str + 7, cpy, p->env_n);
-    ft_free_env (cpy, p->env_n);
+    ft_free_env(cpy, p->env_n);
     p->env_n++;
 }
 
@@ -87,6 +94,6 @@ void    do_env(t_t *p)
     int i;
 
     i = -1;
-    while (++i <= (p->env_n))
+    while (++i <= p->env_n && var_env[i])
         printf ("%s\n", var_env[i]);
 }

@@ -16,7 +16,7 @@ char 	**ft_export(char *str, char **cpy, int i)
 	int		j;
 
 	j = -1;
-	while (++j <= i)
+	while (++j <= i && cpy[j])
 		var_env[j] = ft_strdup(cpy[j]);
 	var_env[j] = ft_strdup(str);
 	return (var_env);
@@ -26,9 +26,11 @@ char	**ft_unset(char *str, char **cpy, int i)
 {
 	int		j;
 	int		k;
+	char	*s;
 
+	s = ft_strjoin(str, "=");
 	j = 0;
-	while (j <= i && ft_strncmp(str, cpy[j], ft_strlen(str)))
+	while (j <= i && ft_strncmp(s, cpy[j], ft_strlen(s)))
 	{
 		var_env[j] = ft_strdup(cpy[j]);
 		j++;
@@ -38,6 +40,7 @@ char	**ft_unset(char *str, char **cpy, int i)
 	{
 		var_env[j] = ft_strdup(cpy[k]);
 		k++;
+		j++;
 	}
 	return (var_env);
 }

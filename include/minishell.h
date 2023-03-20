@@ -22,6 +22,9 @@
 # include <signal.h>
 # include <termios.h>
 # include <fcntl.h>
+# include <dirent.h>
+# include <errno.h>
+# include <sys/stat.h>
 
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
@@ -34,6 +37,7 @@ typedef struct s_t
 	int		flag_s;
 	int		flag_d;
 	int		flag_qu;
+	int		e_status;
 }	t_t;
 
 /*MINISHELL*/
@@ -47,7 +51,7 @@ void	ft_update_env(char *var, char *pwd, char **env);
 
 void	ft_env_(char *nev, char **env, int max);
 
-char	**ft_cpy_env(char **envp, char **cpy, int max);
+char	**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
 
@@ -68,23 +72,24 @@ int		ft_quotes(char *s, int i, char c, t_t *p);
 /*FT_UTILS*/
 char	*ft_last_word(char *s);
 
-void	ft_free_env(char **var_env, int j);
+void	ft_free_env(char **env, int j);
 
 /*PIPES*/
-void	do_pipes(char *str);
+void	do_pipes(char *str, t_t *p);
 int     check_pipe(char *str);
-void    ft_last(char **pipe_sep, int *prevpipe, int i);
-void    ft_pipe(char **pipe_sep, int *prevpipe, int i);
-void    exec(char **pipe_sep, int i);
+void    ft_last(char **pipe_sep, int *prevpipe, int i, t_t *p);
+void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_t *p);
+void    exec(char **pipe_sep, int i, t_t *p);
 
 /*COMMAND*/
 char	*find_path(char **var_env);
 char	*paths_arg(char **paths_sep, char **arg);
 void	free_matrix(char **matrix);
-void	c_proccess(int status, char *str, char **str_sep);
-void    find_cmd(char *str);
+void	c_proccess(int status, char *str, char **str_sep, t_t *p);
+void    find_cmd(char *str, t_t *p);
 
 /*BUILTIN*/
+int		echo_status(t_t *p, int i);
 void    do_env(t_t *p);
 void    do_pwd(void);
 void    do_echo(char *str, t_t *p);
@@ -92,7 +97,12 @@ void    do_unset(t_t *p, char *str);
 void    do_export(char *str, t_t *p);
 
 /*BUILTIN_CD*/
-void    cd_back_home(int flag);
-void    do_cd(char *str);
+void	do_cd_back(void);
+void	do_cd_home(void);
+void	do_cd(char *str);
+
+/*EXEC*/
+int		check_exec(char *str);
+void	exec_file(char *str, char **argv);
 
 #endif

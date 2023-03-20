@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	**ft_cpy_env(char **envp, char **cpy, int max)
+char	**ft_cpy_env(char **env, char **cpy, int max)
 {
 	int		i;
 
 	i = -1;
-	while (++i <= max && envp[i])
-		cpy[i] = ft_strdup(envp[i]);
+	while (++i <= max && env[i])
+		cpy[i] = ft_strdup(env[i]);
 	return (cpy);
 }
 
