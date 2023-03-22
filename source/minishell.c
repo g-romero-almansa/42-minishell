@@ -37,14 +37,14 @@ void	do_builtin(char *str, t_t *p)
 {
     if (!ft_strncmp(str, "pwd", 3))
         do_pwd();
-	else if (!ft_strncmp(str, "echo", 4)) //mirar echo$PATH
+	else if (!ft_strncmp(str, "echo", 4))
         do_echo(str, p);
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
         rl_on_new_line();
     else if (!ft_strncmp(str, "cd ", 3))
         do_cd(str);
     else if (!ft_strncmp(str, "cd", 2))
-        cd_back_home(2);
+        do_cd_home();
 	if (!ft_strncmp(str, "exit", sizeof(str)))
     {
         printf("exit\n");
@@ -60,11 +60,11 @@ void	do_builtin(char *str, t_t *p)
 
 int check_builtin(char *str)
 {
-    if (!ft_strncmp(str, "pwd", 3))
+    if (!ft_strncmp(str, "pwd ", 4))
         return (1);
     else if (!ft_strncmp(str, "cd", 2))
         return (1);
-    else if (!ft_strncmp(str, "echo", 4))
+    else if (!ft_strncmp(str, "echo ", 5))
         return (1);
     else if (!ft_strncmp(str, "exit", 4))
         return (1);
@@ -84,22 +84,20 @@ int	main(int argc, char **argv, char **envp)
 	t_t		*p;
 
 	(void)argc;
-    (void)argv;
     signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
     i = 0;
     while (envp[i])
         i++;
 	var_env = (char **)malloc((i + 1) * sizeof(char *));
+	if (!var_env)
+		exit(0);
 	p = malloc(sizeof(t_t));
 	p->env_n = 28;
 	p->flag_s = 0;
 	p->flag_d = 0;
 	p->flag_qu = 0;
-	if (!var_env)
-		exit(0);
-	p = malloc(sizeof(t_t));
-	p->env_n = 28;
+    p->e_status = 0;
     var_env = ft_cpy_env(envp, var_env, p->env_n);
     while (1)
     {	
@@ -113,11 +111,13 @@ int	main(int argc, char **argv, char **envp)
         if (str && *str)
             add_history(str);
         if (check_pipe(str))
-            do_pipes(str);
+            do_pipes(str, p);
         else if (check_builtin(str))
             do_builtin(str, p);
+        else if (check_exec(str))
+            exec_file(str, argv);
         else
-            find_cmd(str);
+            find_cmd(str, p);
         free(str);
     }
 }

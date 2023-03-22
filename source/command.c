@@ -11,15 +11,15 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	*find_path(char **var_env)
+char	*find_path(char **env)
 {
 	int		i;
 	char	*path_env;
 
 	i = 0;
-	while (!ft_strnstr(var_env[i], "PATH=", 5))
+	while (!ft_strnstr(env[i], "PATH=", 5))
 		i++;
-	path_env = ft_strnstr(var_env[i], "PATH=", 5);
+	path_env = ft_strnstr(env[i], "PATH=", 5);
 	return (path_env + 5);
 }
 
@@ -56,19 +56,21 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-void	c_proccess(int status, char *str, char **str_sep)
+void	c_proccess(int status, char *str, char **str_sep, t_t *p)
 {
 	char    *path_env;
     char    **paths_sep;
     char    *cmd;
 	char	**arg;
 
+	(void)p;
 	path_env = find_path(var_env);
 	paths_sep = ft_split(path_env, ':');
 	arg = ft_split(str, ' ');
 	cmd = paths_arg(paths_sep, arg);
 	if (!cmd)
 	{
+		p->e_status = 127;
 		free_matrix(paths_sep);
 		free(cmd);
 		ft_putstr_fd(str, 2);
@@ -79,7 +81,7 @@ void	c_proccess(int status, char *str, char **str_sep)
 	free(str_sep);
 }
 
-void    find_cmd(char *str)
+void    find_cmd(char *str, t_t *p)
 {
 	pid_t	pid;
 	int		status;
@@ -89,6 +91,6 @@ void    find_cmd(char *str)
 	pid = fork();
 	status = 0;
 	if (pid == 0)
-		c_proccess(status, str, str_sep);
+		c_proccess(status, str, str_sep, p);
 	waitpid(pid, &status, 0);
 }

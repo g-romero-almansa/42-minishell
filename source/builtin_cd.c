@@ -11,40 +11,41 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    cd_back_home(int flag)
+void    do_cd_back(void)
+{
+    char    *s;
+
+    chdir("..");
+    s = malloc (sizeof(char) * ft_strlen(getenv("PWD")));
+    getcwd(s, ft_strlen(getenv("PWD")));
+    ft_env_pwd(getenv("PWD"), s, var_env, 1);
+    rl_on_new_line();
+}
+
+void    do_cd_home(void)
 {
     char    *s;
     int     len;
 
-    if (flag == 1)
-    {
-        chdir("..");
-        s = malloc (sizeof(char) * ft_strlen(getenv("PWD")));
-        getcwd(s, ft_strlen(getenv("PWD")));
-        ft_env_pwd(getenv("PWD"), s, var_env, 1);
-        rl_on_new_line();
-    }
-    else
-    {
-        len = ft_strlen(getenv("HOME"));
-        s = malloc(sizeof(char) * len);
-        s = getenv("HOME");
-        ft_env_pwd(getenv("PWD"), s, var_env, 1);
-        chdir(s);
-    }
+    len = ft_strlen(getenv("HOME"));
+    s = malloc(sizeof(char) * len);
+    s = getenv("HOME");
+    ft_env_pwd(getenv("PWD"), s, var_env, 1);
+    chdir(s);
 }
 
 void    do_cd(char *str)
 {
+    DIR     *dirp;
     char    *dir;
     char    *pwd;
     int     len;
     char    *path_dir;
     
     if (!ft_strncmp(str, "cd ..", sizeof(str)))
-        cd_back_home(1);
+        do_cd_back();
     else if (!ft_strncmp(str, "cd ", sizeof(str)))
-        cd_back_home(2);
+        do_cd_home();
     else
     {
         dir = malloc(sizeof(char) * (ft_strlen(str) - 3));
@@ -54,7 +55,14 @@ void    do_cd(char *str)
         pwd = malloc(sizeof(char) * (len + 1));
         getcwd(pwd, len + 1);
         path_dir = ft_strjoin(pwd, dir);
-        ft_env_pwd(pwd, path_dir, var_env, 1);
-        chdir(path_dir);
+        dirp = opendir(path_dir);
+        if (dirp == NULL)
+            printf("%s: %s\n", str, strerror(errno));
+        else
+        {
+            ft_env_pwd(pwd, path_dir, var_env, 1);
+            chdir(path_dir);
+            closedir(dirp);
+        }
     }
 }

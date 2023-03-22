@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    exec(char **pipe_sep, int i)
+void    exec(char **pipe_sep, int i, t_t *p)
 {
     char    *path_env;
     char    **paths_sep;
@@ -30,10 +30,12 @@ void    exec(char **pipe_sep, int i)
 		ft_putendl_fd(": command not found", 2);
 		exit(0);
     }
+    if (check_builtin(str_sep[0]))
+        do_builtin(str_sep[0], p);
     execve(cmd, str_sep, var_env);
 }
 
-void    ft_pipe(char **pipe_sep, int *prevpipe, int i)
+void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_t *p)
 {
     int fd[2];
     pid_t   child_pid;
@@ -50,7 +52,7 @@ void    ft_pipe(char **pipe_sep, int *prevpipe, int i)
         close(fd[1]);
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
-        exec(pipe_sep, i);
+        exec(pipe_sep, i, p);
     }
     else
     {
@@ -60,7 +62,7 @@ void    ft_pipe(char **pipe_sep, int *prevpipe, int i)
     }
 }
 
-void    ft_last(char **pipe_sep, int *prevpipe, int i)
+void    ft_last(char **pipe_sep, int *prevpipe, int i, t_t *p)
 {
     pid_t   last_pid;
     pid_t   check;
@@ -72,7 +74,7 @@ void    ft_last(char **pipe_sep, int *prevpipe, int i)
     {
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
-        exec(pipe_sep, i);
+        exec(pipe_sep, i, p);
     }
     else
     {
@@ -83,7 +85,7 @@ void    ft_last(char **pipe_sep, int *prevpipe, int i)
     }
 }
 
-void    do_pipes(char *str)
+void    do_pipes(char *str, t_t *p)
 {
     int     prevpipe;
     int     n_pipes;
@@ -99,9 +101,9 @@ void    do_pipes(char *str)
     while (i <= n_pipes)
     {
         if (pipe_sep[i] && pipe_sep[i + 1])
-            ft_pipe(pipe_sep, &prevpipe, i);
+            ft_pipe(pipe_sep, &prevpipe, i, p);
         else if (pipe_sep[i + 1] == NULL)
-            ft_last(pipe_sep, &prevpipe, i);
+            ft_last(pipe_sep, &prevpipe, i, p);
         i++;
     }
 }
