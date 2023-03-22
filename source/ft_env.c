@@ -16,7 +16,7 @@ char	**ft_cpy_env(char **envp, char **cpy, int max)
 	int		i;
 
 	i = -1;
-	while (++i <= max)
+	while (++i <= max && envp[i])
 		cpy[i] = ft_strdup(envp[i]);
 	return (cpy);
 }
