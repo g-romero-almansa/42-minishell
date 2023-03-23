@@ -6,14 +6,14 @@
 #    By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/12 10:57:13 by gromero-          #+#    #+#              #
-#    Updated: 2023/02/08 11:01:07 by gromero-         ###   ########.fr        #
+#    Updated: 2023/03/22 10:56:27 by gromero-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
 				source/ft_utils.c source/ft_echo.c source/command.c \
 				source/ft_export_unset.c source/builtin.c source/builtin_cd.c \
-				source/exec.c
+			   	source/ft_redirect.c source/exec.c
 
 OBJ_SRC		=	 $(SRC:.c = .o)
 

@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/02/20 11:21:32 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/13 11:37:51 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,8 @@ void	do_cd(char *str);
 int		check_exec(char *str);
 void    add_level(char *str, t_t *p);
 void	exec_file(char *str, char **argv, t_t *p);
+
+
+void	ft_prueba(char *s, int flag);
 
 #endif

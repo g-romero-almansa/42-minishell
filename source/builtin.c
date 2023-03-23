@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/03/01 10:53:06 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/03/13 11:37:27 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -35,8 +35,18 @@ int echo_status(t_t *p, int i)
 void    do_echo(char *str, t_t *p)
 {
     int i;
+	int	flag;
 
-    if (!ft_strncmp(str, "echo -n", 7))
+	i = -1;
+	flag = 0;
+	while (str[++i])
+		if (str[i] == '>')
+			flag++;
+	if (flag == 1)
+		ft_prueba(str, 1);
+	else if (flag == 2)
+		ft_prueba(str, 2);
+	else if (!ft_strncmp(str, "echo -n", 7))
 	{
 		printf("%s", str + 8);
 		rl_on_new_line();

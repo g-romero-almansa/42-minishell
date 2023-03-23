@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/02 10:54:19 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/15 12:23:06 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -16,13 +16,20 @@ void	sighandler(int num)
 	if (num == SIGINT)
 	{	
 		rl_on_new_line();
-		printf ("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
 		rl_redisplay();
-		rl_replace_line("", 1);
-		//rl_redisplay();
-		//rl_replace_line("", 1);
+		rl_replace_line("", 0);
+		write (1, "  \n", 3);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (num == SIGQUIT)
+	{	
+		rl_on_new_line();
+		rl_redisplay();
+		rl_replace_line("", 0);
+		//write (1, "  ", 2);
+		//rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -78,6 +85,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
     signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
     i = 0;
     while (envp[i])
         i++;
@@ -96,7 +104,7 @@ int	main(int argc, char **argv, char **envp)
         str = readline(BEGIN "My Term $ " CLOSE);
 		if (!str)
 		{
-            printf ("exit\n");
+            ft_putstr_fd("exit\n", 2);
 			exit(0);
 		}
 		ft_env_(str, var_env, p->env_n);
