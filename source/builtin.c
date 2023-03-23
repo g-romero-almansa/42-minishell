@@ -25,9 +25,9 @@ void    do_pwd(void)
 
 int echo_status(t_t *p, int i)
 {
-    (void)p;
     printf("%d", p->e_status);
     i++;
+    p->e_status = 0;
     rl_on_new_line();
     return (i);
 }

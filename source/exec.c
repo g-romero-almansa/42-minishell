@@ -18,7 +18,31 @@ int check_exec(char *str)
     return (0);
 }
 
-void    exec_file(char *str, char **argv)
+void    add_level(char *str, t_t *p)
+{
+    int     i;
+    char    *sub;
+    int     num;
+
+    i = 0;
+    if (!ft_strncmp(str, "/minishell", sizeof(str)))
+    {
+        while (i <= p->env_n && var_env[i])
+        {
+            if (!ft_strncmp(var_env[i], "SHLVL=", 6))
+            {
+                sub = ft_strchr(var_env[i], '=');
+                num = ft_atoi(sub + 1);
+                num++;
+                sub = ft_strjoin("SHLVL=", ft_itoa(num));
+                var_env[i] = sub;
+            }
+            i++;
+        }
+    }
+}
+
+void    exec_file(char *str, char **argv, t_t *p)
 {
     int     len;
     char    *pwd;
@@ -36,14 +60,13 @@ void    exec_file(char *str, char **argv)
         dir = malloc(sizeof(char) * (ft_strlen(str) - 2));
         dir = ft_strchr(str, '/');
         pwd = ft_strjoin(pwd, dir);
+        add_level(dir, p);
         if (execve(pwd, argv, var_env) == -1)
         {
             ft_putstr_fd(str, 2);
-            printf(": %s\n", strerror(errno));
+            ft_putendl_fd(strerror(errno), 2);
             exit(status);
         }
-        //else
-        //  SHLVL++
     }
     waitpid(pid, &status, 0);
 }

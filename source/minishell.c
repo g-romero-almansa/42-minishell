@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **envp)
         else if (check_builtin(str))
             do_builtin(str, p);
         else if (check_exec(str))
-            exec_file(str, argv);
+            exec_file(str, argv, p);
         else
             find_cmd(str, p);
         free(str);

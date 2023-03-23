@@ -86,7 +86,7 @@ char	*find_path(char **var_env);
 char	*paths_arg(char **paths_sep, char **arg);
 void	free_matrix(char **matrix);
 void	c_proccess(int status, char *str, char **str_sep, t_t *p);
-void    find_cmd(char *str, t_t *p);
+void	find_cmd(char *str, t_t *p);
 
 /*BUILTIN*/
 int		echo_status(t_t *p, int i);
@@ -103,6 +103,7 @@ void	do_cd(char *str);
 
 /*EXEC*/
 int		check_exec(char *str);
-void	exec_file(char *str, char **argv);
+void    add_level(char *str, t_t *p);
+void	exec_file(char *str, char **argv, t_t *p);
 
 #endif
