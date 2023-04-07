@@ -33,7 +33,7 @@ void	sighandler(int num)
 	}
 }
 
-void	do_builtin(char *str, t_t *p)
+void	do_builtin(char *str, t_shell *p)
 {
     if (!ft_strncmp(str, "pwd", 3))
         do_pwd();
@@ -42,16 +42,13 @@ void	do_builtin(char *str, t_t *p)
 	else if (!ft_strncmp(str, "cd .", sizeof(str)))
         rl_on_new_line();
     else if (!ft_strncmp(str, "cd ", 3))
-        do_cd(str);
+        do_cd(str, p);
     else if (!ft_strncmp(str, "cd", 2))
-        do_cd_home();
-	if (!ft_strncmp(str, "exit", sizeof(str)))
-    {
-        printf("exit\n");
-        exit(0);
-    }
+        do_cd_home(p);
+	if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
+        do_exit(str);
     if (!ft_strncmp(str, "env", sizeof(str)))
-        do_env(p);
+        do_env(p, str);
 	if (!ft_strncmp(str, "unset", 5))
         do_unset(p, str);
     if (!ft_strncmp(str, "export", 6))
@@ -66,9 +63,9 @@ int check_builtin(char *str)
         return (1);
     else if (!ft_strncmp(str, "echo ", 5))
         return (1);
-    else if (!ft_strncmp(str, "exit", 4))
+    else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
         return (1);
-    else if (!ft_strncmp(str, "env", 3))
+    else if (!ft_strncmp(str, "env", sizeof(str)))
         return (1);
     else if (!ft_strncmp(str, "export", 6))
         return (1);
@@ -81,36 +78,38 @@ int	main(int argc, char **argv, char **envp)
 {
     char    *str;
     int     i;
-	t_t		*p;
+	t_shell *p;
 
-	(void)argc;
     signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
+	p = malloc(sizeof(t_shell));
     i = 0;
     while (envp[i])
         i++;
-	var_env = (char **)malloc((i + 1) * sizeof(char *));
-	if (!var_env)
+	p->var_env = (char **)malloc((i + 1) * sizeof(char *));
+	if (!p->var_env)
 		exit(0);
-	p = malloc(sizeof(t_t));
-	p->env_n = 28;
+	p->env_n = i;
 	p->flag_s = 0;
 	p->flag_d = 0;
 	p->flag_qu = 0;
-    p->e_status = 0;
-    var_env = ft_cpy_env(envp, var_env, p->env_n);
-    while (1)
+    p->fd_out = STDOUT_FILENO;
+    p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
+    g_error = 0;
+    while (argc)
     {	
-        str = readline(BEGIN "My Term $ " CLOSE);
+        str = readline(BEGIN "minishell $ " CLOSE);
 		if (!str)
 		{
             ft_putstr_fd("exit\n", 2);
 			exit(0);
 		}
-		ft_env_(str, var_env, p->env_n);
+		ft_env_(str, p->var_env, p->env_n);
         if (str && *str)
             add_history(str);
-        if (check_pipe(str))
+        if (check_redir(str))
+            do_redir(str, p);
+        else if (check_pipe(str))
             do_pipes(str, p);
         else if (check_builtin(str))
             do_builtin(str, p);

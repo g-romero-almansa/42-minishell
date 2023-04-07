@@ -16,7 +16,7 @@ char	**ft_cpy_env(char **env, char **cpy, int max)
 	int		i;
 
 	i = -1;
-	while (++i <= max && env[i])
+	while (++i < max && env[i])
 		cpy[i] = ft_strdup(env[i]);
 	return (cpy);
 }
@@ -63,7 +63,7 @@ void	ft_update_env(char *var, char *pwd, char **env)
 
 void	ft_env_pwd(char *old, char *nev, char **env, int num)
 {
-	(void)num;
+	(void)num; //??
 	ft_update_env("OLDPWD", old, env);
 	ft_update_env("PWD", nev, env);
 }

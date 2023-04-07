@@ -18,7 +18,11 @@ int	ft_echo(char *s, char **envp, int i)
 
 	p = malloc((ft_strlen(s) - 6) * sizeof(char));
 	if (!p)
-		exit (0);
+	{
+		g_error = errno;
+		perror("Error: ");
+		exit(errno);
+	}
 	j = -1;
 	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
 		p[++j] = s[++i];
@@ -26,13 +30,13 @@ int	ft_echo(char *s, char **envp, int i)
 	j = -1;
 	while (envp[++j])
 	{
-		if (!ft_strncmp(p, envp[j], ft_strlen(p)) && ft_strlen(p) == ft_count(envp[j]))
+		if (!ft_strncmp(p, envp[j], ft_strlen(p)) && (ft_strlen(p) == ft_count(envp[j])))
 		{
-			i = -1;	
+			i = -1;
 			while (envp[j][i] != '=')
 				i++;
 			while (envp[j][++i])
-				printf ("%c", envp[j][i]);
+				ft_putchar_fd(envp[j][i], 1);
 		}
 	}
 	return (ft_strlen(p));
@@ -59,6 +63,12 @@ void	echo_low_bar(char *str, char **envp, int max)
 		while (i < max && ft_strncmp(envp[i], "_=", 2))
 			i++;
 		s = malloc(sizeof(char) * (ft_strlen(envp[i]) + 1));
+		if (!s)
+		{
+			g_error = errno;
+			perror("Error: ");
+			exit(errno);
+		}
 		s = ft_strchr(envp[i], '=');
 		if (!ft_strncmp(envp[i], "_=$", 3))
 		{
@@ -67,11 +77,11 @@ void	echo_low_bar(char *str, char **envp, int max)
 			ft_echo(s, envp, 5);
 		}
 		else
-			printf("%s", s + 1);
+			ft_putstr_fd(s + 1, 1);
 	}
 }
 
-int	ft_quotes(char *s, int i, char c, t_t *p)
+int	ft_quotes(char *s, int i, char c, t_shell *p)
 {
 	int		j;
 
@@ -98,12 +108,12 @@ int	ft_quotes(char *s, int i, char c, t_t *p)
 		{
 			if (s[j] == '$' && s[j + 1] == '_')
             {
-                echo_low_bar(s, var_env, p->env_n);
+                echo_low_bar(s, p->var_env, p->env_n);
                 j++;
             }
             else if (s[j] == '$')
 			{
-				j = ft_echo(s, var_env, j) + j;
+				j = ft_echo(s, p->var_env, j) + j;
 			}
 			else if (s[j] != 34)
 				printf ("%c", s[j]);

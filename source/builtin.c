@@ -19,38 +19,24 @@ void    do_pwd(void)
     len = ft_strlen(getenv("PWD"));
     pwd = malloc(sizeof(char) * (len + 1));
     getcwd(pwd, len + 1);
-    printf("%s\n", pwd);
-    rl_on_new_line();
+    ft_putendl_fd(pwd, 1);
 }
 
-int echo_status(t_t *p, int i)
+int echo_status(int i)
 {
-    printf("%d", p->e_status);
+    ft_putnbr_fd(g_error, 1);
     i++;
-    p->e_status = 0;
+    g_error = 0;
     rl_on_new_line();
     return (i);
 }
 
-void    do_echo(char *str, t_t *p)
+void    do_echo(char *str, t_shell *p)
 {
-    int i;
-	int	flag;
+	int i;
 
-	i = -1;
-	flag = 0;
-	while (str[++i])
-		if (str[i] == '>')
-			flag++;
-	if (flag == 1)
-		ft_prueba(str, 1);
-	else if (flag == 2)
-		ft_prueba(str, 2);
-	else if (!ft_strncmp(str, "echo -n", 7))
-	{
-		printf("%s", str + 8);
-		rl_on_new_line();
-	}
+    if (!ft_strncmp(str, "echo -n", 7))
+		ft_putstr_fd(str + 8, p->fd_out);
     else if (!ft_strncmp(str, "echo", 4))
     {
         i = 4;
@@ -58,52 +44,114 @@ void    do_echo(char *str, t_t *p)
         {
             if (str[i] == '$' && str[i + 1] == '_')
             {
-                echo_low_bar(str, var_env, p->env_n);
+                echo_low_bar(str, p->var_env, p->env_n);
                 i++;
             }
             else if (str[i] == '$' && str[i + 1] == '?')
-                i = echo_status(p, i);
+                i = echo_status(i);
             else if (str[i] == '$')
-				i = ft_echo(str, var_env, i) + i;
+				i = ft_echo(str, p->var_env, i) + i;
             else
-				printf ("%c", str[i]);
+				ft_putchar_fd(str[i], p->fd_out);
         }
         printf("\n");
-		rl_on_new_line();
     }
 }
 
-void    do_unset(t_t *p, char *str)
+void    do_unset(t_shell *p, char *str)
 {
     char	**cpy;
 
     cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
-    cpy = ft_cpy_env(var_env, cpy, p->env_n);
-    ft_free_env(var_env, p->env_n);
-    var_env = (char **)malloc((p->env_n) * sizeof(char *));
-    var_env = ft_unset(str + 6, cpy, p->env_n);
+    if (!cpy)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    cpy = ft_cpy_env(p->var_env, cpy, p->env_n);
+    ft_free_env(p->var_env, p->env_n);
+    p->var_env = (char **)malloc((p->env_n) * sizeof(char *));
+    if (!p->var_env)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    p->var_env = ft_unset(str + 6, cpy, p);
     ft_free_env(cpy, p->env_n);
-    p->env_n--;
 }
 
-void    do_export(char *str, t_t *p) //export sin variables
+void    do_export(char *str, t_shell *p)
 {
     char	**cpy;
 
     cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
-    cpy = ft_cpy_env(var_env, cpy, p->env_n);
-    ft_free_env(var_env, p->env_n);
-    var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
-    var_env = ft_export(str + 7, cpy, p->env_n);
+    if (!cpy)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    cpy = ft_cpy_env(p->var_env, cpy, p->env_n);
+    ft_free_env(p->var_env, p->env_n);
+    p->var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
+    if (!p->var_env)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    p->var_env = ft_export(str + 7, cpy, p);
     ft_free_env(cpy, p->env_n);
-    p->env_n++;
 }
 
-void    do_env(t_t *p)
+void    do_env(t_shell *p, char *str)
 {
     int i;
 
-    i = -1;
-    while (++i <= p->env_n && var_env[i])
-        printf ("%s\n", var_env[i]);
+    if (!find_path(p))
+    {
+        ft_putstr_fd(str, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+    }
+    else
+    {
+        i = 0;
+        while (i < p->env_n && p->var_env[i])
+        {
+            ft_putendl_fd(p->var_env[i], 1);
+            i++;
+        }
+    }
+}
+
+void    do_exit(char *str)
+{
+    char    **arg;
+    int     i;
+    int     len;
+
+    if (!ft_strncmp(str, "exit ", 5))
+    {
+        if (!ft_strncmp(str, "exit ", sizeof(str)))
+        {
+            ft_putendl_fd("exit", 2);
+            exit(0);
+        }
+        arg = ft_split(str, ' ');
+        len = ft_strlen(arg[1]);
+        i = 0;
+        while (i < len)
+        {
+            if (!ft_isdigit(arg[1][i]))
+            {
+                free_matrix(arg);
+                ft_putendl_fd("exit", 2);
+                ft_putstr_fd(str, 2);
+		        ft_putendl_fd(": numeric argument required", 2);
+                exit(0);
+            }
+            i++;
+        }
+        free_matrix(arg);
+    }
+    ft_putendl_fd("exit", 2);
+    exit(0);
 }
