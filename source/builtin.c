@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/03/13 11:37:27 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/22 11:20:42 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -89,14 +89,21 @@ void    do_unset(t_t *p, char *str)
 void    do_export(char *str, t_t *p) //export sin variables
 {
     char	**cpy;
-
-    cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
-    cpy = ft_cpy_env(var_env, cpy, p->env_n);
-    ft_free_env(var_env, p->env_n);
-    var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
-    var_env = ft_export(str + 7, cpy, p->env_n);
-    ft_free_env(cpy, p->env_n);
-    p->env_n++;
+	
+	if (ft_strlen(str) == 6)
+	{
+		ft_show_export(p);
+	}
+	else
+	{
+   		cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
+    	cpy = ft_cpy_env(var_env, cpy, p->env_n);
+    	ft_free_env(var_env, p->env_n);
+    	var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
+    	var_env = ft_export(str + 7, cpy, p->env_n);
+    	ft_free_env(cpy, p->env_n);
+    	p->env_n++;
+	}
 }
 
 void    do_env(t_t *p)

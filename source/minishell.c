@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/15 12:23:06 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/03/28 10:57:44 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -27,7 +27,7 @@ void	sighandler(int num)
 		rl_on_new_line();
 		rl_redisplay();
 		rl_replace_line("", 0);
-		//write (1, "  ", 2);
+		write (1, "  ", 2);
 		//rl_on_new_line();
 		rl_redisplay();
 	}
