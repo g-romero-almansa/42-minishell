@@ -174,6 +174,8 @@ void    lexer(char *str, t_shell *p)
             p->infile = ft_strdup(p->tokens[j]->value);
         if (p->tokens[j]->token_type == OUTFILE)
             p->outfile = ft_strdup(p->tokens[j]->value);
+        printf("TOKEN: %s\n", p->tokens[j]->value);
+        printf("TOKEN_TYPE: %u\n", p->tokens[j]->token_type);
         j++;
     }
 }

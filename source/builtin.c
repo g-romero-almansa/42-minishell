@@ -20,6 +20,7 @@ void    do_pwd(t_shell *p)
     pwd = malloc(sizeof(char) * (len + 1));
     getcwd(pwd, len + 1);
     ft_putendl_fd(pwd, 1);
+    free(pwd);
 }
 
 int echo_status(int i)

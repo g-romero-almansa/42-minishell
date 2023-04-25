@@ -5,3 +5,12 @@ ctrl - \ si se ejecuta con un comando como "cat"
 
 comillas dobles (echo "$USER" debería imprimirse sin las "")
 comillas simples (echo '$PATH' debería imprimir '$PATH')
+
+en la funcion ft_env_pwd se puede eliminar num??
+en la funcion ft_last_word se esta volviendo a dar memoria a una variable que ya tiene??
+
+las redirecciones de entrada (las dobles tambien) pueden ser:
+cat < infile
+cat <infile
+< infile cat
+<infile cat

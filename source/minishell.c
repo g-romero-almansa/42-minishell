@@ -39,19 +39,19 @@ void	do_builtin(char *str, t_shell *p)
         do_pwd(p);
 	else if (!ft_strncmp(str, "echo", 4))
         do_echo(str, p);
-	else if (!ft_strncmp(str, "cd .", sizeof(str)))
+    else if (!ft_strncmp(str, "cd", ft_strlen(str)) || !ft_strncmp(str, "cd ", ft_strlen(str)))
+        do_cd_home(p);
+	else if (!ft_strncmp(str, "cd .", ft_strlen(str)))
         rl_on_new_line();
     else if (!ft_strncmp(str, "cd ", 3))
         do_cd(str, p);
-    else if (!ft_strncmp(str, "cd", 2))
-        do_cd_home(p);
-	if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
+	else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
         do_exit(str);
-    if (!ft_strncmp(str, "env", sizeof(str)))
+    else if (!ft_strncmp(str, "env", ft_strlen(str)))
         do_env(p);
-	if (!ft_strncmp(str, "unset", 5))
+	else if (!ft_strncmp(str, "unset", 5))
         do_unset(p, str);
-    if (!ft_strncmp(str, "export", 6))
+    else if (!ft_strncmp(str, "export", 6))
         do_export(str, p);
 }
 
@@ -65,7 +65,7 @@ int check_builtin(char *str)
         return (1);
     else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
         return (1);
-    else if (!ft_strncmp(str, "env", sizeof(str)))
+    else if (!ft_strncmp(str, "env", ft_strlen(str)))
         return (1);
     else if (!ft_strncmp(str, "export", 6))
         return (1);
@@ -116,7 +116,7 @@ int	main(int argc, char **argv, char **envp)
         if (str && *str)
             add_history(str);
         p->str = ft_strdup(str);
-        //lexer(str, p);
+        lexer(str, p);
         //parser(p);
         //executer(p, argv);
         if (check_pipe(str))
@@ -128,12 +128,12 @@ int	main(int argc, char **argv, char **envp)
         else if (check_exec(str))
             exec_file(argv, p);
         else
-            find_cmd(p, str);
+            find_cmd(p);
         free(str);
         free(p->infile);
         free(p->outfile);
-        /*free(p->tokens);
-        free(p->pipes);*/
+        free(p->tokens);
+        //free(p->pipes);
     }
     free(p->var_env);
     free(p);

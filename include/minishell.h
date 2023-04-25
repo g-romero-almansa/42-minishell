@@ -114,8 +114,8 @@ void	exec(char **pipe_sep, t_shell *p, int i);
 char	*find_path(t_shell *p);
 char	*paths_arg(char **paths_sep, char **arg);
 void	free_matrix(char **matrix);
-void	c_proccess(t_shell *p, char *str);
-void	find_cmd(t_shell *p, char *str);
+void	c_proccess(t_shell *p);
+void	find_cmd(t_shell *p);
 
 /*BUILTIN*/
 int		echo_status(int i);

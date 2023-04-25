@@ -46,6 +46,7 @@ void    exec(char **pipe_sep, t_shell *p, int i)
             g_error = 127;
             exit(127);
         }
+        free_matrix(paths_sep);
         execve(cmd, str_sep, p->var_env);
     }
 }
@@ -146,6 +147,7 @@ void    do_pipes(char *str, t_shell *p)
             ft_last(pipe_sep, &prevpipe, i, p);
         i++;
     }
+    free_matrix(pipe_sep);
     free(p->child_pid);
 }
 

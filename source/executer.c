@@ -25,7 +25,7 @@ void    executer(t_shell *p, char **argv)
         else if (check_exec(p->str))
             exec_file(argv, p);
         else
-            find_cmd(p, p->str);
+            find_cmd(p);
     }
     else
     {

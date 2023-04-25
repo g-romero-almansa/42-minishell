@@ -47,6 +47,7 @@ void	input_redir(char *str, t_shell *p)
 		if (WIFEXITED(status))
 			g_error = WEXITSTATUS(status);
 	}
+	free_matrix(redir_sep);
 }
 
 void	output_redir(char *str, t_shell *p)
@@ -85,6 +86,7 @@ void	output_redir(char *str, t_shell *p)
 		if (WIFEXITED(status))
 			g_error = WEXITSTATUS(status);
 	}
+	free_matrix(redir_sep);
 }
 
 void	double_input(char *str, t_shell *p)
@@ -130,6 +132,7 @@ void	double_input(char *str, t_shell *p)
 		if (WIFEXITED(status))
 			g_error = WEXITSTATUS(status);
 	}
+	free_matrix(redir_sep);
 }
 
 void	double_output(char *str, t_shell *p)
@@ -169,6 +172,7 @@ void	double_output(char *str, t_shell *p)
 		if (WIFEXITED(status))
 			g_error = WEXITSTATUS(status);
 	}
+	free_matrix(redir_sep);
 }
 
 void	do_redir(char *str, t_shell *p)

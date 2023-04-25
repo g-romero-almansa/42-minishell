@@ -39,6 +39,7 @@ void    do_cd_back(t_shell *p)
     getcwd(s, ft_strlen(get_env("PWD=", p)));
     ft_env_pwd(get_env("PWD=", p), s, p->var_env, 1);
     rl_on_new_line();
+    free(s);
 }
 
 void    do_cd_home(t_shell *p)
@@ -66,10 +67,8 @@ void    do_cd(char *str, t_shell *p)
     int     len;
     char    *path_dir;
     
-    if (!ft_strncmp(str, "cd ..", sizeof(str)))
+    if (!ft_strncmp(str, "cd ..", ft_strlen(str)))
         do_cd_back(p);
-    else if (!ft_strncmp(str, "cd ", sizeof(str)))
-        do_cd_home(p);
     else
     {
         dir = malloc(sizeof(char) * (ft_strlen(str) - 3));
