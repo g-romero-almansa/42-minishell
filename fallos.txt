@@ -3,7 +3,5 @@ ctrl - \ si el prompt tiene algun comando
 ctrl - C si se ejecuta con un comando como "cat"
 ctrl - \ si se ejecuta con un comando como "cat"
 
-comillas dobles (menos con echo si son palabras)
-comillas simples (menos con echo si son palabras o env)
-
-$PATH con multiples directorios???
+comillas dobles (echo "$USER" debería imprimirse sin las "")
+comillas simples (echo '$PATH' debería imprimir '$PATH')

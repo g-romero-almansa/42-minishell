@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    exec(char **pipe_sep, int i, t_shell *p)
+void    exec(char **pipe_sep, t_shell *p, int i)
 {
     char    *path_env;
     char    **paths_sep;
@@ -74,14 +74,13 @@ void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_shell *p)
         close(fd[1]);
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
-        exec(pipe_sep, i, p);
+        exec(pipe_sep, p, i);
     }
     else
     {
         close(fd[1]);
         close(*prevpipe);
         *prevpipe = fd[0];
-        p->fd_out = STDOUT_FILENO;
     }
 }
 
@@ -100,7 +99,7 @@ void    ft_last(char **pipe_sep, int *prevpipe, int i, t_shell *p)
     {
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
-        exec(pipe_sep, i, p);
+        exec(pipe_sep, p, i);
     }
     else
     {
@@ -132,13 +131,13 @@ void    do_pipes(char *str, t_shell *p)
     p->n_pipes = 0;
     while (pipe_sep[p->n_pipes])
         p->n_pipes++;
-    i = 0;
     p->child_pid = (pid_t *)malloc(sizeof(pid_t) * (p->n_pipes + 1));
     if (!p->child_pid)
     {
         g_error = errno;
         perror("Error: ");
     }
+    i = 0;
     while (i <= p->n_pipes)
     {
         if (pipe_sep[i] && pipe_sep[i + 1])
@@ -147,6 +146,7 @@ void    do_pipes(char *str, t_shell *p)
             ft_last(pipe_sep, &prevpipe, i, p);
         i++;
     }
+    free(p->child_pid);
 }
 
 int check_pipe(char *str)

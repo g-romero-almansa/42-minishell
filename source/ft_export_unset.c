@@ -22,42 +22,34 @@ char 	**ft_export(char *str, char **cpy, t_shell *p)
 	while (str[j] != '=')
 		j++;
 	sub = ft_substr(str, 0, j);
-	if (!ft_strncmp(sub, "PATH", ft_strlen(sub)))
+	j = 0;
+	while (j < p->env_n && cpy[j])
 	{
-		p->var_env = ft_unset(sub, cpy, p);
-		free(sub);
+		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
+			flag = 1;
+		j++;
 	}
-	else
+	if (flag == 1)
 	{
 		j = 0;
 		while (j < p->env_n && cpy[j])
 		{
 			if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-				flag = 1;
+				p->var_env[j] = ft_strdup(str);
+			else
+				p->var_env[j] = ft_strdup(cpy[j]);
 			j++;
 		}
-		if (flag == 1)
-		{
-			j = 0;
-			while (j < p->env_n && cpy[j])
-			{
-				if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-					p->var_env[j] = ft_strdup(str);
-				else
-					p->var_env[j] = ft_strdup(cpy[j]);
-				j++;
-			}
-		}
-		else
-		{
-			p->env_n++;
-			j = -1;
-			while (++j < p->env_n && cpy[j])
-				p->var_env[j] = ft_strdup(cpy[j]);
-			p->var_env[j] = ft_strdup(str);
-		}
-		free(sub);
 	}
+	else
+	{
+		j = -1;
+		while (++j < p->env_n && cpy[j])
+			p->var_env[j] = ft_strdup(cpy[j]);
+		p->var_env[j] = ft_strdup(str);
+		p->env_n++;
+	}
+	free(sub);
 	return (p->var_env);
 }
 
@@ -82,5 +74,6 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 		j++;
 	}
 	p->env_n--;
+	free(s);
 	return (p->var_env);
 }

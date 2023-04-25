@@ -18,14 +18,14 @@ int check_exec(char *str)
     return (0);
 }
 
-void    add_level(char *str, t_shell *p)
+void    add_level(char *dir, t_shell *p)
 {
     int     i;
     char    *sub;
     int     num;
 
     i = 0;
-    if (!ft_strncmp(str, "/minishell", sizeof(str)))
+    if (!ft_strncmp(dir, "/minishell", ft_strlen(dir)))
     {
         while (i < p->env_n && p->var_env[i])
         {
@@ -43,7 +43,7 @@ void    add_level(char *str, t_shell *p)
     }
 }
 
-void    exec_file(char *str, char **argv, t_shell *p)
+void    exec_file(char **argv, t_shell *p)
 {
     int     len;
     char    *pwd;
@@ -60,8 +60,8 @@ void    exec_file(char *str, char **argv, t_shell *p)
     }
     else if (pid == 0)
     {
-        len = ft_strlen(getenv("PWD"));
-        pwd = malloc(sizeof(char) * (len + ft_strlen(str)));
+        len = ft_strlen(get_env("PWD", p));
+        pwd = malloc(sizeof(char) * (len + ft_strlen(p->str)));
         if (!pwd)
         {
             g_error = errno;
@@ -69,21 +69,21 @@ void    exec_file(char *str, char **argv, t_shell *p)
 		    exit(errno);
         }
         getcwd(pwd, len + 1);
-        dir = malloc(sizeof(char) * (ft_strlen(str) - 2));
+        dir = malloc(sizeof(char) * (ft_strlen(p->str) - 2));
         if (!dir)
         {
             g_error = errno;
 		    perror("Error: ");
 		    exit(errno);
         }
-        dir = ft_strchr(str, '/');
+        dir = ft_strchr(p->str, '/');
         pwd = ft_strjoin(pwd, dir);
         add_level(dir, p);
         if (execve(pwd, argv, p->var_env) == -1)
         {
             free(pwd);
             free(dir);
-            ft_putstr_fd(str, 2);
+            ft_putstr_fd(p->str, 2);
             ft_putstr_fd(": ", 2);
             ft_putendl_fd(strerror(errno), 2);
             g_error = 126;

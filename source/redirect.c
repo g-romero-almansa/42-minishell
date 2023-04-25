@@ -39,7 +39,7 @@ void	input_redir(char *str, t_shell *p)
 		p->fd_out = fd;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
-		exec(redir_sep, 0, p);
+		exec(redir_sep, p, 0);
 	}
 	else
 	{
@@ -77,7 +77,7 @@ void	output_redir(char *str, t_shell *p)
 		p->fd_out = fd;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		exec(redir_sep, 0, p);
+		exec(redir_sep, p, 0);
 	}
 	else
 	{
@@ -159,7 +159,7 @@ void	double_output(char *str, t_shell *p)
 		}
 		p->fd_out = fd;
 		dup2(fd, STDOUT_FILENO);
-		exec(redir_sep, 0, p);
+		exec(redir_sep, p, 0);
 		close(fd);
 		exit(0);
 	}

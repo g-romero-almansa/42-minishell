@@ -48,6 +48,7 @@ void	ft_update_env(char *var, char *pwd, char **env)
 	int		i;
 	int		j;
 	int		k;
+	char	*sub;
 
 	i = 0;
 	while (env[i] && ft_strncmp(env[i], var, ft_strlen(var)))
@@ -56,9 +57,10 @@ void	ft_update_env(char *var, char *pwd, char **env)
 	while (env[i][j] != '=')
 		j++;
 	k = -1;
-	while (pwd[++k])
-		env[i][++j] = pwd[k];
-	env[i][j + 1] = '\0';
+	sub = ft_substr(env[i], 0, j + 1);
+	free(env[i]);
+	env[i] = ft_strjoin(sub, pwd);
+	free(sub);
 }
 
 void	ft_env_pwd(char *old, char *nev, char **env, int num)
