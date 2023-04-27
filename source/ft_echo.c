@@ -39,7 +39,9 @@ int	ft_echo(char *s, char **envp, int i)
 				ft_putchar_fd(envp[j][i], 1);
 		}
 	}
-	return (ft_strlen(p));
+	j = ft_strlen(p);
+	free(p);
+	return (j);
 }
 
 size_t	ft_count(char *s)

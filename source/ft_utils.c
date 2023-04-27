@@ -17,7 +17,7 @@ char	*ft_last_word(char *s)
 	int		j;
 	char	*str;
 
-	str = malloc (ft_strlen(s) * sizeof(char));
+	str = malloc(ft_strlen(s) * sizeof(char));
 	i = ft_strlen(s) - 1;
 	while (s[i] != ' ' && s[i] != '\t' && s[i])
 		i--;

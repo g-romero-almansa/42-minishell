@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:31:47 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 11:15:51 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -22,42 +22,34 @@ char 	**ft_export(char *str, char **cpy, t_shell *p)
 	while (str[j] != '=')
 		j++;
 	sub = ft_substr(str, 0, j);
-	if (!ft_strncmp(sub, "PATH", ft_strlen(sub)))
+	j = 0;
+	while (j < p->env_n && cpy[j])
 	{
-		p->var_env = ft_unset(sub, cpy, p);
-		free(sub);
+		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
+			flag = 1;
+		j++;
 	}
-	else
+	if (flag == 1)
 	{
 		j = 0;
 		while (j < p->env_n && cpy[j])
 		{
 			if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-				flag = 1;
+				p->var_env[j] = ft_strdup(str);
+			else
+				p->var_env[j] = ft_strdup(cpy[j]);
 			j++;
 		}
-		if (flag == 1)
-		{
-			j = 0;
-			while (j < p->env_n && cpy[j])
-			{
-				if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-					p->var_env[j] = ft_strdup(str);
-				else
-					p->var_env[j] = ft_strdup(cpy[j]);
-				j++;
-			}
-		}
-		else
-		{
-			p->env_n++;
-			j = -1;
-			while (++j < p->env_n && cpy[j])
-				p->var_env[j] = ft_strdup(cpy[j]);
-			p->var_env[j] = ft_strdup(str);
-		}
-		free(sub);
 	}
+	else
+	{
+		j = -1;
+		while (++j < p->env_n && cpy[j])
+			p->var_env[j] = ft_strdup(cpy[j]);
+		p->var_env[j] = ft_strdup(str);
+		p->env_n++;
+	}
+	free(sub);
 	return (p->var_env);
 }
 
@@ -90,7 +82,7 @@ void	ft_show_export(t_shell *p)
 	{
 		j = -1;
 		while (p->var_env[++j])
-			if (p->var_env[j][0] == c)
+			if (p->var_env[j][0] == c)	
 				tpm[++i] = ft_substr(p->var_env[j], 0, ft_strlen(p->var_env[j]));
 		c++;
 	}
@@ -131,5 +123,6 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 		j++;
 	}
 	p->env_n--;
+	free(s);
 	return (p->var_env);
 }

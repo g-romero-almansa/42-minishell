@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:17:36 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:40:55 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -34,22 +34,22 @@ void	sighandler(int num)
 void	do_builtin(char *str, t_shell *p)
 {
     if (!ft_strncmp(str, "pwd", 3))
-        do_pwd();
+        do_pwd(p);
 	else if (!ft_strncmp(str, "echo", 4))
         do_echo(str, p);
-	else if (!ft_strncmp(str, "cd .", sizeof(str)))
+    else if (!ft_strncmp(str, "cd", ft_strlen(str)) || !ft_strncmp(str, "cd ", ft_strlen(str)))
+        do_cd_home(p);
+	else if (!ft_strncmp(str, "cd .", ft_strlen(str)))
         rl_on_new_line();
     else if (!ft_strncmp(str, "cd ", 3))
         do_cd(str, p);
-    else if (!ft_strncmp(str, "cd", 2))
-        do_cd_home(p);
-	if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
+	else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
         do_exit(str);
-    if (!ft_strncmp(str, "env", sizeof(str)))
-        do_env(p, str);
-	if (!ft_strncmp(str, "unset", 5))
+    else if (!ft_strncmp(str, "env", ft_strlen(str)))
+        do_env(p);
+	else if (!ft_strncmp(str, "unset", 5))
         do_unset(p, str);
-    if (!ft_strncmp(str, "export", 6))
+    else if (!ft_strncmp(str, "export", 6))
         do_export(str, p);
 }
 
@@ -59,11 +59,11 @@ int check_builtin(char *str)
         return (1);
     else if (!ft_strncmp(str, "cd", 2))
         return (1);
-    else if (!ft_strncmp(str, "echo ", 5))
+    else if (!ft_strncmp(str, "echo", 4))
         return (1);
     else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
         return (1);
-    else if (!ft_strncmp(str, "env", sizeof(str)))
+    else if (!ft_strncmp(str, "env", ft_strlen(str)))
         return (1);
     else if (!ft_strncmp(str, "export", 6))
         return (1);
@@ -89,13 +89,21 @@ int	main(int argc, char **argv, char **envp)
 	p->flag_s = 0;
 	p->flag_d = 0;
 	p->flag_qu = 0;
-    p->fd_out = STDOUT_FILENO;
     p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
 	g_error = 0;
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
     while (argc)
-    {
+    {	
+        p->interp = 1;
+        p->append = 0;
+        p->infile = ft_strdup("STDIN_FILENO");
+        p->outfile = ft_strdup("STDOUT_FILENO");
+        p->n_pipes = 0;
+        p->fd_out = STDOUT_FILENO;
+        p->fd_in = STDIN_FILENO;
+        dup2(0, STDIN_FILENO);
+        dup2(1, STDOUT_FILENO);
         str = readline(BEGIN "minishell $ " CLOSE);
 		if (!str)
 		{
@@ -105,16 +113,26 @@ int	main(int argc, char **argv, char **envp)
 		ft_env_(str, p->var_env, p->env_n);
         if (str && *str)
             add_history(str);
-        if (check_redir(str))
-            do_redir(str, p);
-        else if (check_pipe(str))
+        p->str = ft_strdup(str);
+        lexer(str, p);
+        //parser(p);
+        //executer(p, argv);
+        if (check_pipe(str))
             do_pipes(str, p);
+        else if (check_redir(str))
+            do_redir(str, p);
         else if (check_builtin(str))
             do_builtin(str, p);
         else if (check_exec(str))
-            exec_file(str, argv, p);
+            exec_file(argv, p);
         else
-            find_cmd(str, p);	
+            find_cmd(p);
         free(str);
+        free(p->infile);
+        free(p->outfile);
+        free(p->tokens);
+        //free(p->pipes);
     }
+    free(p->var_env);
+    free(p);
 }
