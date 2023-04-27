@@ -6,49 +6,71 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 12:45:49 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/02/23 10:46:18 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:22:23 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void    exec(char **pipe_sep, int i, t_t *p)
+void    exec(char **pipe_sep, int i, t_shell *p)
 {
     char    *path_env;
     char    **paths_sep;
     char    **str_sep;
     char    *cmd;
 
-    path_env = find_path(var_env);
-    paths_sep = ft_split(path_env, ':');
     str_sep = ft_split(pipe_sep[i], ' ');
-    cmd = paths_arg(paths_sep, str_sep);
-    if (!cmd)
-    {
-        free_matrix(paths_sep);
-		free(cmd);
-		ft_putstr_fd(str_sep[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		exit(0);
-    }
+    pipe_sep[i] = ft_strtrim(pipe_sep[i], " ");
     if (check_builtin(str_sep[0]))
-        do_builtin(str_sep[0], p);
-    execve(cmd, str_sep, var_env);
+        do_builtin(pipe_sep[i], p);
+    else
+    {
+        path_env = find_path(p);
+        if (!path_env)
+        {
+            ft_putstr_fd(str_sep[0], 2);
+            ft_putendl_fd(": No such file or directory", 2);
+            free_matrix(str_sep);
+            free_matrix(pipe_sep);
+            g_error = 127;
+            exit(127);
+        }
+        paths_sep = ft_split(path_env, ':');
+        cmd = paths_arg(paths_sep, str_sep);
+        if (!cmd)
+        {
+            free_matrix(paths_sep);
+            ft_putstr_fd(str_sep[0], 2);
+            ft_putendl_fd(": command not found", 2);
+            free_matrix(str_sep);
+            free_matrix(pipe_sep);
+            g_error = 127;
+            exit(127);
+        }
+        execve(cmd, str_sep, p->var_env);
+    }
 }
 
-void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_t *p)
+void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_shell *p)
 {
     int fd[2];
-    pid_t   child_pid;
 
     if (pipe(fd) < 0)
-        perror("Error en pipe");
-    child_pid = fork();
-    if (child_pid == -1)
-        perror("Error en fork");
-    else if (child_pid == 0)
+    {
+        g_error = errno;
+        perror("Error: ");
+        exit(errno);
+    }
+    p->child_pid[i] = fork();
+    if (p->child_pid[i] == -1)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    else if (p->child_pid[i] == 0)
     {
         close(fd[0]);
         dup2(fd[1], STDOUT_FILENO);
+        p->fd_out = fd[1];
         close(fd[1]);
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
@@ -59,18 +81,22 @@ void    ft_pipe(char **pipe_sep, int *prevpipe, int i, t_t *p)
         close(fd[1]);
         close(*prevpipe);
         *prevpipe = fd[0];
+        p->fd_out = STDOUT_FILENO;
     }
 }
 
-void    ft_last(char **pipe_sep, int *prevpipe, int i, t_t *p)
+void    ft_last(char **pipe_sep, int *prevpipe, int i, t_shell *p)
 {
-    pid_t   last_pid;
-    pid_t   check;
+    int     j;
+    int     status;
 
-    last_pid = fork();
-    if (last_pid == -1)
-        perror("Error en fork");
-    else if (last_pid == 0)
+    p->child_pid[i] = fork();
+    if (p->child_pid[i] == -1)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    else if (p->child_pid[i] == 0)
     {
         dup2(*prevpipe, STDIN_FILENO);
         close(*prevpipe);
@@ -79,26 +105,41 @@ void    ft_last(char **pipe_sep, int *prevpipe, int i, t_t *p)
     else
     {
         close(*prevpipe);
-        check = wait(0);
-        while (check != -1)
-            check = wait(0);
+        j = 0;
+        while (j <= p->n_pipes)
+        {
+            waitpid(p->child_pid[j], &status, 0);
+            if (WIFEXITED(status))
+                g_error = WEXITSTATUS(status);
+            j++;
+        }
     }
 }
 
-void    do_pipes(char *str, t_t *p)
+void    do_pipes(char *str, t_shell *p)
 {
     int     prevpipe;
-    int     n_pipes;
     int     i;
     char    **pipe_sep;
 
     prevpipe = dup(0);
+    if (prevpipe == -1)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
     pipe_sep = ft_split(str, '|');
-    n_pipes = 0;
-    while (pipe_sep[n_pipes])
-        n_pipes++;
+    p->n_pipes = 0;
+    while (pipe_sep[p->n_pipes])
+        p->n_pipes++;
     i = 0;
-    while (i <= n_pipes)
+    p->child_pid = (pid_t *)malloc(sizeof(pid_t) * (p->n_pipes + 1));
+    if (!p->child_pid)
+    {
+        g_error = errno;
+        perror("Error: ");
+    }
+    while (i <= p->n_pipes)
     {
         if (pipe_sep[i] && pipe_sep[i + 1])
             ft_pipe(pipe_sep, &prevpipe, i, p);

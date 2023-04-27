@@ -33,7 +33,7 @@ void	ft_free_env(char **env, int j)
 	int		i;
 	
 	i = -1;
-	while (++i <= j && env[i])
+	while (++i < j && env[i])
 		free(env[i]);
 	free(env);
 }

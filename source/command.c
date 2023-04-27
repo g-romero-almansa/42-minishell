@@ -6,20 +6,22 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 10:41:26 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/02/01 10:41:30 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:21:16 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	*find_path(char **env)
+char	*find_path(t_shell *p)
 {
 	int		i;
 	char	*path_env;
 
 	i = 0;
-	while (!ft_strnstr(env[i], "PATH=", 5))
+	while (i < p->env_n && (!ft_strnstr(p->var_env[i], "PATH=", 5)))
 		i++;
-	path_env = ft_strnstr(env[i], "PATH=", 5);
+	if (i == p->env_n)
+		return (NULL);
+	path_env = ft_strnstr(p->var_env[i], "PATH=", 5);
 	return (path_env + 5);
 }
 
@@ -56,41 +58,54 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-void	c_proccess(int status, char *str, char **str_sep, t_t *p)
+void	c_proccess(char *str, t_shell *p)
 {
 	char    *path_env;
     char    **paths_sep;
     char    *cmd;
 	char	**arg;
 
-	(void)p;
-	path_env = find_path(var_env);
-	paths_sep = ft_split(path_env, ':');
 	arg = ft_split(str, ' ');
+	execve(str, arg, p->var_env);
+	path_env = find_path(p);
+	if (!path_env)
+	{
+		free(arg);
+		ft_putstr_fd(str, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		g_error = 127;
+		exit(127);
+	}
+	paths_sep = ft_split(path_env, ':');
 	cmd = paths_arg(paths_sep, arg);
 	if (!cmd)
 	{
-		p->e_status = 127;
 		free_matrix(paths_sep);
-		free(cmd);
 		ft_putstr_fd(str, 2);
 		ft_putendl_fd(": command not found", 2);
-		exit(status);
+		g_error = 127;
+		exit(127);
 	}
-	execve(cmd, arg, var_env);
-	free(str_sep);
+	execve(cmd, arg, p->var_env);
 }
 
-void    find_cmd(char *str, t_t *p)
+void	find_cmd(char *str, t_shell *p)
 {
 	pid_t	pid;
 	int		status;
 	char	**str_sep;
 
 	str_sep = ft_split(str, ' ');
-	pid = fork();
 	status = 0;
-	if (pid == 0)
-		c_proccess(status, str, str_sep, p);
+	pid = fork();
+	if (pid == -1)
+	{
+		g_error = errno;
+        perror("Error: ");
+	}
+	else if (pid == 0)
+		c_proccess(str, p);
 	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_error = WEXITSTATUS(status);
 }
