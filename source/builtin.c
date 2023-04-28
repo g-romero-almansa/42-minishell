@@ -36,7 +36,6 @@ void	do_echo(char *str, t_shell *p)
 {
 	int	i;
 
-	printf("aqui");
 	if (!ft_strncmp(str, "echo -n", 7))
 		ft_putstr_fd(str + 8, 1);
 	else if (!ft_strncmp(str, "echo", 4))

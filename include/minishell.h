@@ -56,7 +56,6 @@ typedef struct s_token
 {
 	t_token_type	token_type;
 	char			*value;
-	char			*value;
 }				t_token;
 
 typedef struct s_shell
