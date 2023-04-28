@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:54:19 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:27:31 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ typedef struct s_pipes
 typedef struct s_token
 {
 	t_token_type	token_type;
-	char		*value;
+	char			*value;
 }				t_token;
-
 
 typedef struct s_shell
 {
@@ -91,7 +90,7 @@ void	ft_env_(char *nev, char **env, int max);
 char	**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
-char 	**ft_export(char *str, char **cpy, t_shell *p);
+char	**ft_export(char *str, char **cpy, t_shell *p);
 void	ft_show_export(t_shell *p);
 char	**ft_unset(char *str, char **cpy, t_shell *p);
 
@@ -129,7 +128,7 @@ void	do_export(char *str, t_shell *p);
 void	do_exit(char *str);
 
 /*BUILTIN_CD*/
-char    *get_env(char *s, t_shell *p);
+char	*get_env(char *s, t_shell *p);
 void	do_cd_back(t_shell *p);
 void	do_cd_home(t_shell *p);
 void	do_cd(char *str, t_shell *p);
@@ -149,14 +148,14 @@ void	double_output(char *str, t_shell *p);
 void	double_input(char *str, t_shell *p);
 
 /*LEXER*/
-void    lexer(char *str, t_shell *p);
-char    *get_next_token(char *str, int *i);
-t_token_type    get_token_type(char *token, t_token_type token_type);
+void	lexer(char *str, t_shell *p);
+char	*get_next_token(char *str, int *i);
+t_token_type	get_token_type(char *token, t_token_type token_type);
 
 /*PARSER*/
-void    parser(t_shell *p);
+void	parser(t_shell *p);
 
 /*EXECUTER*/
-void    executer(t_shell *p, char **argv);
+void	executer(t_shell *p, char **argv);
 
 #endif

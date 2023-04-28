@@ -1,8 +1,3 @@
-ctrl - \ si el prompt está vacío
-ctrl - \ si el prompt tiene algun comando
-ctrl - C si se ejecuta con un comando como "cat"
-ctrl - \ si se ejecuta con un comando como "cat"
-
 comillas dobles (echo "$USER" debería imprimirse sin las "")
 comillas simples (echo '$PATH' debería imprimir '$PATH')
 

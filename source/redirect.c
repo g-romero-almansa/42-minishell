@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 12:19:50 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:19:28 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:27:10 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -113,7 +113,8 @@ void	double_input(char *str, t_shell *p)
 		gnl = readline("> ");
 		while (gnl)
 		{
-			if ((ft_strlen(gnl) == ft_strlen(redir_sep[1])) && !ft_strncmp(gnl, redir_sep[1], ft_strlen(redir_sep[1])))
+			if ((ft_strlen(gnl) == ft_strlen(redir_sep[1]))
+				&& !ft_strncmp(gnl, redir_sep[1], ft_strlen(redir_sep[1])))
 			{
 				ft_putstr_fd(buffer, p->fd_out);
 				free(gnl);
@@ -125,7 +126,7 @@ void	double_input(char *str, t_shell *p)
 			free(gnl);
 			gnl = readline("> ");
 		}
-	}
+	}	
 	else
 	{
 		waitpid(child_pid, &status, 0);
@@ -146,6 +147,7 @@ void	double_output(char *str, t_shell *p)
 	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
 	redir_sep[1] = ft_strtrim(redir_sep[1], "> ");
 	child_pid = fork();
+	fd = 0;
 	if (child_pid == -1)
 	{
 		g_error = errno;
@@ -177,33 +179,33 @@ void	double_output(char *str, t_shell *p)
 
 void	do_redir(char *str, t_shell *p)
 {
-	int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '<' && str[i + 1] == '<')
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' && str[i + 1] == '<')
 			double_input(str, p);
 		else if (str[i] == '>' && str[i + 1] == '>')
 			double_output(str, p);
 		else if (str[i] == '<' && str[i - 1] != '<')
-            input_redir(str, p);
+			input_redir(str, p);
 		else if (str[i] == '>' && str[i - 1] != '>')
 			output_redir(str, p);
-        i++;
-    }
+		i++;
+	}
 }
 
 int	check_redir(char *str)
 {
-	int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '<' || str[i] == '>')
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' || str[i] == '>')
+			return (1);
+		i++;
+	}
+	return (0);
 }
