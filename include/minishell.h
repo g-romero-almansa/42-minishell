@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:54:19 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:27:31 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_token
 {
 	t_token_type	token_type;
 	char			*value;
+	char			*value;
 }				t_token;
 
 typedef struct s_shell
@@ -90,7 +91,7 @@ void			ft_env_(char *nev, char **env, int max);
 char			**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
-char 			**ft_export(char *str, char **cpy, t_shell *p);
+char			**ft_export(char *str, char **cpy, t_shell *p);
 void			ft_show_export(t_shell *p);
 char			**ft_unset(char *str, char **cpy, t_shell *p);
 

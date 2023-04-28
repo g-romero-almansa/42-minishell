@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 12:19:50 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:19:28 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:27:10 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -126,7 +126,7 @@ void	double_input(char *str, t_shell *p)
 			free(gnl);
 			gnl = readline("> ");
 		}
-	}
+	}	
 	else
 	{
 		waitpid(child_pid, &status, 0);
@@ -147,6 +147,7 @@ void	double_output(char *str, t_shell *p)
 	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
 	redir_sep[1] = ft_strtrim(redir_sep[1], "> ");
 	child_pid = fork();
+	fd = 0;
 	if (child_pid == -1)
 	{
 		g_error = errno;
@@ -197,7 +198,8 @@ void	do_redir(char *str, t_shell *p)
 
 int	check_redir(char *str)
 {
-	int	i;
+	int i;
+
     i = 0;
     while (str[i])
     {
