@@ -74,22 +74,23 @@ void	parser(t_shell *p)
 {
 	int		i;
 	char	*temp;
+	char	*sub;
 
 	i = 0;
 	while (i < p->n_tokens)
 	{
-		if (ft_strchr(p->tokens[i]->value, '\'') != NULL)
+		if ((sub = ft_strchr(p->tokens[i]->value, '\'')) != NULL)
 		{
 			p->interp = 0;
-			temp = ft_substr(p->tokens[i]->value, 1,
+			temp = ft_substr(sub, 1,
 					ft_strlen(p->tokens[i]->value) - 2);
 			free(p->tokens[i]->value);
 			p->tokens[i]->value = ft_strdup(temp);
 			free(temp);
 		}
-		else if (ft_strchr(p->tokens[i]->value, '\"') != NULL)
+		else if ((sub = ft_strchr(p->tokens[i]->value, '\"')) != NULL)
 		{
-			temp = ft_substr(p->tokens[i]->value, 1,
+			temp = ft_substr(sub, 1,
 					ft_strlen(p->tokens[i]->value) - 2);
 			free(p->tokens[i]->value);
 			p->tokens[i]->value = ft_strdup(temp);
