@@ -18,10 +18,10 @@ void	executer(t_shell *p, char *str, char **argv)
 	i = 0;
 	if (p->n_pipes == 0)
 	{
-		if (check_redir(str))
-			do_redir(str, p);
-		else if (check_builtin(str))
+		if (check_builtin(str))
 			do_builtin(str, p);
+		else if (check_redir(str))
+			do_redir(str, p);
 		else if (check_exec(str))
 			exec_file(argv, p);
 		else
