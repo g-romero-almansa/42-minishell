@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:03:46 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/02 11:13:08 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:57:53 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -63,9 +63,8 @@ void	ft_update_env(char *var, char *pwd, char **env)
 	free(sub);
 }
 
-void	ft_env_pwd(char *old, char *nev, char **env, int num)
+void	ft_env_pwd(char *old, char *nev, char **env)
 {
-	(void)num;
 	ft_update_env("OLDPWD", old, env);
 	ft_update_env("PWD", nev, env);
 }

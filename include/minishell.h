@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/13 11:37:51 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:54:19 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@
 # include <dirent.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
 
-int	g_error;
+int		g_error;
 
 typedef enum e_token_type
 {
@@ -83,13 +84,14 @@ void			do_builtin(char *str, t_shell *p);
 int				check_builtin(char *str);
 
 /*FT_ENV*/
-void			ft_env_pwd(char *old, char *nev, char **env, int num);
+void			ft_env_pwd(char *old, char *nev, char **env);
 void			ft_update_env(char *var, char *pwd, char **env);
 void			ft_env_(char *nev, char **env, int max);
 char			**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
-char			**ft_export(char *str, char **cpy, t_shell *p);
+char 			**ft_export(char *str, char **cpy, t_shell *p);
+void			ft_show_export(t_shell *p);
 char			**ft_unset(char *str, char **cpy, t_shell *p);
 
 /*FT_ECHO*/
@@ -133,6 +135,7 @@ void			do_cd(char *str, t_shell *p);
 
 /*EXEC*/
 int				check_exec(char *str);
+void			ft_prueba(char *s, int flag);
 void			add_level(char *dir, t_shell *p);
 void			exec_file(char **argv, t_shell *p);
 

@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/03/13 11:37:27 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:50:42 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -94,22 +94,27 @@ void	do_export(char *str, t_shell *p)
 {
 	char	**cpy;
 
-	cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
-	if (!cpy)
+	if (ft_strlen(str) == 6)
+		ft_show_export(p);
+	else
 	{
-		g_error = errno;
-		perror("Error: ");
+    	cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
+  		if (!cpy)
+   		{
+       		g_error = errno;
+       		perror("Error: ");
+   		}
+	    cpy = ft_cpy_env(p->var_env, cpy, p->env_n);
+	    ft_free_env(p->var_env, p->env_n);
+	    p->var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
+	    if (!p->var_env)
+	    {
+	    g_error = errno;
+        perror("Error: ");
+  		}
+		p->var_env = ft_export(str + 7, cpy, p);
+	    ft_free_env(cpy, p->env_n - 1);
 	}
-	cpy = ft_cpy_env(p->var_env, cpy, p->env_n);
-	ft_free_env(p->var_env, p->env_n);
-	p->var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
-	if (!p->var_env)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
-	p->var_env = ft_export(str + 7, cpy, p);
-	ft_free_env(cpy, p->env_n - 1);
 }
 
 void	do_env(t_shell *p)

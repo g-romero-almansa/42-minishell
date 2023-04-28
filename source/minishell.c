@@ -6,29 +6,27 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/03/15 12:23:06 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:40:55 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
 void	sighandler(int num)
 {
-	if (num == SIGINT)
+	pid_t	pid;
+	int		status;
+
+	(void)num;
+	pid = waitpid(-1, &status, WNOHANG);
+	if (pid == 0)
+		write (1, "\n", 1);
+	else
 	{
 		rl_on_new_line();
 		rl_redisplay();
 		rl_replace_line("", 0);
 		write(1, "  \n", 3);
 		rl_on_new_line();
-		rl_redisplay();
-	}
-	else if (num == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		rl_replace_line("", 0);
-		//write (1, "  ", 2);
-		//rl_on_new_line();
 		rl_redisplay();
 	}
 }
@@ -81,9 +79,6 @@ int	main(int argc, char **argv, char **envp)
 	int		i;
 	t_shell	*p;
 
-	(void)argv;
-	signal(SIGINT, sighandler);
-	signal(SIGQUIT, sighandler);
 	p = malloc(sizeof(t_shell));
 	i = 0;
 	while (envp[i])
@@ -95,20 +90,22 @@ int	main(int argc, char **argv, char **envp)
 	p->flag_s = 0;
 	p->flag_d = 0;
 	p->flag_qu = 0;
-	p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
+    p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
 	g_error = 0;
-	while (argc)
-	{
-		p->interp = 1;
-		p->append = 0;
-		p->infile = ft_strdup("STDIN_FILENO");
-		p->outfile = ft_strdup("STDOUT_FILENO");
-		p->n_pipes = 0;
-		p->fd_out = STDOUT_FILENO;
-		p->fd_in = STDIN_FILENO;
-		dup2(0, STDIN_FILENO);
-		dup2(1, STDOUT_FILENO);
-		str = readline(BEGIN "minishell $ " CLOSE);
+	signal(SIGINT, sighandler);
+	signal(SIGQUIT, SIG_IGN);
+    while (argc)
+    {	
+        p->interp = 1;
+        p->append = 0;
+        p->infile = ft_strdup("STDIN_FILENO");
+        p->outfile = ft_strdup("STDOUT_FILENO");
+        p->n_pipes = 0;
+        p->fd_out = STDOUT_FILENO;
+        p->fd_in = STDIN_FILENO;
+        dup2(0, STDIN_FILENO);
+        dup2(1, STDOUT_FILENO);
+        str = readline(BEGIN "minishell $ " CLOSE);
 		if (!str)
 		{
 			ft_putstr_fd("exit\n", 2);
