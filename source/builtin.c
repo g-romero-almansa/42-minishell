@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/04/27 10:50:42 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/28 11:20:34 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -51,6 +51,8 @@ void	do_echo(char *str, t_shell *p)
 		{
 			while (str[++i])
 			{
+				//if (str[i] == 34 || str[i] == 39)
+				//	i = ft_quotes(str, i, str[i], p);
 				if (str[i] == '$' && str[i + 1] == '_')
 				{
 					echo_low_bar(str, p->var_env, p->env_n);
