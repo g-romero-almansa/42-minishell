@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char 	**ft_export(char *str, char **cpy, t_shell *p)
+char	**ft_export(char *str, char **cpy, t_shell *p)
 {
 	int		j;
 	char	*sub;
@@ -74,6 +74,5 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 		j++;
 	}
 	p->env_n--;
-	free(s);
 	return (p->var_env);
 }

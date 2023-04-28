@@ -30,7 +30,8 @@ int	ft_echo(char *s, char **envp, int i)
 	j = -1;
 	while (envp[++j])
 	{
-		if (!ft_strncmp(p, envp[j], ft_strlen(p)) && (ft_strlen(p) == ft_count(envp[j])))
+		if (!ft_strncmp(p, envp[j], ft_strlen(p))
+			&& (ft_strlen(p) == ft_count(envp[j])))
 		{
 			i = -1;
 			while (envp[j][i] != '=')
@@ -85,7 +86,7 @@ void	echo_low_bar(char *str, char **envp, int max)
 
 int	ft_quotes(char *s, int i, char c, t_shell *p)
 {
-	int		j;
+	int	j;
 
 	p->flag_qu = 0;
 	j = i;
@@ -97,28 +98,28 @@ int	ft_quotes(char *s, int i, char c, t_shell *p)
 	if (i != (int)ft_strlen(s) && c == 34)
 		p->flag_qu = 1;
 	else if (c == 34)
-		write (1, &c, 1);
-	 if (i != (int)ft_strlen(s) && c == 39)
+		write(1, &c, 1);
+	if (i != (int)ft_strlen(s) && c == 39)
 		p->flag_qu = 2;
-	 else if (c == 39)
-		 write (1, &c, 1);
+	else if (c == 39)
+		write(1, &c, 1);
 	if (p->flag_qu == 2)
 		while (++j < i)
-			write (1, &s[j], 1);
+			write(1, &s[j], 1);
 	if (p->flag_qu == 1)
 		while (++j < i)
 		{
 			if (s[j] == '$' && s[j + 1] == '_')
-            {
-                echo_low_bar(s, p->var_env, p->env_n);
-                j++;
-            }
-            else if (s[j] == '$')
+			{
+				echo_low_bar(s, p->var_env, p->env_n);
+				j++;
+			}
+			else if (s[j] == '$')
 			{
 				j = ft_echo(s, p->var_env, j) + j;
 			}
 			else if (s[j] != 34)
-				printf ("%c", s[j]);
+				printf("%c", s[j]);
 		}
 	return (j);
 }

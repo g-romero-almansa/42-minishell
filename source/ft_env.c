@@ -13,7 +13,7 @@
 
 char	**ft_cpy_env(char **env, char **cpy, int max)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (++i < max && env[i])
@@ -23,9 +23,9 @@ char	**ft_cpy_env(char **env, char **cpy, int max)
 
 void	ft_env_(char *nev, char **env, int max)
 {
-	int		i;
-	int		j;
-	int		k;
+	int	i;
+	int	j;
+	int	k;
 
 	i = 0;
 	if (ft_strncmp(nev, "echo $_", ft_strlen(nev)))
@@ -65,7 +65,7 @@ void	ft_update_env(char *var, char *pwd, char **env)
 
 void	ft_env_pwd(char *old, char *nev, char **env, int num)
 {
-	(void)num; //??
+	(void)num;
 	ft_update_env("OLDPWD", old, env);
 	ft_update_env("PWD", nev, env);
 }

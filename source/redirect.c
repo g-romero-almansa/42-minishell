@@ -23,7 +23,7 @@ void	input_redir(char *str, t_shell *p)
 	redir_sep[1] = ft_strtrim(redir_sep[1], " ");
 	child_pid = fork();
 	if (child_pid == -1)
-	{	
+	{
 		g_error = errno;
 		perror("Error: ");
 	}
@@ -39,7 +39,7 @@ void	input_redir(char *str, t_shell *p)
 		p->fd_out = fd;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
-		exec(redir_sep, p, 0);
+		exec(redir_sep[0], p);
 	}
 	else
 	{
@@ -62,7 +62,7 @@ void	output_redir(char *str, t_shell *p)
 	redir_sep[1] = ft_strtrim(redir_sep[1], " ");
 	child_pid = fork();
 	if (child_pid == -1)
-	{	
+	{
 		g_error = errno;
 		perror("Error: ");
 	}
@@ -78,7 +78,7 @@ void	output_redir(char *str, t_shell *p)
 		p->fd_out = fd;
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		exec(redir_sep, p, 0);
+		exec(redir_sep[0], p);
 	}
 	else
 	{
@@ -113,7 +113,8 @@ void	double_input(char *str, t_shell *p)
 		gnl = readline("> ");
 		while (gnl)
 		{
-			if ((ft_strlen(gnl) == ft_strlen(redir_sep[1])) && !ft_strncmp(gnl, redir_sep[1], ft_strlen(redir_sep[1])))
+			if ((ft_strlen(gnl) == ft_strlen(redir_sep[1])) && !ft_strncmp(gnl,
+					redir_sep[1], ft_strlen(redir_sep[1])))
 			{
 				ft_putstr_fd(buffer, p->fd_out);
 				free(gnl);
@@ -162,7 +163,7 @@ void	double_output(char *str, t_shell *p)
 		}
 		p->fd_out = fd;
 		dup2(fd, STDOUT_FILENO);
-		exec(redir_sep, p, 0);
+		exec(redir_sep[0], p);
 		close(fd);
 		exit(0);
 	}
@@ -177,33 +178,33 @@ void	double_output(char *str, t_shell *p)
 
 void	do_redir(char *str, t_shell *p)
 {
-	int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '<' && str[i + 1] == '<')
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' && str[i + 1] == '<')
 			double_input(str, p);
 		else if (str[i] == '>' && str[i + 1] == '>')
 			double_output(str, p);
 		else if (str[i] == '<' && str[i - 1] != '<')
-            input_redir(str, p);
+			input_redir(str, p);
 		else if (str[i] == '>' && str[i - 1] != '>')
 			output_redir(str, p);
-        i++;
-    }
+		i++;
+	}
 }
 
 int	check_redir(char *str)
 {
-	int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '<' || str[i] == '>')
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' || str[i] == '>')
+			return (1);
+		i++;
+	}
+	return (0);
 }

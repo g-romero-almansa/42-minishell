@@ -60,9 +60,9 @@ void	free_matrix(char **matrix)
 
 void	c_proccess(t_shell *p)
 {
-	char    *path_env;
-    char    **paths_sep;
-    char    *cmd;
+	char	*path_env;
+	char	**paths_sep;
+	char	*cmd;
 	char	**arg;
 
 	arg = ft_split(p->str, ' ');
@@ -99,7 +99,7 @@ void	find_cmd(t_shell *p)
 	if (pid == -1)
 	{
 		g_error = errno;
-        perror("Error: ");
+		perror("Error: ");
 	}
 	else if (pid == 0)
 		c_proccess(p);

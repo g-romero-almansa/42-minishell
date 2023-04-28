@@ -30,8 +30,8 @@ char	*ft_last_word(char *s)
 
 void	ft_free_env(char **env, int j)
 {
-	int		i;
-	
+	int	i;
+
 	i = -1;
 	while (++i < j && env[i])
 		free(env[i]);
