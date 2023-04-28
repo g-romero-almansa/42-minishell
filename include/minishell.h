@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 12:27:31 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/28 10:44:36 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_pipes
 typedef struct s_token
 {
 	t_token_type	token_type;
-	char			*value;
 	char			*value;
 }				t_token;
 
