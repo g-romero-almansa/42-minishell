@@ -7,3 +7,6 @@ cat < infile
 cat <infile
 < infile cat
 <infile cat
+redirecciones y builtin juntos no funciona
+
+ejecutar comandos con comillas simples como argumentos no funciona

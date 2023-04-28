@@ -109,8 +109,8 @@ void	do_export(char *str, t_shell *p)
 	    p->var_env = (char **)malloc((p->env_n + 2) * sizeof(char *));
 	    if (!p->var_env)
 	    {
-	    g_error = errno;
-        perror("Error: ");
+			g_error = errno;
+			perror("Error: ");
   		}
 		p->var_env = ft_export(str + 7, cpy, p);
 	    ft_free_env(cpy, p->env_n - 1);

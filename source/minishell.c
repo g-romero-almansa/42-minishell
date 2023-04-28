@@ -44,7 +44,7 @@ void	do_builtin(char *str, t_shell *p)
 		rl_on_new_line();
 	else if (!ft_strncmp(str, "cd ", 3))
 		do_cd(str, p);
-	else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
+	else if (!ft_strncmp(str, "exit", 4))
 		do_exit(str);
 	else if (!ft_strncmp(str, "env", ft_strlen(str)))
 		do_env(p);
@@ -62,7 +62,7 @@ int	check_builtin(char *str)
 		return (1);
 	else if (!ft_strncmp(str, "echo", 4))
 		return (1);
-	else if (!ft_strncmp(str, "exit ", 5) || !ft_strncmp(str, "exit", 4))
+	else if (!ft_strncmp(str, "exit", 4))
 		return (1);
 	else if (!ft_strncmp(str, "env", ft_strlen(str)))
 		return (1);

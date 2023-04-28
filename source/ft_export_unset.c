@@ -21,7 +21,7 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 	flag = 0;
 	while (str[j] != '=')
 		j++;
-	sub = ft_substr(str, 0, j);
+	sub = ft_substr(str, 0, j + 1);
 	j = 0;
 	while (j < p->env_n && cpy[j])
 	{
@@ -49,7 +49,7 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 		p->var_env[j] = ft_strdup(str);
 		p->env_n++;
 	}
-	free(sub);
+	//free(sub);
 	return (p->var_env);
 }
 
