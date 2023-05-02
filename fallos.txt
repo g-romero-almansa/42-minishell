@@ -1,6 +1,6 @@
-las comillas deberían aparecer o no?
-
 en la funcion ft_last_word se esta volviendo a dar memoria a una variable que ya tiene??
+
+"bin/ls" y /bin/ls deberían hacer lo mismo??
 
 las redirecciones de entrada (las dobles tambien) pueden ser:
 cat < infile
@@ -9,4 +9,4 @@ cat <infile
 <infile cat
 redirecciones y builtin juntos no funciona
 
-ejecutar comandos con comillas simples como argumentos no funciona
+ctrl-D en una linea vacia da segmantion fault

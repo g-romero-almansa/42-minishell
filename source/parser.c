@@ -18,14 +18,8 @@ void	join_tokens(t_shell *p, int start, int end, int n)
 
 	join = ft_strdup(p->tokens[start]->value);
 	start++;
-	p->pipes[n]->input = NULL;
-	p->pipes[n]->output = NULL;
 	while (start < end)
 	{
-		if (p->tokens[start]->token_type == INFILE)
-			p->pipes[n]->input = ft_strdup(p->tokens[start]->value);
-		else if (p->tokens[start]->token_type == OUTFILE)
-			p->pipes[n]->output = ft_strdup(p->tokens[start]->value);
 		temp = ft_strjoin(join, " ");
 		free(join);
 		join = ft_strjoin(temp, p->tokens[start]->value);
@@ -34,10 +28,6 @@ void	join_tokens(t_shell *p, int start, int end, int n)
 	}
 	p->pipes[n]->str = ft_strdup(join);
 	free(join);
-	if (p->pipes[n]->input == NULL)
-		p->pipes[n]->input = ft_strdup("STDIN_FILENO");
-	if (p->pipes[n]->output == NULL)
-		p->pipes[n]->output = ft_strdup("STDOUT_FILENO");
 }
 
 void	init_parser(t_shell *p)
@@ -79,8 +69,9 @@ void	parser(t_shell *p)
 	i = 0;
 	while (i < p->n_tokens)
 	{
-		if ((sub = ft_strchr(p->tokens[i]->value, '\'')) != NULL)
+		if (ft_strchr(p->tokens[i]->value, '\'') != NULL)
 		{
+			sub = ft_strchr(p->tokens[i]->value, '\'');
 			p->interp = 0;
 			temp = ft_substr(sub, 1,
 					ft_strlen(p->tokens[i]->value) - 2);
@@ -88,8 +79,9 @@ void	parser(t_shell *p)
 			p->tokens[i]->value = ft_strdup(temp);
 			free(temp);
 		}
-		else if ((sub = ft_strchr(p->tokens[i]->value, '\"')) != NULL)
+		else if (ft_strchr(p->tokens[i]->value, '\"') != NULL)
 		{
+			sub = ft_strchr(p->tokens[i]->value, '\"');
 			temp = ft_substr(sub, 1,
 					ft_strlen(p->tokens[i]->value) - 2);
 			free(p->tokens[i]->value);

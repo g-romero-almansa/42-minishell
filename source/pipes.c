@@ -19,6 +19,8 @@ void	exec(char *str, t_shell *p)
 	char	*cmd;
 
 	str_sep = ft_split(str, ' ');
+	if (p->interp == 0)
+		str_sep[1] = NULL;
 	str_sep[0] = ft_strtrim(str_sep[0], " ");
 	if (check_builtin(str_sep[0]))
 	{

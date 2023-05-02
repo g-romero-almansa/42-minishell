@@ -18,14 +18,33 @@ int	check_exec(char *str)
 	return (0);
 }
 
+char	*last_dir(char *s)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	str = malloc((ft_strlen(s) + 1) * sizeof(char));
+	i = ft_strlen(s) - 1;
+	while (s[i] != '/' && s[i])
+		i--;
+	j = -1;
+	while (s[++i])
+		str[++j] = s[i];
+	str[j + 1] = '\0';
+	return (str);
+}
+
 void	add_level(char *dir, t_shell *p)
 {
 	int		i;
 	char	*sub;
+	char	*last;
 	int		num;
 
 	i = 0;
-	if (!ft_strncmp(dir, "/minishell", ft_strlen(dir)))
+	last = last_dir(dir);
+	if (!ft_strncmp(last, "minishell", ft_strlen(last)))
 	{
 		while (i < p->env_n && p->var_env[i])
 		{

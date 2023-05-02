@@ -48,8 +48,6 @@ typedef enum e_token_type
 typedef struct s_pipes
 {
 	char	*str;
-	char	*input;
-	char	*output;
 }				t_pipes;
 
 typedef struct s_token
@@ -71,8 +69,6 @@ typedef struct s_shell
 	int		interp;
 	int		fd_out;
 	int		fd_in;
-	char	*infile;
-	char	*outfile;
 	int		append;
 	char	*str;
 	t_token	**tokens;
@@ -82,6 +78,7 @@ typedef struct s_shell
 /*MINISHELL*/
 void			do_builtin(char *str, t_shell *p);
 int				check_builtin(char *str);
+void			free_executer(t_shell *p);
 
 /*FT_ENV*/
 void			ft_env_pwd(char *old, char *nev, char **env);
@@ -98,7 +95,6 @@ char			**ft_unset(char *str, char **cpy, t_shell *p);
 int				ft_echo(char *s, char **envp, int i);
 size_t			ft_count(char *s);
 void			echo_low_bar(char *str, char **envp, int max);
-int				ft_quotes(char *s, int i, char c, t_shell *p);
 
 /*FT_UTILS*/
 char			*ft_last_word(char *s);
@@ -119,23 +115,26 @@ void			c_proccess(t_shell *p);
 void			find_cmd(t_shell *p);
 
 /*BUILTIN*/
-int				echo_status(int i);
 void			do_env(t_shell *p);
 void			do_pwd(t_shell *p);
-void			do_echo(char *str, t_shell *p);
 void			do_unset(t_shell *p, char *str);
+void			export_cnt(t_shell *p, char *str);
 void			do_export(char *str, t_shell *p);
-void			do_exit(char *str);
 
 /*BUILTIN_CD*/
 char			*get_env(char *s, t_shell *p);
 void			do_cd_back(t_shell *p);
 void			do_cd_home(t_shell *p);
+void			open_dir(char *path_dir, char *str, t_shell *p);
 void			do_cd(char *str, t_shell *p);
+
+/*BUILTIN_ECHO*/
+int				echo_status(int i);
+void			print_echo(char *str, t_shell *p);
+void			do_echo(char *str, t_shell *p);
 
 /*EXEC*/
 int				check_exec(char *str);
-void			ft_prueba(char *s, int flag);
 void			add_level(char *dir, t_shell *p);
 void			exec_file(char **argv, t_shell *p);
 
@@ -163,5 +162,15 @@ void			input_redir_pipe(char *str, t_shell *p);
 void			output_redir_pipe(char *str, t_shell *p);
 void			double_output_pipe(char *str, t_shell *p);
 void			do_redir_pipe(char *str, t_shell *p);
+
+/*EXIT*/
+void			exit_num(t_shell *p, char *str);
+void			do_exit(char *str, t_shell *p);
+void			free_exit(t_shell *p, char *str);
+
+/*ERROR*/
+void			error_cmd(char *str);
+void			error_malloc(void);
+void			error_nofile(char *str);
 
 #endif

@@ -126,7 +126,7 @@ void	double_input(char *str, t_shell *p)
 			free(gnl);
 			gnl = readline("> ");
 		}
-	}	
+	}
 	else
 	{
 		waitpid(child_pid, &status, 0);
@@ -198,14 +198,14 @@ void	do_redir(char *str, t_shell *p)
 
 int	check_redir(char *str)
 {
-	int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '<' || str[i] == '>')
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' || str[i] == '>')
+			return (1);
+		i++;
+	}
+	return (0);
 }

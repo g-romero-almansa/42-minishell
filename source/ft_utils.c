@@ -14,17 +14,12 @@
 char	*ft_last_word(char *s)
 {
 	int		i;
-	int		j;
 	char	*str;
 
-	str = malloc(ft_strlen(s) * sizeof(char));
 	i = ft_strlen(s) - 1;
-	while (s[i] != ' ' && s[i] != '\t' && s[i])
+	while (s[i] && s[i] != ' ' && s[i] != '\t')
 		i--;
-	j = -1;
-	while (s[++i])
-		str[++j] = s[i];
-	str[j + 1] = '\0';
+	str = ft_substr(s, i + 1, ft_strlen(s) - i - 1);
 	return (str);
 }
 
