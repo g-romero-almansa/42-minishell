@@ -25,28 +25,27 @@ char	*get_next_token(char *str, int *i)
 		start++;
 	}
 	j = 0;
-	token = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	//token = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[*i])
 	{
 		if (str[*i] == '\'' || str[*i] == '\"')
 		{
 			quote = str[*i];
-			token[j] = str[*i];
-			j++;
+			start = *i;
+			/*token[j] = str[*i];
+			j++;*/
 			(*i)++;
 			while (str[*i] && str[*i] != quote)
 			{
-				token[j] = str[*i];
-				j++;
+				/*token[j] = str[*i];
+				j++;*/
 				(*i)++;
 			}
-			if (str[*i] == quote)
-			{
-				token[j] = str[*i];
-				j++;
-				(*i)++;
-			}
-			token[j] = '\0';
+			/*token[j] = str[*i];
+			j++;*/
+			(*i)++;
+			token = ft_substr(str, start, *i - start);
+			//token[j] = '\0';
 			return (token);
 		}
 		else if (str[*i] == ' ' && start != *i)
@@ -59,6 +58,7 @@ char	*get_next_token(char *str, int *i)
 		{
 			if (start == *i)
 			{
+				token = (char *)malloc(sizeof(char) * 2);
 				token[0] = str[*i];
 				token[1] = '\0';
 				(*i)++;
@@ -72,6 +72,7 @@ char	*get_next_token(char *str, int *i)
 		{
 			if (start == *i)
 			{
+				token = (char *)malloc(sizeof(char) * 3);
 				token[0] = str[*i];
 				token[1] = str[(*i) + 1];
 				token[2] = '\0';
@@ -86,6 +87,7 @@ char	*get_next_token(char *str, int *i)
 		{
 			if (start == *i)
 			{
+				token = (char *)malloc(sizeof(char) * 3);
 				token[0] = str[*i];
 				token[1] = str[(*i) + 1];
 				token[2] = '\0';
@@ -100,6 +102,7 @@ char	*get_next_token(char *str, int *i)
 		{
 			if (start == *i)
 			{
+				token = (char *)malloc(sizeof(char) * 2);
 				token[0] = str[*i];
 				token[1] = '\0';
 				(*i)++;
@@ -113,6 +116,7 @@ char	*get_next_token(char *str, int *i)
 		{
 			if (start == *i)
 			{
+				token = (char *)malloc(sizeof(char) * 2);
 				token[0] = str[*i];
 				token[1] = '\0';
 				(*i)++;
@@ -122,17 +126,18 @@ char	*get_next_token(char *str, int *i)
 			(*i)++;
 			return (token);
 		}
-		else
+		/*else
 		{
 			if (str[*i] != ' ')
 			{
 				token[j] = str[*i];
 				j++;
 			}
-		}
+		}*/
 		(*i)++;
 	}
-	token[ft_strlen(token) + 1] = '\0';
+	token = ft_substr(str, start, *i - start);
+	//token[ft_strlen(token) + 1] = '\0';
 	return (token);
 }
 
@@ -174,6 +179,7 @@ void	lexer(char *str, t_shell *p)
 	}
 	p->n_tokens = j;
 	p->tokens = malloc(sizeof(t_token *) * j);
+	p->tokens[j] = NULL;
 	i = 0;
 	j = 0;
 	while ((size_t)i < ft_strlen(str))
@@ -187,10 +193,6 @@ void	lexer(char *str, t_shell *p)
 			p->tokens[j]->token_type = get_token_type(p->tokens[j]->value, ARG);
 		if (p->tokens[j]->token_type == APPEND)
 			p->append = 1;
-		if (p->tokens[j]->token_type == INFILE)
-			p->infile = ft_strdup(p->tokens[j]->value);
-		if (p->tokens[j]->token_type == OUTFILE)
-			p->outfile = ft_strdup(p->tokens[j]->value);
 		j++;
 	}
 }

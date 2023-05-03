@@ -19,7 +19,7 @@ char	*find_path(t_shell *p)
 	i = 0;
 	while (i < p->env_n && (!ft_strnstr(p->var_env[i], "PATH=", 5)))
 		i++;
-	if (i == p->env_n)
+	if (i == p->env_n && (!ft_strnstr(p->var_env[i], "PATH=", 5)))
 		return (NULL);
 	path_env = ft_strnstr(p->var_env[i], "PATH=", 5);
 	return (path_env + 5);
@@ -65,14 +65,14 @@ void	c_proccess(t_shell *p)
 	char	*cmd;
 	char	**arg;
 
-	arg = ft_split(p->str, ' ');
-	execve(p->str, arg, p->var_env);
+	arg = ft_split(p->pipes[0]->str, ' ');
+	if (p->interp == 0)
+		arg[1] = NULL;
+	execve(arg[0], arg, p->var_env);
 	path_env = find_path(p);
 	if (!path_env)
 	{
-		ft_putstr_fd(p->str, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		g_error = 127;
+		error_nofile(p->pipes[0]->str);
 		exit(127);
 	}
 	paths_sep = ft_split(path_env, ':');
@@ -80,9 +80,7 @@ void	c_proccess(t_shell *p)
 	if (!cmd)
 	{
 		free_matrix(paths_sep);
-		ft_putstr_fd(p->str, 2);
-		ft_putendl_fd(": command not found", 2);
-		g_error = 127;
+		error_cmd(p->pipes[0]->str);
 		exit(127);
 	}
 	free_matrix(paths_sep);
