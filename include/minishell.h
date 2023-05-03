@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:44:36 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/03 11:13:49 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void			find_cmd(t_shell *p);
 void			do_env(t_shell *p);
 void			do_pwd(t_shell *p);
 void			do_unset(t_shell *p, char *str);
+void			do_unset2(int first_n, t_shell *p, char *str);
 void			export_cnt(t_shell *p, char *str);
 void			do_export(char *str, t_shell *p);
 

@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/04/28 11:20:34 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/03 10:54:55 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -21,10 +21,19 @@ void	do_pwd(t_shell *p)
 
 void	do_unset(t_shell *p, char *str)
 {
-	char	**cpy;
-	int		first_n;
+	if (!ft_strncmp(str, "echo", 5) && ft_strlen(str) == 4)
+		printf ("\n");
+	else if (!ft_strncmp(str, "echo -n", 7))
+		ft_putstr_fd(str + 8, 1);
+	else if (!ft_strncmp(str, "echo", 4))
+		do_unset2(p->env_n, p, str);
+}
 
-	first_n = p->env_n;
+void	do_unset2(int first_n, t_shell *p, char *str)
+{
+	char	**cpy;
+
+	//first_n = p->env_n;
 	cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
 	if (!cpy)
 	{
