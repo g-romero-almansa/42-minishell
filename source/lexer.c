@@ -15,6 +15,40 @@ char	*get_next_token(char *str, int *i)
 {
 	char	*token;
 	char	quote;
+	int		start;
+
+	start = *i;
+	if (str[*i] == ' ')
+	{
+		(*i)++;
+		start++;
+	}
+	if (str[*i] == '\'' || str[*i] == '\"')
+	{
+		quote = str[*i];
+		while (str[*i] && str[*i] != quote)
+			(*i)++;
+	}
+	else if (str[*i] == '|' || str[*i] == '<' || str[*i] == '>')
+	{
+		start = (*i)++;
+		if ((str[*i - 1] == '<' || str[*i - 1] == '>') && str[*i] == str[*i - 1])
+			(*i)++;
+	}
+	else
+	{
+		while (str[*i] && str[*i] != ' ' && str[*i] != '\'' && str[*i] != '\"'
+			&& str[*i] != '|' && str[*i] != '<' && str[*i] != '>')
+			(*i)++;
+	}
+	token = ft_substr(str, start, *i - start);
+	return (token);
+}
+
+/*char	*get_next_token(char *str, int *i)
+{
+	char	*token;
+	char	quote;
 	int		j;
 	int		start;
 
@@ -25,27 +59,17 @@ char	*get_next_token(char *str, int *i)
 		start++;
 	}
 	j = 0;
-	//token = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	while (str[*i])
 	{
 		if (str[*i] == '\'' || str[*i] == '\"')
 		{
 			quote = str[*i];
 			start = *i;
-			/*token[j] = str[*i];
-			j++;*/
 			(*i)++;
 			while (str[*i] && str[*i] != quote)
-			{
-				/*token[j] = str[*i];
-				j++;*/
 				(*i)++;
-			}
-			/*token[j] = str[*i];
-			j++;*/
 			(*i)++;
 			token = ft_substr(str, start, *i - start);
-			//token[j] = '\0';
 			return (token);
 		}
 		else if (str[*i] == ' ' && start != *i)
@@ -126,20 +150,11 @@ char	*get_next_token(char *str, int *i)
 			(*i)++;
 			return (token);
 		}
-		/*else
-		{
-			if (str[*i] != ' ')
-			{
-				token[j] = str[*i];
-				j++;
-			}
-		}*/
 		(*i)++;
 	}
 	token = ft_substr(str, start, *i - start);
-	//token[ft_strlen(token) + 1] = '\0';
 	return (token);
-}
+}*/
 
 t_token_type	get_token_type(char *token, t_token_type token_type)
 {
