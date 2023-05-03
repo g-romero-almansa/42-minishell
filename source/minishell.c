@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/28 11:32:42 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/28 11:38:19 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -110,7 +110,7 @@ int	main(int argc, char **argv, char **envp)
 		while (str[i] == ' ' || str[i] == '\t')
 			i++;
 		if (str[i] == '\0')
-			str = malloc(i * sizeof(;char));
+			str = malloc(i * sizeof(char));
 		if (!str)
 		{
 			ft_putstr_fd("exit\n", 2);

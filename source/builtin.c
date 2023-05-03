@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:53:02 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/04/28 11:20:34 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/04/28 11:51:08 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -36,7 +36,9 @@ void	do_echo(char *str, t_shell *p)
 {
 	int	i;
 
-	if (!ft_strncmp(str, "echo -n", 7))
+	if (!ft_strncmp(str, "echo", 5) && ft_strlen(str) == 4)
+		printf ("\n");
+	else if (!ft_strncmp(str, "echo -n", 7))
 		ft_putstr_fd(str + 8, 1);
 	else if (!ft_strncmp(str, "echo", 4))
 	{
