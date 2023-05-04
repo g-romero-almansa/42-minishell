@@ -6,3 +6,7 @@ cat <infile
 < infile cat
 <infile cat
 redirecciones y builtin juntos no funciona
+
+echo con pipes no imprime las comillas, hay que cambiar los builtin para que utilice los tokens
+
+si ejecuto cat Makefile | wc -c > outfile sale "minishell $ exit"
