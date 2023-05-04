@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:20:20 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/02 13:20:24 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/05/03 13:08:07 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -78,3 +78,4 @@ void	free_exit(t_shell *p, char *str)
 	free(p->pipes);
 	free(p);
 }
+
