@@ -95,13 +95,9 @@ void	do_cd(char *str, t_shell *p)
 		dir = ft_strchr(str, ' ');
 		dir[0] = '/';
 		len = ft_strlen(get_env("PWD=", p));
-		pwd = malloc(sizeof(char) * (len + 1));
-		if (!pwd)
-			error_malloc();
-		getcwd(pwd, len + 1);
+		pwd = get_env("PWD=", p);
 		path_dir = ft_strjoin(pwd, dir);
 		open_dir(path_dir, str, p);
-		free(pwd);
 		free(path_dir);
 	}
 }

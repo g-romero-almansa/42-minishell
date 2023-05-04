@@ -34,6 +34,9 @@ void	exit_num(t_shell *p, char *str)
 		i++;
 	}
 	free_matrix(arg);
+	free_exit(p, str);
+	ft_putendl_fd("exit", 2);
+	exit(0);
 }
 
 void	do_exit(char *str, t_shell *p)
@@ -48,9 +51,14 @@ void	do_exit(char *str, t_shell *p)
 		}
 		exit_num(p, str);
 	}
-	free_exit(p, str);
-	ft_putendl_fd("exit", 2);
-	exit(0);
+	if (!ft_strncmp(str, "exit", ft_strlen(str)))
+	{
+		free_exit(p, str);
+		ft_putendl_fd("exit", 2);
+		exit(0);
+	}
+	else
+		error_cmd(str);
 }
 
 void	free_exit(t_shell *p, char *str)
