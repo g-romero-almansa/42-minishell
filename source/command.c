@@ -19,7 +19,7 @@ char	*find_path(t_shell *p)
 	i = 0;
 	while (i < p->env_n && (!ft_strnstr(p->var_env[i], "PATH=", 5)))
 		i++;
-	if (i == p->env_n && (!ft_strnstr(p->var_env[i], "PATH=", 5)))
+	if (i == p->env_n && (!ft_strnstr(p->var_env[i - 1], "PATH=", 5)))
 		return (NULL);
 	path_env = ft_strnstr(p->var_env[i], "PATH=", 5);
 	return (path_env + 5);

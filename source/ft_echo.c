@@ -18,11 +18,7 @@ int	ft_echo(char *s, char **envp, int i)
 
 	p = malloc((ft_strlen(s) - 6) * sizeof(char));
 	if (!p)
-	{
-		g_error = errno;
-		perror("Error: ");
-		exit(errno);
-	}
+		error_malloc();
 	j = -1;
 	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
 		p[++j] = s[++i];

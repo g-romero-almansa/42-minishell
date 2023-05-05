@@ -107,7 +107,7 @@ void	ft_last(char *str, int *prevpipe, int i, t_shell *p)
 		dup2(*prevpipe, STDIN_FILENO);
 		close(*prevpipe);
 		if (check_redir(str))
-			do_redir(str, p);
+			do_redir_pipe(str, p);
 		else
 			exec(str, p);
 	}

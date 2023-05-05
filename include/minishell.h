@@ -26,6 +26,7 @@
 # include <errno.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <string.h>
 
 # define BEGIN "\001\033[m\002"
 # define CLOSE "\001\033[0m\002"
@@ -137,6 +138,7 @@ void			do_echo(char *str, t_shell *p);
 /*EXEC*/
 int				check_exec(char *str);
 void			add_level(char *dir, t_shell *p);
+void			exec_child(t_shell *p, char **argv);
 void			exec_file(char **argv, t_shell *p);
 
 /*REDIRECT*/

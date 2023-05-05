@@ -10,6 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
+NAME		=	minishell
+
 SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
 				source/ft_utils.c source/ft_echo.c source/command.c \
 				source/ft_export_unset.c source/builtin.c source/builtin_cd.c \
@@ -17,36 +19,38 @@ SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
 				source/executer.c source/redir_pipe.c source/exit.c source/error.c \
 				source/builtin_echo.c
 
-OBJ_SRC		=	 $(SRC:.c = .o)
+OBJ_SRC		=	 $(SRC:.c=.o)
 
 INC			=	./libft
 
 LIB			=	libft.a
 
-EXEC		=	minishell
-
 CC			=	gcc
-CFLAGS		=	-Wall -Werror -Wextra -lreadline -I /Users/$(USER)/.brew/opt/readline/include
-FTFLGS		=	-Llibft -lft -lreadline -L /Users/$(USER)/.brew/opt/readline/lib
+CFLAGS		=	-Wall -Werror -Wextra 
+LFLAGS		=	-I /Users/$(USER)/.brew/opt/readline/include
+FTFLAGS		=	-L /Users/$(USER)/.brew/opt/readline/lib
+LREADLINE	=	-lreadline
+HEADERS		=	-I ./include
 
-all:		$(EXEC)
+all:	libft $(NAME)
 
-$(NAME):	all
+libft:
+	@$(MAKE) -C $(INC)
 
-$(LIB):
-	make -C $(INC)
+%.o: %.c
+	$(CC)	$(CFLAGS)	$(LFLAGS)	-o	$@	-c	$<	$(HEADERS)
 
-$(EXEC):	$(LIB)	$(OBJ_SRC)
-	$(CC)	$(CFLAGS)	$(FTFLGS)	$(OBJ_SRC)	-o	$(EXEC)	$(INC)/$(LIB)
+$(NAME) :	$(OBJ_SRC)
+	$(CC)	$(OBJ_SRC)	$(FTFLAGS)	$(LFLAGS)	$(INC)/$(LIB)	$(HEADERS)	-o	$(NAME)	$(LREADLINE)
 
 clean:
-	rm -f $(EXEC)
-	make -C libft clean
+	rm -f $(OBJ_SRC)
+	make -C $(INC) clean
 
 fclean: clean
 	rm -f $(NAME)
-	make -C libft fclean
+	make -C $(INC) fclean
 
-re:	fclean all
+re:	clean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft

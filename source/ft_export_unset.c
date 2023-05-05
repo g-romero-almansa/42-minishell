@@ -117,7 +117,7 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 	{
 		p->var_env[j] = ft_strdup(cpy[j]);
 		j++;
-		if (!ft_strncmp(s, cpy[j], ft_strlen(s)))
+		if (j != p->env_n && !ft_strncmp(s, cpy[j], ft_strlen(s)))
 			less = 1;
 	}
 	k = j + 1;
