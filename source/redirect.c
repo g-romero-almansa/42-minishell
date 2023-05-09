@@ -164,9 +164,8 @@ void	double_output(char *str, t_shell *p)
 		}
 		p->fd_out = fd;
 		dup2(fd, STDOUT_FILENO);
-		exec(redir_sep[0], p);
 		close(fd);
-		exit(0);
+		exec(redir_sep[0], p);
 	}
 	else
 	{

@@ -69,6 +69,9 @@ void	parser(t_shell *p)
 	i = 0;
 	while (i < p->n_tokens)
 	{
+		if (!ft_strncmp(p->tokens[i]->value, "|",
+				ft_strlen(p->tokens[i]->value)))
+			p->n_pipes++;
 		if (ft_strchr(p->tokens[i]->value, '\'') != NULL)
 		{
 			sub = ft_strchr(p->tokens[i]->value, '\'');
@@ -88,9 +91,6 @@ void	parser(t_shell *p)
 			p->tokens[i]->value = ft_strdup(temp);
 			free(temp);
 		}
-		if (!ft_strncmp(p->tokens[i]->value, "|",
-				ft_strlen(p->tokens[i]->value)))
-			p->n_pipes++;
 		i++;
 	}
 	init_parser(p);

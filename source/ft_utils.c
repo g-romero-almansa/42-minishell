@@ -17,7 +17,7 @@ char	*ft_last_word(char *s)
 	char	*str;
 
 	i = ft_strlen(s) - 1;
-	while (s[i] && s[i] != ' ' && s[i] != '\t')
+	while (i >= 0 && s[i] != ' ' && s[i] != '\t')
 		i--;
 	str = ft_substr(s, i + 1, ft_strlen(s) - i - 1);
 	return (str);

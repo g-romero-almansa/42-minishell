@@ -30,8 +30,12 @@ void	ft_env_(char *nev, char **env, int max)
 	i = 0;
 	if (ft_strncmp(nev, "echo $_", ft_strlen(nev)))
 	{
-		while (i < max && ft_strncmp(env[i], "_=", 2))
+		while (i < max)
+		{
+			if (!ft_strncmp(env[i], "_=", 2))
+				break ;
 			i++;
+		}
 		nev = ft_last_word(nev);
 		k = -1;
 		env[i][0] = '_';

@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:42:00 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/03 13:07:32 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:49:11 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -62,11 +62,36 @@ void	add_level(char *dir, t_shell *p)
 	}
 }
 
-void	exec_file(char **argv, t_shell *p)
+void	exec_child(t_shell *p, char **argv)
 {
-	int		len;
 	char	*pwd;
 	char	*dir;
+
+	pwd = get_env("PWD=", p);
+	dir = malloc(sizeof(char) * (ft_strlen(p->str) - 2));
+	if (!dir)
+	{
+		g_error = errno;
+		perror("Error: ");
+		exit(errno);
+	}
+	dir = ft_strchr(p->str, '/');
+	pwd = ft_strjoin(pwd, dir);
+	add_level(dir, p);
+	if (execve(pwd, argv, p->var_env) == -1)
+	{
+		free(pwd);
+		free(dir);
+		ft_putstr_fd(p->str, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		g_error = 126;
+		exit(126);
+	}
+}
+
+void	exec_file(char **argv, t_shell *p)
+{
 	pid_t	pid;
 	int		status;
 
@@ -78,37 +103,7 @@ void	exec_file(char **argv, t_shell *p)
 		perror("Error: ");
 	}
 	else if (pid == 0)
-	{
-		len = ft_strlen(get_env("PWD=", p));
-		pwd = malloc(sizeof(char) * (len + ft_strlen(p->str)));
-		if (!pwd)
-		{
-			g_error = errno;
-			perror("Error: ");
-			exit(errno);
-		}
-		getcwd(pwd, len + 1);
-		dir = malloc(sizeof(char) * (ft_strlen(p->str) - 2));
-		if (!dir)
-		{
-			g_error = errno;
-			perror("Error: ");
-			exit(errno);
-		}
-		dir = ft_strchr(p->str, '/');
-		pwd = ft_strjoin(pwd, dir);
-		add_level(dir, p);
-		if (execve(pwd, argv, p->var_env) == -1)
-		{
-			free(pwd);
-			free(dir);
-			ft_putstr_fd(p->str, 2);
-			ft_putstr_fd(": ", 2);
-			ft_putendl_fd(strerror(errno), 2);
-			g_error = 126;
-			exit(126);
-		}
-	}
+		exec_child(p, argv);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		g_error = WEXITSTATUS(status);

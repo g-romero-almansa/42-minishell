@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/03 13:08:25 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/08 11:02:09 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -18,31 +18,33 @@ int	ft_echo(char *s, char **envp, int i)
 
 	p = malloc((ft_strlen(s) - 6) * sizeof(char));
 	if (!p)
-	{
-		g_error = errno;
-		perror("Error: ");
-		exit(errno);
-	}
+		error_malloc();
 	j = -1;
 	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
 		p[++j] = s[++i];
 	p[j] = '\0';
 	j = -1;
 	while (envp[++j])
-	{
-		if (!ft_strncmp(p, envp[j], ft_strlen(p))
-			&& (ft_strlen(p) == ft_count(envp[j])))
-		{
-			i = -1;
-			while (envp[j][i] != '=')
-				i++;
-			while (envp[j][++i])
-				ft_putchar_fd(envp[j][i], 1);
-		}
-	}
+		ft_echo2(p, envp, j);
 	j = ft_strlen(p);
 	free(p);
 	return (j);
+}
+
+void	ft_echo2(char *p, char **envp, int j)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_strncmp(p, envp[j], ft_strlen(p))
+		&& (ft_strlen(p) == ft_count(envp[j])))
+	{	
+		i = -1;
+		while (envp[j][i] != '=')
+			i++;
+		while (envp[j][++i])
+			ft_putchar_fd(envp[j][i], 1);
+	}
 }
 
 size_t	ft_count(char *s)
