@@ -93,6 +93,7 @@ void			ft_show_export(t_shell *p);
 char			**ft_unset(char *str, char **cpy, t_shell *p);
 
 /*FT_ECHO*/
+void			search_echo(char *p, char **envp);
 int				ft_echo(char *s, char **envp, int i);
 size_t			ft_count(char *s);
 void			echo_low_bar(char *str, char **envp, int max);

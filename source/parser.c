@@ -20,7 +20,7 @@ void	join_tokens(t_shell *p, int start, int end, int n)
 	start++;
 	while (start < end)
 	{
-		temp = ft_strjoin(join, " ");
+		temp = ft_strdup(join);
 		free(join);
 		join = ft_strjoin(temp, p->tokens[start]->value);
 		free(temp);
@@ -39,13 +39,12 @@ void	init_parser(t_shell *p)
 	i = 0;
 	start = 0;
 	pipes = 0;
-	p->pipes = malloc(sizeof(t_pipes *) * (p->n_pipes + 2));
+	p->pipes = malloc(sizeof(t_pipes *) * (p->n_pipes + 1));
 	while (i <= p->n_pipes)
 	{
 		p->pipes[i] = malloc(sizeof(t_pipes));
 		i++;
 	}
-	p->pipes[i] = NULL;
 	i = 0;
 	while (i < p->n_tokens)
 	{

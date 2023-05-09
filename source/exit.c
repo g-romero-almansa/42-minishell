@@ -79,7 +79,8 @@ void	free_exit(t_shell *p, char *str)
 	i = 0;
 	while (i <= p->n_pipes)
 	{
-		free(p->pipes[i]->str);
+		/*if (p->pipes[i]->str)
+			free(p->pipes[i]->str);*/
 		free(p->pipes[i]);
 		i++;
 	}

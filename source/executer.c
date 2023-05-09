@@ -19,7 +19,7 @@ void	executer(t_shell *p, char *str, char **argv)
 	if (p->n_pipes == 0)
 	{
 		if (check_builtin(str))
-			do_builtin(str, p);
+			do_builtin(p->pipes[0]->str, p);
 		else if (check_redir(str))
 			do_redir(str, p);
 		else if (check_exec(str))

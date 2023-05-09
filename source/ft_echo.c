@@ -11,18 +11,11 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-int	ft_echo(char *s, char **envp, int i)
+void	search_echo(char *p, char **envp)
 {
-	char	*p;
-	int		j;
+	int	j;
+	int	i;
 
-	p = malloc((ft_strlen(s) - 6) * sizeof(char));
-	if (!p)
-		error_malloc();
-	j = -1;
-	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
-		p[++j] = s[++i];
-	p[j] = '\0';
 	j = -1;
 	while (envp[++j])
 	{
@@ -36,6 +29,21 @@ int	ft_echo(char *s, char **envp, int i)
 				ft_putchar_fd(envp[j][i], 1);
 		}
 	}
+}
+
+int	ft_echo(char *s, char **envp, int i)
+{
+	char	*p;
+	int		j;
+
+	p = malloc((ft_strlen(s) - 6) * sizeof(char));
+	if (!p)
+		error_malloc();
+	j = -1;
+	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
+		p[++j] = s[++i];
+	p[j] = '\0';
+	search_echo(p, envp);
 	j = ft_strlen(p);
 	free(p);
 	return (j);
