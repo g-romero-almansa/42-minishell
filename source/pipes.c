@@ -148,7 +148,7 @@ void	do_pipes(char *str, t_shell *p)
 	{
 		if (p->pipes[i] && p->pipes[i + 1])
 			ft_pipe(p->pipes[i]->str, &prevpipe, i, p);
-		else if (p->pipes[i + 1] == NULL)
+		if (i == p->n_pipes)
 			ft_last(p->pipes[i]->str, &prevpipe, i, p);
 		i++;
 	}

@@ -35,14 +35,12 @@ char	*get_next_token(char *str, int *i)
 			while (str[*i] && str[*i] != quote)
 				(*i)++;
 			(*i)++;
-			token = ft_substr(str, start, *i - start);
-			return (token);
+			return (ft_substr(str, start, *i - start));
 		}
 		else if (str[*i] == ' ' && start != *i)
 		{
-			token = ft_substr(str, start, *i - start);
 			(*i)++;
-			return (token);
+			return (ft_substr(str, start, *i - start));
 		}
 		else if ((str[*i] == '<' && str[*i + 1] == '<') || (str[*i] == '>'
 				&& str[*i + 1] == '>'))
@@ -56,9 +54,8 @@ char	*get_next_token(char *str, int *i)
 				(*i) += 2;
 				return (token);
 			}
-			token = ft_substr(str, start, *i - start);
 			*i += 2;
-			return (token);
+			return (ft_substr(str, start, *i - start));
 		}
 		else if (str[*i] == '|' || str[*i] == '<' || str[*i] == '>')
 		{
@@ -70,14 +67,12 @@ char	*get_next_token(char *str, int *i)
 				(*i)++;
 				return (token);
 			}
-			token = ft_substr(str, start, *i - start);
 			(*i)++;
-			return (token);
+			return (ft_substr(str, start, *i - start));
 		}
 		(*i)++;
 	}
-	token = ft_substr(str, start, *i - start);
-	return (token);
+	return (ft_substr(str, start, *i - start));
 }
 
 t_token_type	get_token_type(char *token, t_token_type token_type)
@@ -118,7 +113,6 @@ void	lexer(char *str, t_shell *p)
 	}
 	p->n_tokens = j;
 	p->tokens = malloc(sizeof(t_token *) * j);
-	p->tokens[j] = NULL;
 	i = 0;
 	j = 0;
 	while ((size_t)i < ft_strlen(str))

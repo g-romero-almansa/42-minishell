@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:20:20 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/08 10:55:53 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/09 12:42:53 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -17,6 +17,7 @@ void	exit_num(t_shell *p, char *str)
 	int		i;
 	int		len;
 
+	printf ("\n\n pepe\n");
 	arg = ft_split(str, ' ');
 	len = ft_strlen(arg[1]);
 	i = 0;
@@ -79,7 +80,8 @@ void	free_exit(t_shell *p, char *str)
 	i = 0;
 	while (i <= p->n_pipes)
 	{
-		free(p->pipes[i]->str);
+		/*if (p->pipes[i]->str)
+			free(p->pipes[i]->str);*/
 		free(p->pipes[i]);
 		i++;
 	}

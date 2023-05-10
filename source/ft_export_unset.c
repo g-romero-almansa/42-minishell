@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/09 10:30:55 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/09 12:15:09 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -36,6 +36,7 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 		p->var_env[j] = ft_strdup(str);
 		p->env_n++;
 	}
+	p->var_env[++j] = NULL;
 	return (p->var_env);
 }
 
@@ -122,5 +123,6 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 	}
 	if (less)
 		p->env_n--;
+	p->var_env[j] = NULL;
 	return (p->var_env);
 }
