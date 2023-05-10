@@ -18,7 +18,7 @@ void	error_cmd(char *str)
 	g_error = 127;
 }
 
-void	error_malloc(void)
+void	std_error(void)
 {
 	g_error = errno;
 	perror("Error: ");

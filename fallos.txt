@@ -1,5 +1,3 @@
-en la funcion ft_last_word se esta volviendo a dar memoria a una variable que ya tiene??
-
 las redirecciones de entrada (las dobles tambien) pueden ser:
 cat < infile
 cat <infile

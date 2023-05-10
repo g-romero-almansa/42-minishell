@@ -30,6 +30,20 @@ void	join_tokens(t_shell *p, int start, int end, int n)
 	free(join);
 }
 
+void	free_tokens(t_shell *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->n_tokens)
+	{
+		free(p->tokens[i]->value);
+		free(p->tokens[i]);
+		i++;
+	}
+	free(p->tokens);
+}
+
 void	init_parser(t_shell *p)
 {
 	int	i;
@@ -59,6 +73,20 @@ void	init_parser(t_shell *p)
 	join_tokens(p, start, i, pipes);
 }
 
+void	parser_quote(char *str, t_shell *p)
+{
+	char	*sub;
+	char	*temp;
+
+	sub = ft_strchr(str, '\'');
+	p->interp = 0;
+	temp = ft_substr(sub, 1,
+			ft_strlen(str) - 2);
+	free(str);
+	str = ft_strdup(temp);
+	free(temp);
+}
+
 void	parser(t_shell *p)
 {
 	int		i;
@@ -72,15 +100,7 @@ void	parser(t_shell *p)
 				ft_strlen(p->tokens[i]->value)))
 			p->n_pipes++;
 		if (ft_strchr(p->tokens[i]->value, '\'') != NULL)
-		{
-			sub = ft_strchr(p->tokens[i]->value, '\'');
-			p->interp = 0;
-			temp = ft_substr(sub, 1,
-					ft_strlen(p->tokens[i]->value) - 2);
-			free(p->tokens[i]->value);
-			p->tokens[i]->value = ft_strdup(temp);
-			free(temp);
-		}
+			parser_quote(p->tokens[i]->value, p);
 		else if (ft_strchr(p->tokens[i]->value, '\"') != NULL)
 		{
 			sub = ft_strchr(p->tokens[i]->value, '\"');

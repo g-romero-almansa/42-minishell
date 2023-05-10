@@ -6,18 +6,18 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/09 11:06:13 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:26:57 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void	search_echo(char *p, char **envp)
+void	search_echo(char *p, char **envp, int max)
 {
 	int	j;
 	int	i;
 
-	j = -1;
-	while (envp[++j])
+	j = 0;
+	while (j < max)
 	{
 		if (!ft_strncmp(p, envp[j], ft_strlen(p))
 			&& (ft_strlen(p) == ft_count(envp[j])))
@@ -28,22 +28,23 @@ void	search_echo(char *p, char **envp)
 			while (envp[j][++i])
 				ft_putchar_fd(envp[j][i], 1);
 		}
+		j++;
 	}
 }
 
-int	ft_echo(char *s, char **envp, int i)
+int	ft_echo(char *s, char **envp, int i, int max)
 {
 	char	*p;
 	int		j;
 
-	p = malloc((ft_strlen(s) - 6) * sizeof(char));
+	p = malloc((ft_strlen(s) - 5) * sizeof(char));
 	if (!p)
-		error_malloc();
+		std_error();
 	j = -1;
 	while (s[i] != ' ' && s[i] && s[i] != 34 && s[i] != 39)
 		p[++j] = s[++i];
 	p[j] = '\0';
-	search_echo(p, envp);
+	search_echo(p, envp, max);
 	j = ft_strlen(p);
 	free(p);
 	return (j);
@@ -72,8 +73,7 @@ void	echo_low_bar(char *str, char **envp, int max)
 		s = malloc(sizeof(char) * (ft_strlen(envp[i]) + 1));
 		if (!s)
 		{
-			g_error = errno;
-			perror("Error: ");
+			std_error();
 			exit(errno);
 		}
 		s = ft_strchr(envp[i], '=');
@@ -81,7 +81,7 @@ void	echo_low_bar(char *str, char **envp, int max)
 		{
 			s = ft_strchr(envp[i], '$');
 			s = ft_strjoin("echo ", s);
-			ft_echo(s, envp, 5);
+			ft_echo(s, envp, 5, max);
 		}
 		else
 			ft_putstr_fd(s + 1, 1);

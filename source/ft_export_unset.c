@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/09 12:15:09 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:42:51 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -118,8 +118,7 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 	while (++k < p->env_n && cpy[k])
 	{
 		less = 1;
-		p->var_env[j] = ft_strdup(cpy[k]);
-		j++;
+		p->var_env[j++] = ft_strdup(cpy[k]);
 	}
 	if (less)
 		p->env_n--;

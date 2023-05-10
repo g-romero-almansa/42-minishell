@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/09 12:41:52 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:10:46 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -53,11 +53,7 @@ void	do_builtin(char *str, t_shell *p)
 	else if (!ft_strncmp(str, "export", 6))
 		do_export(str, p);
 	else
-	{
-		ft_putstr_fd(str, 2);
-		ft_putendl_fd(": command not found", 2);
-		g_error = 127;
-	}
+		error_cmd(str);
 }
 
 int	check_builtin(char *str)
@@ -84,14 +80,6 @@ void	free_executer(t_shell *p)
 	int	i;
 
 	i = 0;
-	while (i < p->n_tokens)
-	{
-		free(p->tokens[i]->value);
-		free(p->tokens[i]);
-		i++;
-	}
-	free(p->tokens);
-	i = 0;
 	while (i < p->n_pipes)
 	{
 		free(p->pipes[i]->str);
@@ -102,48 +90,20 @@ void	free_executer(t_shell *p)
 	free(p->str);
 }
 
-void	leaks(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	int		i;
 	t_shell	*p;
 
-	//atexit(leaks);
 	p = malloc(sizeof(t_shell));
-	i = 0;
-	while (envp[i])
-		i++;
-	p->var_env = (char **)malloc((i + 1) * sizeof(char *));
-	if (!p->var_env)
-		exit(0);
-	p->env_n = i;
-	p->flag_s = 0;
-	p->flag_d = 0;
-	p->flag_qu = 0;
-	p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
-	g_error = 0;
-	signal(SIGINT, sighandler);
-	signal(SIGQUIT, SIG_IGN);
+	ft_init(envp, p);
 	while (argc)
 	{
-		p->interp = 1;
-		p->append = 0;
-		p->n_pipes = 0;
-		p->fd_out = STDOUT_FILENO;
-		p->fd_in = STDIN_FILENO;
-		dup2(0, STDIN_FILENO);
-		dup2(1, STDOUT_FILENO);
+		ft_init2(p);
 		str = readline(BEGIN "minishell $ " CLOSE);
 		if (!str)
-		{
-			ft_putstr_fd("exit\n", 2);
-			exit(0);
-		}
+			control_d();
 		i = 0;
 		while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 			i++;
@@ -151,15 +111,7 @@ int	main(int argc, char **argv, char **envp)
 			str = malloc(i * sizeof(char));
 		if (str && *str)
 			add_history(str);
-		if (ft_strlen(str) != 0)
-		{
-			ft_env_(str, p->var_env, p->env_n);
-			p->str = ft_strdup(str);
-			lexer(str, p);
-			parser(p);
-			executer(p, str, argv);
-			free_executer(p);
-		}
+		ft_init3(p, str, argv);
 		free(str);
 	}
 	ft_free_env(p->var_env, p->env_n);

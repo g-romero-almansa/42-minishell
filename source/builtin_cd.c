@@ -48,12 +48,6 @@ void	do_cd_home(t_shell *p)
 	int		len;
 
 	len = ft_strlen(get_env("HOME=", p));
-	s = malloc(sizeof(char) * (len + 1));
-	if (!s)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
 	s = get_env("HOME=", p);
 	ft_env_pwd(get_env("PWD=", p), s, p->var_env);
 	chdir(s);
@@ -91,7 +85,7 @@ void	do_cd(char *str, t_shell *p)
 	{
 		dir = malloc(sizeof(char) * (ft_strlen(str) - 3));
 		if (!dir)
-			error_malloc();
+			std_error();
 		dir = ft_strchr(str, ' ');
 		dir[0] = '/';
 		len = ft_strlen(get_env("PWD=", p));

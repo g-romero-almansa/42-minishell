@@ -28,5 +28,5 @@ void	executer(t_shell *p, char *str, char **argv)
 			find_cmd(p);
 	}
 	else
-		do_pipes(p->str, p);
+		do_pipes(p);
 }
