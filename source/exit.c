@@ -69,14 +69,6 @@ void	free_exit(t_shell *p, char *str)
 	free(p->str);
 	ft_free_env(p->var_env, p->env_n);
 	i = 0;
-	while (i < p->n_tokens)
-	{
-		free(p->tokens[i]->value);
-		free(p->tokens[i]);
-		i++;
-	}
-	free(p->tokens);
-	i = 0;
 	while (i <= p->n_pipes)
 	{
 		/*if (p->pipes[i]->str)

@@ -39,7 +39,7 @@ void	print_echo(char *str, t_shell *p)
 			else if (str[i] == '$' && str[i + 1] == '?')
 				i = echo_status(i);
 			else if (str[i] == '$' && p->interp)
-				i = ft_echo(str, p->var_env, i) + i;
+				i = ft_echo(str, p->var_env, i, p->env_n) + i;
 			else
 				ft_putchar_fd(str[i], 1);
 		}

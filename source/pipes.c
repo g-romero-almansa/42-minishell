@@ -11,78 +11,20 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void	exec(char *str, t_shell *p)
-{
-	char	*path_env;
-	char	**paths_sep;
-	char	**str_sep;
-	char	*cmd;
-
-	str_sep = ft_split(str, ' ');
-	if (p->interp == 0)
-		str_sep[1] = NULL;
-	str_sep[0] = ft_strtrim(str_sep[0], " ");
-	if (check_builtin(str_sep[0]))
-	{
-		do_builtin(str, p);
-		exit(0);
-	}
-	else
-	{
-		path_env = find_path(p);
-		if (!path_env)
-		{
-			ft_putstr_fd(str_sep[0], 2);
-			ft_putendl_fd(": No such file or directory", 2);
-			free_matrix(str_sep);
-			g_error = 127;
-			exit(127);
-		}
-		paths_sep = ft_split(path_env, ':');
-		cmd = paths_arg(paths_sep, str_sep);
-		if (!cmd)
-		{
-			free_matrix(paths_sep);
-			ft_putstr_fd(str_sep[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			free_matrix(str_sep);
-			g_error = 127;
-			exit(127);
-		}
-		free_matrix(paths_sep);
-		execve(cmd, str_sep, p->var_env);
-	}
-}
-
 void	ft_pipe(char *str, int *prevpipe, int i, t_shell *p)
 {
 	int	fd[2];
 
 	if (pipe(fd) < 0)
 	{
-		g_error = errno;
-		perror("Error: ");
+		std_error();
 		exit(errno);
 	}
 	p->child_pid[i] = fork();
 	if (p->child_pid[i] == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (p->child_pid[i] == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		p->fd_out = fd[1];
-		close(fd[1]);
-		dup2(*prevpipe, STDIN_FILENO);
-		close(*prevpipe);
-		if (check_redir(str))
-			do_redir_pipe(str, p);
-		else
-			exec(str, p);
-	}
+		child_pipe(p, prevpipe, str, fd);
 	else
 	{
 		close(fd[1]);
@@ -98,19 +40,9 @@ void	ft_last(char *str, int *prevpipe, int i, t_shell *p)
 
 	p->child_pid[i] = fork();
 	if (p->child_pid[i] == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (p->child_pid[i] == 0)
-	{
-		dup2(*prevpipe, STDIN_FILENO);
-		close(*prevpipe);
-		if (check_redir(str))
-			do_redir_pipe(str, p);
-		else
-			exec(str, p);
-	}
+		last_child(prevpipe, str, p);
 	else
 	{
 		close(*prevpipe);
@@ -125,24 +57,17 @@ void	ft_last(char *str, int *prevpipe, int i, t_shell *p)
 	}
 }
 
-void	do_pipes(char *str, t_shell *p)
+void	do_pipes(t_shell *p)
 {
 	int	prevpipe;
 	int	i;
 
-	(void)str;
 	prevpipe = dup(0);
 	if (prevpipe == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	p->child_pid = (pid_t *)malloc(sizeof(pid_t) * (p->n_pipes + 1));
 	if (!p->child_pid)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	i = 0;
 	while (i <= p->n_pipes)
 	{

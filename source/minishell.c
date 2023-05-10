@@ -53,11 +53,7 @@ void	do_builtin(char *str, t_shell *p)
 	else if (!ft_strncmp(str, "export", 6))
 		do_export(str, p);
 	else
-	{
-		ft_putstr_fd(str, 2);
-		ft_putendl_fd(": command not found", 2);
-		g_error = 127;
-	}
+		error_cmd(str);
 }
 
 int	check_builtin(char *str)
@@ -84,14 +80,6 @@ void	free_executer(t_shell *p)
 	int	i;
 
 	i = 0;
-	while (i < p->n_tokens)
-	{
-		free(p->tokens[i]->value);
-		free(p->tokens[i]);
-		i++;
-	}
-	free(p->tokens);
-	i = 0;
 	while (i < p->n_pipes)
 	{
 		free(p->pipes[i]->str);
@@ -102,18 +90,12 @@ void	free_executer(t_shell *p)
 	free(p->str);
 }
 
-void	leaks(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	int		i;
 	t_shell	*p;
 
-	//atexit(leaks);
 	p = malloc(sizeof(t_shell));
 	i = 0;
 	while (envp[i])
@@ -157,6 +139,7 @@ int	main(int argc, char **argv, char **envp)
 			p->str = ft_strdup(str);
 			lexer(str, p);
 			parser(p);
+			free_tokens(p);
 			executer(p, str, argv);
 			free_executer(p);
 		}

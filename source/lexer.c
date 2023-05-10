@@ -13,8 +13,6 @@
 
 char	*get_next_token(char *str, int *i)
 {
-	char	*token;
-	char	quote;
 	int		j;
 	int		start;
 
@@ -28,48 +26,14 @@ char	*get_next_token(char *str, int *i)
 	while (str[*i])
 	{
 		if (str[*i] == '\'' || str[*i] == '\"')
-		{
-			quote = str[*i];
-			start = *i;
-			(*i)++;
-			while (str[*i] && str[*i] != quote)
-				(*i)++;
-			(*i)++;
+			return (token_quote(str, i));
+		else if (str[*i] == ' ' && start != *i && (*i)++)
 			return (ft_substr(str, start, *i - start));
-		}
-		else if (str[*i] == ' ' && start != *i)
-		{
-			(*i)++;
-			return (ft_substr(str, start, *i - start));
-		}
 		else if ((str[*i] == '<' && str[*i + 1] == '<') || (str[*i] == '>'
 				&& str[*i + 1] == '>'))
-		{
-			if (start == *i)
-			{
-				token = (char *)malloc(sizeof(char) * 3);
-				token[0] = str[*i];
-				token[1] = str[(*i) + 1];
-				token[2] = '\0';
-				(*i) += 2;
-				return (token);
-			}
-			*i += 2;
-			return (ft_substr(str, start, *i - start));
-		}
+			return (token_dredir(str, i, start));
 		else if (str[*i] == '|' || str[*i] == '<' || str[*i] == '>')
-		{
-			if (start == *i)
-			{
-				token = (char *)malloc(sizeof(char) * 2);
-				token[0] = str[*i];
-				token[1] = '\0';
-				(*i)++;
-				return (token);
-			}
-			(*i)++;
-			return (ft_substr(str, start, *i - start));
-		}
+			return (token_pipe(str, i, start));
 		(*i)++;
 	}
 	return (ft_substr(str, start, *i - start));
@@ -97,11 +61,11 @@ t_token_type	get_token_type(char *token, t_token_type token_type)
 		return (CMD);
 }
 
-void	lexer(char *str, t_shell *p)
+int	count_tokens(char *str)
 {
-	char	*token;
 	int		i;
 	int		j;
+	char	*token;
 
 	i = 0;
 	j = 0;
@@ -111,9 +75,17 @@ void	lexer(char *str, t_shell *p)
 		j++;
 		free(token);
 	}
-	p->n_tokens = j;
-	p->tokens = malloc(sizeof(t_token *) * j);
+	return (j);
+}
+
+void	lexer(char *str, t_shell *p)
+{
+	int		i;
+	int		j;
+
 	i = 0;
+	p->n_tokens = count_tokens(str);
+	p->tokens = malloc(sizeof(t_token *) * p->n_tokens);
 	j = 0;
 	while ((size_t)i < ft_strlen(str))
 	{

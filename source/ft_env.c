@@ -24,9 +24,10 @@ char	**ft_cpy_env(char **env, char **cpy, int max)
 
 void	ft_env_(char *nev, char **env, int max)
 {
-	int	i;
-	int	j;
-	int	k;
+	int		i;
+	int		j;
+	int		k;
+	char	*temp;
 
 	i = 0;
 	if (ft_strncmp(nev, "echo $_", ft_strlen(nev)))
@@ -37,14 +38,15 @@ void	ft_env_(char *nev, char **env, int max)
 				break ;
 			i++;
 		}
-		nev = ft_last_word(nev);
+		temp = ft_last_word(nev);
 		k = -1;
 		env[i][0] = '_';
 		env[i][1] = '=';
 		j = 1;
-		while (nev[++k])
-			env[i][++j] = nev[k];
+		while (temp[++k])
+			env[i][++j] = temp[k];
 		env[i][j + 1] = '\0';
+		free(temp);
 	}
 }
 

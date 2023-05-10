@@ -17,7 +17,8 @@ SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
 				source/ft_export_unset.c source/builtin.c source/builtin_cd.c \
 			   	source/redirect.c source/exec.c source/lexer.c source/parser.c \
 				source/executer.c source/redir_pipe.c source/exit.c source/error.c \
-				source/builtin_echo.c
+				source/builtin_echo.c source/tokens.c source/redir_out.c \
+				source/redir_in.c source/exec_pipes.c
 
 OBJ_SRC		=	 $(SRC:.c=.o)
 
