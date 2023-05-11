@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 11:08:55 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/10 11:09:50 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:17:09 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -44,6 +44,8 @@ void	ft_init2(t_shell *p)
 
 void	ft_init3(t_shell *p, char *str, char **argv)
 {
+	if (str && *str)
+		add_history(str);
 	if (ft_strlen(str) != 0)
 	{
 		ft_env_(str, p->var_env, p->env_n);

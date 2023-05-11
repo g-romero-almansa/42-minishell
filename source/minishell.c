@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 10:39:38 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:16:41 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -94,18 +94,12 @@ void	free_executer(t_shell *p)
 	free(p->str);
 }
 
-void	leaks(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	int		i;
 	t_shell	*p;
 
-	//atexit(leaks);
 	p = malloc(sizeof(t_shell));
 	ft_init(envp, p);
 	while (argc)
@@ -122,8 +116,6 @@ int	main(int argc, char **argv, char **envp)
 			free(str);
 			str = malloc(i * sizeof(char));
 		}
-		if (str && *str)
-			add_history(str);
 		ft_init3(p, str, argv);
 		free(str);
 	}
