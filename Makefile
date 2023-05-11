@@ -6,7 +6,7 @@
 #    By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/03 12:02:26 by gromero-          #+#    #+#              #
-#    Updated: 2023/05/03 12:28:03 by gromero-         ###   ########.fr        #
+#    Updated: 2023/05/10 11:10:29 by gromero-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC			=	source/minishell.c source/ft_env.c source/pipes.c \
 			   	source/redirect.c source/exec.c source/lexer.c source/parser.c \
 				source/executer.c source/redir_pipe.c source/exit.c source/error.c \
 				source/builtin_echo.c source/tokens.c source/redir_out.c \
-				source/redir_in.c source/exec_pipes.c
+				source/redir_in.c source/exec_pipes.c source/ft_init.c
 
 OBJ_SRC		=	 $(SRC:.c=.o)
 

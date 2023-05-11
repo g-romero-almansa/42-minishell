@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/27 11:15:51 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:42:51 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -22,25 +22,12 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 	while (str[j] != '=')
 		j++;
 	sub = ft_substr(str, 0, j + 1);
-	j = 0;
-	while (j < p->env_n && cpy[j])
-	{
+	j = -1;
+	while (++j < p->env_n && cpy[j])
 		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
 			flag = 1;
-		j++;
-	}
 	if (flag == 1)
-	{
-		j = 0;
-		while (j < p->env_n && cpy[j])
-		{
-			if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-				p->var_env[j] = ft_strdup(str);
-			else
-				p->var_env[j] = ft_strdup(cpy[j]);
-			j++;
-		}
-	}
+		ft_export2(p, cpy, sub, str);
 	else
 	{
 		j = -1;
@@ -49,60 +36,65 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 		p->var_env[j] = ft_strdup(str);
 		p->env_n++;
 	}
-	j++;
-	p->var_env[j] = NULL;
+	p->var_env[++j] = NULL;
 	return (p->var_env);
+}
+
+void	ft_export2(t_shell *p, char **cpy, char *sub, char *str)
+{
+	int		j;
+
+	j = 0;
+	while (j < p->env_n && cpy[j])
+	{
+		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
+			p->var_env[j] = ft_strdup(str);
+		else
+			p->var_env[j] = ft_strdup(cpy[j]);
+		j++;
+	}
 }
 
 void	ft_show_export(t_shell *p)
 {
-	int		i;
 	int		j;
 	char	c;
-	char	**tpm;
 
-	j = -1;
-	i = -1;
-	c = 'A';
-	tpm = (char **)malloc((p->env_n) * sizeof(char *));
-	while (c <= 'Z')
+	c = 64;
+	while (++c <= 'Z')
 	{
 		j = -1;
-		while (p->var_env[++j])
+		while (++j < p->env_n)
 			if (p->var_env[j][0] == c)
-				tpm[++i] = ft_substr(p->var_env[j], 0,
-						ft_strlen(p->var_env[j]));
-		c++;
+				ft_show_export2(p, j);
 	}
 	j = -1;
-	while (p->var_env[++j])
-		if (p->var_env[j][0] == '_')
-			tpm[++i] = ft_substr(p->var_env[j], 0, ft_strlen(p->var_env[j]));
-	j = -1;
-	c = 'a';
-	while (c <= 'z')
-	{
-		j = -1;
-		while (p->var_env[++j])
-			if (p->var_env[j][0] == c)
-				tpm[++i] = ft_substr(p->var_env[j], 0,
-						ft_strlen(p->var_env[j]));
-		c++;
-	}
-	j = -1;
-	c = 34;
 	while (++j < p->env_n)
+		if (p->var_env[j][0] == '_')
+			ft_show_export2(p, j);
+	c = 96;
+	while (++c <= 'z')
 	{
-		i = -1;
-		printf("declare -x ");
-		while (tpm[j][++i])
-		{
-			printf("%c", tpm[j][i]);
-			if (tpm[j][i] == '=' || tpm[j][i + 1] == '\0')
-				printf("%c", c);
-		}
-		printf("\n");
+		j = -1;
+		while (++j < p->env_n)
+			if (p->var_env[j][0] == c)
+				ft_show_export2(p, j);
 	}
+}
+
+void	ft_show_export2(t_shell *p, int j)
+{
+	int		i;
+
+	i = -1;
+	printf("declare -x ");
+	while (p->var_env[j][++i])
+	{
+		printf("%c", p->var_env[j][i]);
+		if (p->var_env[j][i] == '=' || p->var_env[j][i + 1] == '\0')
+			printf("\"");
+	}
+	printf("\n");
 }
 
 char	**ft_unset(char *str, char **cpy, t_shell *p)
@@ -122,14 +114,11 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 		if (j != p->env_n && !ft_strncmp(s, cpy[j], ft_strlen(s)))
 			less = 1;
 	}
-	k = j + 1;
-	while (k < p->env_n && cpy[k])
+	k = j;
+	while (++k < p->env_n && cpy[k])
 	{
 		less = 1;
-		p->var_env[j] = ft_strdup(cpy[k]);
-		printf("j:%d\n", j);
-		k++;
-		j++;
+		p->var_env[j++] = ft_strdup(cpy[k]);
 	}
 	if (less)
 		p->env_n--;

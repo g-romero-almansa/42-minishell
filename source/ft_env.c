@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:03:46 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/03 11:30:33 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:32:42 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -29,17 +29,16 @@ void	ft_env_(char *nev, char **env, int max)
 	int		k;
 	char	*temp;
 
-	i = 0;
+	i = -1;
 	if (ft_strncmp(nev, "echo $_", ft_strlen(nev)))
 	{
-		while (i < max)
-		{
+		while (++i < max)
 			if (!ft_strncmp(env[i], "_=", 2))
 				break ;
-			i++;
-		}
 		temp = ft_last_word(nev);
 		k = -1;
+		free (env[i]);
+		env[i] = malloc ((ft_strlen(nev) + 3) * sizeof(char));
 		env[i][0] = '_';
 		env[i][1] = '=';
 		j = 1;

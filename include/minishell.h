@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/03 11:13:49 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:13:46 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ typedef struct s_shell
 }					t_shell;
 
 /*MINISHELL*/
+void				ft_init(char **envp, t_shell *p);
+void				ft_init2(t_shell *p);
+void				ft_init3(t_shell *p, char *str, char **argv);
+void				control_d(void);
+void				sighandler(int num);
 void				do_builtin(char *str, t_shell *p);
 int					check_builtin(char *str);
 void				free_executer(t_shell *p);
@@ -89,7 +94,9 @@ char				**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
 char				**ft_export(char *str, char **cpy, t_shell *p);
+void				ft_export2(t_shell *p, char **cpy, char *sub, char *str);
 void				ft_show_export(t_shell *p);
+void				ft_show_export2(t_shell *p, int j);
 char				**ft_unset(char *str, char **cpy, t_shell *p);
 
 /*FT_ECHO*/
@@ -125,7 +132,6 @@ void				find_cmd(t_shell *p);
 void				do_env(t_shell *p);
 void				do_pwd(t_shell *p);
 void				do_unset(t_shell *p, char *str);
-void				do_unset2(int first_n, t_shell *p, char *str);
 void				export_cnt(t_shell *p, char *str);
 void				do_export(char *str, t_shell *p);
 

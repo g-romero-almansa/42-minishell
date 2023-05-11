@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:21:48 by gromero-          #+#    #+#             */
-/*   Updated: 2023/04/28 11:07:54 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:26:57 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -74,7 +74,6 @@ void	echo_low_bar(char *str, char **envp, int max)
 		if (!s)
 		{
 			std_error();
-			//free
 			exit(errno);
 		}
 		s = ft_strchr(envp[i], '=');

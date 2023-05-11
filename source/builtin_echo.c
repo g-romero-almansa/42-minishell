@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:24:18 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/02 13:24:21 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/05/03 13:06:32 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"

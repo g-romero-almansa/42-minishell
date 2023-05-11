@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:20:20 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/02 13:20:24 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/05/10 12:10:14 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -71,8 +71,6 @@ void	free_exit(t_shell *p, char *str)
 	i = 0;
 	while (i <= p->n_pipes)
 	{
-		/*if (p->pipes[i]->str)
-			free(p->pipes[i]->str);*/
 		free(p->pipes[i]);
 		i++;
 	}
