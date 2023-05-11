@@ -117,13 +117,7 @@ int	main(int argc, char **argv, char **envp)
 			str = malloc(i * sizeof(char));
 		}
 		else
-		{
-			if (str && *str)
-				add_history(str);
 			ft_init3(p, str, argv);
-		}
 		free(str);
 	}
-	ft_free_env(p->var_env, p->env_n);
-	free(p);
 }

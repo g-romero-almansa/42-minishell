@@ -77,14 +77,16 @@ typedef struct s_shell
 }					t_shell;
 
 /*MINISHELL*/
-void				ft_init(char **envp, t_shell *p);
-void				ft_init2(t_shell *p);
-void				ft_init3(t_shell *p, char *str, char **argv);
-void				control_d(void);
 void				sighandler(int num);
 void				do_builtin(char *str, t_shell *p);
 int					check_builtin(char *str);
 void				free_executer(t_shell *p);
+
+/*FT_INIT*/
+void				ft_init(char **envp, t_shell *p);
+void				ft_init2(t_shell *p);
+void				ft_init3(t_shell *p, char *str, char **argv);
+void				control_d(void);
 
 /*FT_ENV*/
 void				ft_env_pwd(char *old, char *nev, char **env);
@@ -169,6 +171,7 @@ void				double_input(char *str, t_shell *p);
 void				out_child(char *file, char *str, t_shell *p);
 void				output_redir(char *str, t_shell *p);
 void				double_out_child(char *file, char *str, t_shell *p);
+char				**sep_redir(char *str);
 void				double_output(char *str, t_shell *p);
 
 /*TOKENS*/

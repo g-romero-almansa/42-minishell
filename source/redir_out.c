@@ -48,18 +48,21 @@ void	double_out_child(char *file, char *str, t_shell *p)
 void	output_redir(char *str, t_shell *p)
 {
 	char	**redir_sep;
+	char	*temp1;
+	char	*temp2;
 	pid_t	child_pid;
 	int		status;
 
 	redir_sep = ft_split(str, '>');
-	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
-	redir_sep[1] = ft_strtrim(redir_sep[1], " ");
+	temp1 = ft_strtrim(redir_sep[0], " ");
+	free(redir_sep[0]);
+	redir_sep[0] = temp1;
+	temp2 = ft_strtrim(redir_sep[1], " ");
+	free(redir_sep[1]);
+	redir_sep[1] = temp2;
 	child_pid = fork();
 	if (child_pid == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (child_pid == 0)
 		out_child(redir_sep[1], redir_sep[0], p);
 	else
@@ -71,6 +74,22 @@ void	output_redir(char *str, t_shell *p)
 	free_matrix(redir_sep);
 }
 
+char	**sep_redir(char *str)
+{
+	char	**redir_sep;
+	char	*temp1;
+	char	*temp2;
+
+	redir_sep = ft_split(str, '>');
+	temp1 = ft_strtrim(redir_sep[0], " ");
+	free(redir_sep[0]);
+	redir_sep[0] = temp1;
+	temp2 = ft_strtrim(redir_sep[1], "> ");
+	free(redir_sep[1]);
+	redir_sep[1] = temp2;
+	return (redir_sep);
+}
+
 void	double_output(char *str, t_shell *p)
 {
 	char	**redir_sep;
@@ -78,16 +97,11 @@ void	double_output(char *str, t_shell *p)
 	pid_t	child_pid;
 	int		status;
 
-	redir_sep = ft_split(str, '>');
-	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
-	redir_sep[1] = ft_strtrim(redir_sep[1], "> ");
+	redir_sep = sep_redir(str);
 	child_pid = fork();
 	fd = 0;
 	if (child_pid == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (child_pid == 0)
 		double_out_child(redir_sep[1], redir_sep[0], p);
 	else

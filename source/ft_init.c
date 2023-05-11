@@ -43,7 +43,7 @@ void	ft_init2(t_shell *p)
 }
 
 void	ft_init3(t_shell *p, char *str, char **argv)
-{
+{	
 	if (str && *str)
 		add_history(str);
 	if (ft_strlen(str) != 0)
