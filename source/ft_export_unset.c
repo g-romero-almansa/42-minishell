@@ -11,56 +11,6 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	**ft_export(char *str, char **cpy, t_shell *p)
-{
-	int		j;
-	char	*sub;
-	int		flag;
-
-	j = 0;
-	flag = 0;
-	while (str[j] != '=')
-		j++;
-	sub = ft_substr(str, 0, j + 1);
-	j = -1;
-	while (++j < p->env_n && cpy[j])
-		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-			flag = 1;
-	if (flag == 1)
-		ft_export2(p, cpy, sub, str);
-	else
-		ft_export3(p, cpy, str);
-	free(sub);
-	p->var_env[++j] = NULL;
-	return (p->var_env);
-}
-
-void	ft_export2(t_shell *p, char **cpy, char *sub, char *str)
-{
-	int		j;
-
-	j = 0;
-	while (j < p->env_n && cpy[j])
-	{
-		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
-			p->var_env[j] = ft_strdup(str);
-		else
-			p->var_env[j] = ft_strdup(cpy[j]);
-		j++;
-	}
-}
-
-void	ft_export3(t_shell *p, char **cpy, char *str)
-{
-	int	j;
-
-	j = -1;
-	while (++j < p->env_n && cpy[j])
-		p->var_env[j] = ft_strdup(cpy[j]);
-	p->var_env[j] = ft_strdup(str);
-	p->env_n++;
-}
-
 void	ft_show_export(t_shell *p)
 {
 	int		j;
@@ -72,23 +22,23 @@ void	ft_show_export(t_shell *p)
 		j = -1;
 		while (++j < p->env_n)
 			if (p->var_env[j][0] == c)
-				ft_show_export2(p, j);
+				export_order(p, j);
 	}
 	j = -1;
 	while (++j < p->env_n)
 		if (p->var_env[j][0] == '_')
-			ft_show_export2(p, j);
+			export_order(p, j);
 	c = 96;
 	while (++c <= 'z')
 	{
 		j = -1;
 		while (++j < p->env_n)
 			if (p->var_env[j][0] == c)
-				ft_show_export2(p, j);
+				export_order(p, j);
 	}
 }
 
-void	ft_show_export2(t_shell *p, int j)
+void	export_order(t_shell *p, int j)
 {
 	int		i;
 
@@ -121,7 +71,7 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 			less = 1;
 	}
 	k = j;
-	j = ft_unset2(k, less, p, cpy);
+	j = unset_copy(k, less, p, cpy);
 	free(s);
 	if (less)
 		p->env_n--;
@@ -129,7 +79,7 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 	return (p->var_env);
 }
 
-int	ft_unset2(int k, int less, t_shell *p, char **cpy)
+int	unset_copy(int k, int less, t_shell *p, char **cpy)
 {
 	int		j;
 

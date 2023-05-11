@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void	ft_init(char **envp, t_shell *p)
+void	init_p(char **envp, t_shell *p)
 {
 	int		i;
 
@@ -31,7 +31,7 @@ void	ft_init(char **envp, t_shell *p)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ft_init2(t_shell *p)
+void	re_init(t_shell *p)
 {
 	p->interp = 1;
 	p->append = 0;
@@ -42,7 +42,7 @@ void	ft_init2(t_shell *p)
 	dup2(1, STDOUT_FILENO);
 }
 
-void	ft_init3(t_shell *p, char *str, char **argv)
+void	init(t_shell *p, char *str, char **argv)
 {	
 	if (str && *str)
 		add_history(str);

@@ -83,9 +83,9 @@ int					check_builtin(char *str);
 void				free_executer(t_shell *p);
 
 /*FT_INIT*/
-void				ft_init(char **envp, t_shell *p);
-void				ft_init2(t_shell *p);
-void				ft_init3(t_shell *p, char *str, char **argv);
+void				init_p(char **envp, t_shell *p);
+void				re_init(t_shell *p);
+void				init(t_shell *p, char *str, char **argv);
 void				control_d(void);
 
 /*FT_ENV*/
@@ -96,12 +96,12 @@ char				**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
 char				**ft_export(char *str, char **cpy, t_shell *p);
-void				ft_export2(t_shell *p, char **cpy, char *sub, char *str);
-void				ft_export3(t_shell *p, char **cpy, char *str);
+void				exp_remove(t_shell *p, char **cpy, char *sub, char *str);
+void				exp_change(t_shell *p, char **cpy, char *str);
 void				ft_show_export(t_shell *p);
-void				ft_show_export2(t_shell *p, int j);
+void				export_order(t_shell *p, int j);
 char				**ft_unset(char *str, char **cpy, t_shell *p);
-int					ft_unset2(int k, int less, t_shell *p, char **cpy);
+int					unset_copy(int k, int less, t_shell *p, char **cpy);
 
 /*FT_ECHO*/
 void				search_echo(char *p, char **envp, int max);

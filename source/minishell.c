@@ -37,7 +37,8 @@ void	sighandler(int num)
 
 void	do_builtin(char *str, t_shell *p)
 {
-	if (!ft_strncmp(str, "pwd ", 4) || !ft_strncmp(str, "pwd", 3))
+	if ((!ft_strncmp(str, "pwd ", 4) && ft_strlen(str) == 4)
+		|| (!ft_strncmp(str, "pwd", 3) && ft_strlen(str) == 3))
 		do_pwd(p);
 	else if (!ft_strncmp(str, "echo", 4))
 		do_echo(str, p);
@@ -50,9 +51,9 @@ void	do_builtin(char *str, t_shell *p)
 		do_cd(str, p);
 	else if (!ft_strncmp(str, "exit", 4))
 		do_exit(str, p);
-	else if (!ft_strncmp(str, "env", ft_strlen(str)))
+	else if (!ft_strncmp(str, "env", 3))
 		do_env(p);
-	else if (!ft_strncmp(str, "unset", 5))
+	else if (!ft_strncmp(str, "unset ", 6))
 		do_unset(p, str);
 	else if (!ft_strncmp(str, "export", 6))
 		do_export(str, p);
@@ -70,7 +71,7 @@ int	check_builtin(char *str)
 		return (1);
 	else if (!ft_strncmp(str, "exit", 4))
 		return (1);
-	else if (!ft_strncmp(str, "env", ft_strlen(str)))
+	else if (!ft_strncmp(str, "env", 3) && (ft_strlen(str) == 3))
 		return (1);
 	else if (!ft_strncmp(str, "export", 6))
 		return (1);
@@ -101,10 +102,10 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	*p;
 
 	p = malloc(sizeof(t_shell));
-	ft_init(envp, p);
+	init_p(envp, p);
 	while (argc)
 	{
-		ft_init2(p);
+		re_init(p);
 		str = readline(BEGIN "minishell $ " CLOSE);
 		if (!str)
 			control_d();
@@ -117,7 +118,7 @@ int	main(int argc, char **argv, char **envp)
 			str = malloc(i * sizeof(char));
 		}
 		else
-			ft_init3(p, str, argv);
+			init(p, str, argv);
 		free(str);
 	}
 }
