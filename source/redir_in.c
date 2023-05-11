@@ -6,7 +6,7 @@
 /*   By: barbizu- <barbizu-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:35:08 by barbizu-          #+#    #+#             */
-/*   Updated: 2023/05/09 12:35:11 by barbizu-         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:13:07 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -33,16 +33,18 @@ void	input_redir(char *str, t_shell *p)
 	char	**redir_sep;
 	pid_t	child_pid;
 	int		status;
+	char	*temp1;
 
 	redir_sep = ft_split(str, '<');
-	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
-	redir_sep[1] = ft_strtrim(redir_sep[1], " ");
+	temp1 = ft_strtrim(redir_sep[0], " ");
+	free(redir_sep[0]);
+	redir_sep[0] = temp1;
+	temp1 = ft_strtrim(redir_sep[1], " ");
+	free(redir_sep[1]);
+	redir_sep[1] = temp1;
 	child_pid = fork();
 	if (child_pid == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (child_pid == 0)
 		child_input(redir_sep[1], redir_sep[0], p);
 	else
@@ -84,16 +86,18 @@ void	double_input(char *str, t_shell *p)
 	char	**redir_sep;
 	pid_t	child_pid;
 	int		status;
+	char	*temp1;
 
 	redir_sep = ft_split(str, '<');
-	redir_sep[0] = ft_strtrim(redir_sep[0], " ");
-	redir_sep[1] = ft_strtrim(redir_sep[1], "< ");
+	temp1 = ft_strtrim(redir_sep[0], " ");
+	free(redir_sep[0]);
+	redir_sep[0] = temp1;
+	temp1 = ft_strtrim(redir_sep[1], " ");
+	free(redir_sep[1]);
+	redir_sep[1] = temp1;
 	child_pid = fork();
 	if (child_pid == -1)
-	{
-		g_error = errno;
-		perror("Error: ");
-	}
+		std_error();
 	else if (child_pid == 0)
 		double_child_input(p, redir_sep[1]);
 	else
