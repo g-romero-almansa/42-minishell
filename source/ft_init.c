@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 11:08:55 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 11:17:09 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:30:32 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
