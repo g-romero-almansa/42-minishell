@@ -6,15 +6,15 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 11:08:55 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 13:24:08 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:28:15 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void	ft_init(char **envp, t_shell *p)
+void	init_p(char **envp, t_shell *p)
 {
-	int		i;
-	struct sigaction sa;
+	int					i;
+	struct sigaction	sa;
 
 	i = 0;
 	while (envp[i])
@@ -35,7 +35,7 @@ void	ft_init(char **envp, t_shell *p)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ft_init2(t_shell *p)
+void	re_init(t_shell *p)
 {
 	p->interp = 1;
 	p->append = 0;
@@ -46,7 +46,7 @@ void	ft_init2(t_shell *p)
 	dup2(1, STDOUT_FILENO);
 }
 
-void	ft_init3(t_shell *p, char *str, char **argv)
+void	init(t_shell *p, char *str, char **argv)
 {	
 	if (str && *str)
 		add_history(str);
