@@ -83,9 +83,6 @@ void	do_cd(char *str, t_shell *p)
 		do_cd_back(p);
 	else
 	{
-		dir = malloc(sizeof(char) * (ft_strlen(str) - 3));
-		if (!dir)
-			std_error();
 		dir = ft_strchr(str, ' ');
 		dir[0] = '/';
 		len = ft_strlen(get_env("PWD=", p));

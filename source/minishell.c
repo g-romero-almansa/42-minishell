@@ -80,7 +80,7 @@ void	free_executer(t_shell *p)
 	int	i;
 
 	i = 0;
-	while (i < p->n_pipes)
+	while (i <= p->n_pipes)
 	{
 		free(p->pipes[i]->str);
 		free(p->pipes[i]);
@@ -130,7 +130,10 @@ int	main(int argc, char **argv, char **envp)
 		while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 			i++;
 		if (str[i] == '\0')
+		{
+			free(str);
 			str = malloc(i * sizeof(char));
+		}
 		if (str && *str)
 			add_history(str);
 		if (ft_strlen(str) != 0)
