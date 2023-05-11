@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 11:13:42 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/10 10:42:51 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:17:45 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -29,13 +29,7 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 	if (flag == 1)
 		ft_export2(p, cpy, sub, str);
 	else
-	{
-		j = -1;
-		while (++j < p->env_n && cpy[j])
-			p->var_env[j] = ft_strdup(cpy[j]);
-		p->var_env[j] = ft_strdup(str);
-		p->env_n++;
-	}
+		ft_export3(p, cpy, str);
 	free(sub);
 	p->var_env[++j] = NULL;
 	return (p->var_env);
@@ -54,6 +48,17 @@ void	ft_export2(t_shell *p, char **cpy, char *sub, char *str)
 			p->var_env[j] = ft_strdup(cpy[j]);
 		j++;
 	}
+}
+
+void	ft_export3(t_shell *p, char **cpy, char *str)
+{
+	int	j;
+
+	j = -1;
+	while (++j < p->env_n && cpy[j])
+		p->var_env[j] = ft_strdup(cpy[j]);
+	p->var_env[j] = ft_strdup(str);
+	p->env_n++;
 }
 
 void	ft_show_export(t_shell *p)
@@ -116,14 +121,23 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 			less = 1;
 	}
 	k = j;
-	while (++k < p->env_n && cpy[k])
-	{
-		less = 1;
-		p->var_env[j++] = ft_strdup(cpy[k]);
-	}
+	j = ft_unset2(k, less, p, cpy);
 	free(s);
 	if (less)
 		p->env_n--;
 	p->var_env[j] = NULL;
 	return (p->var_env);
+}
+
+int	ft_unset2(int k, int less, t_shell *p, char **cpy)
+{
+	int		j;
+
+	j = k;
+	while (++k < p->env_n && cpy[k])
+	{
+		less = 1;
+		p->var_env[j++] = ft_strdup(cpy[k]);
+	}
+	return (j);
 }

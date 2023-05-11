@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/10 11:10:46 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:16:41 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -19,7 +19,10 @@ void	sighandler(int num)
 	(void)num;
 	pid = waitpid(-1, &status, WNOHANG);
 	if (pid == 0)
+	{
 		write(1, "\n", 1);
+		g_error = 130;
+	}
 	else
 	{
 		rl_on_new_line();
@@ -28,6 +31,7 @@ void	sighandler(int num)
 		write(1, "  \n", 3);
 		rl_on_new_line();
 		rl_redisplay();
+		g_error = 1;
 	}
 }
 

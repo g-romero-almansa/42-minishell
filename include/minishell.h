@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/10 11:13:46 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:13:55 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,11 @@ char				**ft_cpy_env(char **env, char **cpy, int max);
 /*FT_EXPORT*/
 char				**ft_export(char *str, char **cpy, t_shell *p);
 void				ft_export2(t_shell *p, char **cpy, char *sub, char *str);
+void				ft_export3(t_shell *p, char **cpy, char *str);
 void				ft_show_export(t_shell *p);
 void				ft_show_export2(t_shell *p, int j);
 char				**ft_unset(char *str, char **cpy, t_shell *p);
+int					ft_unset2(int k, int less, t_shell *p, char **cpy);
 
 /*FT_ECHO*/
 void				search_echo(char *p, char **envp, int max);
