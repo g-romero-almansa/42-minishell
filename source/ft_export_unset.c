@@ -36,6 +36,7 @@ char	**ft_export(char *str, char **cpy, t_shell *p)
 		p->var_env[j] = ft_strdup(str);
 		p->env_n++;
 	}
+	free(sub);
 	p->var_env[++j] = NULL;
 	return (p->var_env);
 }
@@ -120,6 +121,7 @@ char	**ft_unset(char *str, char **cpy, t_shell *p)
 		less = 1;
 		p->var_env[j++] = ft_strdup(cpy[k]);
 	}
+	free(s);
 	if (less)
 		p->env_n--;
 	p->var_env[j] = NULL;

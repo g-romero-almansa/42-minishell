@@ -49,7 +49,9 @@ void	do_unset(t_shell *p, char *str)
 void	export_cnt(t_shell *p, char *str)
 {
 	char	**cpy;
+	int		first_n;
 
+	first_n = p->env_n;
 	cpy = (char **)malloc((p->env_n + 1) * sizeof(char *));
 	if (!cpy)
 	{
@@ -65,7 +67,10 @@ void	export_cnt(t_shell *p, char *str)
 		perror("Error: ");
 	}
 	p->var_env = ft_export(str + 7, cpy, p);
-	ft_free_env(cpy, p->env_n - 1);
+	if (first_n == p->env_n)
+		ft_free_env(cpy, p->env_n);
+	else
+		ft_free_env(cpy, p->env_n - 1);
 }
 
 void	do_export(char *str, t_shell *p)

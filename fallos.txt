@@ -1,6 +1,0 @@
-las redirecciones de entrada (las dobles tambien) pueden ser:
-cat < infile
-cat <infile
-< infile cat
-<infile cat
-redirecciones y builtin juntos no funciona
