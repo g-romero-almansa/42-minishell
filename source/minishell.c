@@ -6,17 +6,19 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:05:28 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 12:13:59 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:22:18 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-void	sighandler(int num)
+void	sighandler(int num, siginfo_t *inf, void *o)
 {
 	pid_t	pid;
 	int		status;
 
 	(void)num;
+	(void)o;
+	(void)inf;
 	pid = waitpid(-1, &status, WNOHANG);
 	if (pid == 0)
 	{
@@ -25,11 +27,9 @@ void	sighandler(int num)
 	}
 	else
 	{
+		write (1, "\n", 1);
 		rl_on_new_line();
-		rl_redisplay();
 		rl_replace_line("", 0);
-		write(1, "  \n", 3);
-		rl_on_new_line();
 		rl_redisplay();
 		g_error = 1;
 	}
@@ -94,12 +94,17 @@ void	free_executer(t_shell *p)
 	free(p->str);
 }
 
+void	leaks(void)
+{
+	system("leaks -q minishell");
+}
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	int		i;
 	t_shell	*p;
 
+	atexit(leaks);
 	p = malloc(sizeof(t_shell));
 	ft_init(envp, p);
 	while (argc)

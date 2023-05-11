@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 11:14:53 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 11:13:55 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:12:19 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_shell
 }					t_shell;
 
 /*MINISHELL*/
-void				sighandler(int num);
+void    			sighandler(int num, siginfo_t *inf, void *o);
 void				do_builtin(char *str, t_shell *p);
 int					check_builtin(char *str);
 void				free_executer(t_shell *p);

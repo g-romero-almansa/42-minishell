@@ -6,7 +6,7 @@
 /*   By: gromero- <gromero-@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 11:08:55 by gromero-          #+#    #+#             */
-/*   Updated: 2023/05/11 11:30:32 by gromero-         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:24:08 by gromero-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/minishell.h"
@@ -14,6 +14,7 @@
 void	ft_init(char **envp, t_shell *p)
 {
 	int		i;
+	struct sigaction sa;
 
 	i = 0;
 	while (envp[i])
@@ -27,7 +28,10 @@ void	ft_init(char **envp, t_shell *p)
 	p->flag_qu = 0;
 	p->var_env = ft_cpy_env(envp, p->var_env, p->env_n);
 	g_error = 0;
-	signal(SIGINT, sighandler);
+	rl_catch_signals = 0;
+	sa.sa_flags = SA_RESTART;
+	sa.sa_sigaction = sighandler;
+	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }
 
