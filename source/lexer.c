@@ -17,7 +17,7 @@ char	*get_next_token(char *str, int *i)
 	int		start;
 
 	start = *i;
-	if (str[*i] == ' ')
+	while (str[*i] && str[*i] == ' ')
 	{
 		(*i)++;
 		start++;

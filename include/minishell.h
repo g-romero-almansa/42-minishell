@@ -94,11 +94,16 @@ void				ft_update_env(char *var, char *pwd, char **env);
 void				ft_env_(char *nev, char **env, int max);
 char				**ft_cpy_env(char **env, char **cpy, int max);
 
-/*FT_EXPORT*/
-char				**ft_export(char *str, char **cpy, t_shell *p);
+/*EXPORT*/
+char				*exp_dollar(char *str, int j, t_shell *p, char **cpy);
+int					var_exist(t_shell *p, char **cpy, char *sub);
+void				free_var(char *sub, char *prueba, char *temp);
 void				exp_change(t_shell *p, char **cpy, char *sub, char *str);
 void				exp_add(t_shell *p, char **cpy, char *str);
+
+/*FT_EXPORT_UNSET*/
 void				ft_show_export(t_shell *p);
+char				**ft_export(char *str, char **cpy, t_shell *p);
 void				export_order(t_shell *p, int j);
 char				**ft_unset(char *str, char **cpy, t_shell *p);
 int					unset_copy(int k, int less, t_shell *p, char **cpy);
@@ -153,6 +158,7 @@ void				do_echo(char *str, t_shell *p);
 
 /*EXEC*/
 int					check_exec(char *str);
+char				*last_dir(char *s);
 void				add_level(char *dir, t_shell *p);
 void				exec_child(t_shell *p, char **argv);
 void				exec_file(char **argv, t_shell *p);
