@@ -96,8 +96,8 @@ char				**ft_cpy_env(char **env, char **cpy, int max);
 
 /*FT_EXPORT*/
 char				**ft_export(char *str, char **cpy, t_shell *p);
-void				exp_remove(t_shell *p, char **cpy, char *sub, char *str);
-void				exp_change(t_shell *p, char **cpy, char *str);
+void				exp_change(t_shell *p, char **cpy, char *sub, char *str);
+void				exp_add(t_shell *p, char **cpy, char *str);
 void				ft_show_export(t_shell *p);
 void				export_order(t_shell *p, int j);
 char				**ft_unset(char *str, char **cpy, t_shell *p);

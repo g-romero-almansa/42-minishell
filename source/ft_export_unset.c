@@ -53,6 +53,33 @@ void	export_order(t_shell *p, int j)
 	printf("\n");
 }
 
+char	**ft_export(char *str, char **cpy, t_shell *p)
+{
+	int		j;
+	char	*sub;
+	int		flag;
+	char	*temp;
+	char	*prueba;
+
+	j = 0;
+	while (str[j] != '=')
+		j++;
+	sub = ft_substr(str, 0, j + 1);
+	prueba = exp_dollar(str, j, p, cpy);
+	temp = ft_strjoin(sub, prueba);
+	j = -1;
+	while (++j < p->env_n && cpy[j])
+		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
+			flag = 1;
+	if (flag == 1)
+		exp_change(p, cpy, sub, temp);
+	else
+		exp_add(p, cpy, temp);
+	free_var(sub, prueba, temp);
+	p->var_env[++j] = NULL;
+	return (p->var_env);
+}
+
 char	**ft_unset(char *str, char **cpy, t_shell *p)
 {
 	int		j;

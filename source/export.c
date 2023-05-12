@@ -11,31 +11,54 @@
 /* ************************************************************************** */
 #include "../include/minishell.h"
 
-char	**ft_export(char *str, char **cpy, t_shell *p)
+char	*exp_dollar(char *str, int j, t_shell *p, char **cpy)
 {
-	int		j;
 	char	*sub;
-	int		flag;
+	char	*temp;
+	int		i;
+	int		len;
 
-	j = 0;
+	sub = ft_substr(str, j + 1, ft_strlen(str) - j - 1);
+	i = 0;
+	if (!ft_strncmp(sub, "$", 1))
+	{
+		free(sub);
+		sub = ft_substr(str, j + 2, ft_strlen(str) - j - 2);
+		len = ft_strlen(sub);
+		temp = ft_strjoin(sub, "=");
+		free(sub);
+		while (i < p->env_n)
+		{
+			if (!ft_strncmp(temp, cpy[i], ft_strlen(temp)))
+				sub = ft_substr(cpy[i], len + 1, ft_strlen(cpy[i]) - len - 1);
+			i++;
+		}
+		free(temp);
+	}
+	return (sub);
+}
+
+int	var_exist(t_shell *p, char **cpy, char *sub)
+{
+	int	j;
+	int	flag;
+
 	flag = 0;
-	while (str[j] != '=')
-		j++;
-	sub = ft_substr(str, 0, j + 1);
 	j = -1;
 	while (++j < p->env_n && cpy[j])
 		if (!ft_strncmp(sub, cpy[j], ft_strlen(sub)))
 			flag = 1;
-	if (flag == 1)
-		exp_remove(p, cpy, sub, str);
-	else
-		exp_change(p, cpy, str);
-	free(sub);
-	p->var_env[++j] = NULL;
-	return (p->var_env);
+	return (flag);
 }
 
-void	exp_remove(t_shell *p, char **cpy, char *sub, char *str)
+void	free_var(char *sub, char *prueba, char *temp)
+{
+	free(sub);
+	free(prueba);
+	free(temp);
+}
+
+void	exp_change(t_shell *p, char **cpy, char *sub, char *str)
 {
 	int		j;
 
@@ -50,7 +73,7 @@ void	exp_remove(t_shell *p, char **cpy, char *sub, char *str)
 	}
 }
 
-void	exp_change(t_shell *p, char **cpy, char *str)
+void	exp_add(t_shell *p, char **cpy, char *str)
 {
 	int	j;
 
