@@ -1,2 +1,1 @@
-# 42-minishell
-Proyecto de minishell 42
+Proyecto de minishell 42(recreacion de la shell de bash).
